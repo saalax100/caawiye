@@ -1,0 +1,2472 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horseed.market</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+        
+        .deep-music {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            animation: pulse 0.6s ease-in-out;
+            transition: all 0.3s ease;
+        }
+        
+        .deep-music:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 0;
+            animation: slideIn 0.5s ease-out;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, #1e293b 0%, #334155 100%);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-item {
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 8px;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            transform: translateX(4px);
+        }
+        
+        .sidebar-item.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .main-content {
+            background: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .robot-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .robot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+        }
+        
+        .robot-active {
+            border: 2px solid #10B981;
+            position: relative;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .robot-active::before {
+            content: "ACTIVE";
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .timer {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            color: #10B981;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .balance-card {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 2px;
+        }
+        
+        .payment-method {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .payment-method:hover {
+            border-color: #6366f1;
+            background: #f8fafc;
+        }
+        
+        .payment-method.selected {
+            border-color: #6366f1;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+        }
+        
+        .crypto-option {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .crypto-option:hover {
+            border-color: #f59e0b;
+            background: #fef3c7;
+        }
+        
+        .crypto-option.selected {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Registration Page -->
+    <div id="registerPage" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <div class="mx-auto h-20 w-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mb-6">
+                    <svg class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-extrabold text-gray-900">Horseed.market</h2>
+                <p class="mt-2 text-sm text-gray-600">Ku biir maalgashiga mustaqbalka</p>
+            </div>
+            
+            <div class="card">
+                <form id="registerForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Number</label>
+                        <input type="tel" id="regNumber" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" placeholder="Gali number-kaaga" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="regPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" placeholder="Gali password" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Xaqiiji Password</label>
+                        <input type="password" id="confirmPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" placeholder="Ku celi password-ka" required>
+                    </div>
+                    
+                    <button type="submit" class="w-full btn-primary">
+                        Register
+                    </button>
+                </form>
+                
+                <p class="text-center mt-6 text-gray-600">
+                    Akoon ma leedahay? 
+                    <button onclick="showLogin()" class="text-blue-600 hover:text-blue-800 font-semibold">Login</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 hidden">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <div class="mx-auto h-20 w-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mb-6">
+                    <svg class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-extrabold text-gray-900">Horseed.market</h2>
+                <p class="mt-2 text-sm text-gray-600">Soo gal akoonkaaga</p>
+            </div>
+            
+            <div class="card">
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Number</label>
+                        <input type="tel" id="loginNumber" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" placeholder="Gali number-kaaga" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="loginPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" placeholder="Gali password" required>
+                    </div>
+                    
+                    <button type="submit" class="w-full btn-primary">
+                        Login
+                    </button>
+                </form>
+                
+                <p class="text-center mt-6 text-gray-600">
+                    Akoon ma lihid? 
+                    <button onclick="showRegister()" class="text-blue-600 hover:text-blue-800 font-semibold">Register</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+        <div class="flex h-screen bg-gray-50">
+            <!-- Sidebar -->
+            <div class="sidebar w-64 flex-shrink-0">
+                <div class="p-6">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="h-10 w-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                            </svg>
+                        </div>
+                        <h1 class="text-xl font-bold text-white">Horseed</h1>
+                    </div>
+                    
+                    <nav class="space-y-2">
+                        <div class="sidebar-item active" onclick="showDashboardHome()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                            </svg>
+                            Dashboard
+                        </div>
+                        <div class="sidebar-item" onclick="showRobots()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            Robots
+                        </div>
+                        <div class="sidebar-item" onclick="showMarket()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                            </svg>
+                            Market
+                        </div>
+                        <div class="sidebar-item" onclick="showExchange()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                            </svg>
+                            Exchange
+                        </div>
+                        <div class="sidebar-item" onclick="showDeposit()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Deposit
+                        </div>
+                        <div class="sidebar-item" onclick="showWithdraw()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                            </svg>
+                            Withdraw
+                        </div>
+                        <div class="sidebar-item" onclick="showUSSD()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                            </svg>
+                            USSD
+                        </div>
+                        <div class="sidebar-item" onclick="showAIChat()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            AI Assistant
+                        </div>
+                        <div class="sidebar-item" onclick="showReferral()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.196-2.121M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.196-2.121M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            Referral
+                        </div>
+                        <div class="sidebar-item" onclick="showTransactions()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            </svg>
+                            Transactions
+                        </div>
+                        <div class="sidebar-item" onclick="showSellItems()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Sell Items
+                        </div>
+                        <div class="sidebar-item" onclick="openWhatsApp()">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            WhatsApp
+                        </div>
+                    </nav>
+                </div>
+                
+                <div class="absolute bottom-0 w-64 p-6">
+                    <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded-lg transition-all duration-200">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1 flex flex-col overflow-hidden">
+                <!-- Header -->
+                <div class="header px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+                            <p class="text-gray-600">Soo dhawoow, <span id="userNumber" class="font-semibold"></span></p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-right">
+                                <p class="text-sm text-gray-500">Balance</p>
+                                <p class="text-xl font-bold text-green-600">$<span id="userBalance">0.00</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content -->
+                <div class="flex-1 overflow-auto p-6">
+                    <!-- Dashboard Home -->
+                    <div id="dashboardHome">
+                        <!-- Stats Cards -->
+                        <div class="stats-grid mb-8">
+                            <div class="card balance-card">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-green-100 text-sm font-medium">Total Balance</p>
+                                        <p class="text-3xl font-bold text-white">$<span id="totalBalance">0.00</span></p>
+                                    </div>
+                                    <div class="h-12 w-12 bg-white/20 rounded-lg flex items-center justify-center">
+                                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-500 text-sm font-medium">Active Robots</p>
+                                        <p class="text-3xl font-bold text-gray-900" id="activeRobotsCount">0</p>
+                                    </div>
+                                    <div class="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-500 text-sm font-medium">Total Profit</p>
+                                        <p class="text-3xl font-bold text-gray-900">$<span id="totalProfit">0.00</span></p>
+                                    </div>
+                                    <div class="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Robots Section -->
+                    <div id="robotsSection" class="hidden">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="section-title">Investment Robots</h2>
+                        </div>
+                        <div id="robotsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Robots will be generated here -->
+                        </div>
+                    </div>
+
+                    <!-- Market Section -->
+                    <div id="marketSection" class="hidden">
+                        <h2 class="section-title mb-6">Market - Iibso Alaabta</h2>
+                        
+                        <!-- Market Statistics -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-blue-100 p-4 rounded-lg text-center">
+                                <p class="text-2xl font-bold text-blue-600" id="totalItemsCount">0</p>
+                                <p class="text-sm text-gray-600">Wadarta Alaabta</p>
+                            </div>
+                            <div class="bg-green-100 p-4 rounded-lg text-center">
+                                <p class="text-2xl font-bold text-green-600" id="userItemsCount">0</p>
+                                <p class="text-sm text-gray-600">Alaabta Dadka</p>
+                            </div>
+                            <div class="bg-purple-100 p-4 rounded-lg text-center">
+                                <p class="text-2xl font-bold text-purple-600" id="sellersCount">0</p>
+                                <p class="text-sm text-gray-600">Iibiyayaasha</p>
+                            </div>
+                            <div class="bg-orange-100 p-4 rounded-lg text-center">
+                                <p class="text-2xl font-bold text-orange-600" id="categoriesCount">5</p>
+                                <p class="text-sm text-gray-600">Categories</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Category Tabs -->
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <button onclick="showCategory('all')" class="category-tab active bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300">
+                                Dhammaan
+                            </button>
+                            <button onclick="showCategory('clothing')" class="category-tab bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-gray-300">
+                                Dhar
+                            </button>
+                            <button onclick="showCategory('phones')" class="category-tab bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-gray-300">
+                                Telefon
+                            </button>
+                            <button onclick="showCategory('medicine')" class="category-tab bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-gray-300">
+                                Dawo
+                            </button>
+                            <button onclick="showCategory('electronics')" class="category-tab bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-gray-300">
+                                Electronics
+                            </button>
+                        </div>
+                        
+                        <div id="marketContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Market items will be generated here -->
+                        </div>
+                    </div>
+
+                    <!-- Exchange Section -->
+                    <div id="exchangeSection" class="hidden">
+                        <h2 class="section-title mb-6">Exchange - Lacag Badalka</h2>
+                        
+                        <!-- Live Crypto Prices -->
+                        <div class="card mb-6">
+                            <h3 class="text-lg font-semibold mb-4 text-center">📈 Live Crypto Prices</h3>
+                            <div id="liveCryptoPrices" class="grid grid-cols-3 md:grid-cols-5 gap-4">
+                                <!-- Live prices will be generated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="card max-w-2xl mx-auto">
+                            <div class="text-center mb-6">
+                                <div class="flex items-center justify-center gap-4 mb-4">
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s" alt="EVC Plus" class="w-16 h-16 rounded-full object-cover border-4 border-blue-500 shadow-lg" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                                    <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                                    </svg>
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s" alt="Crypto" class="w-16 h-16 rounded-full object-cover border-4 border-orange-500 shadow-lg" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                                </div>
+                                <h3 class="text-xl font-semibold">EVC Plus ↔ Crypto Exchange</h3>
+                                <p class="text-gray-600">Badalka lacagaha EVC Plus iyo Crypto</p>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Amount (USD)</label>
+                                    <input type="number" id="exchangeAmount" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Gali lacagta">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Dooro Exchange Type</label>
+                                    <div class="grid grid-cols-2 gap-4 mb-4">
+                                        <div class="payment-method" onclick="selectExchangeType('evc-to-crypto')">
+                                            <div class="flex items-center justify-center gap-2 mb-2">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s" alt="EVC" class="w-8 h-8 rounded-full object-cover" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                                                <span>→</span>
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s" alt="Crypto" class="w-8 h-8 rounded-full object-cover" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                                            </div>
+                                            <p class="font-semibold text-sm">EVC → Crypto</p>
+                                        </div>
+                                        <div class="payment-method" onclick="selectExchangeType('crypto-to-evc')">
+                                            <div class="flex items-center justify-center gap-2 mb-2">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s" alt="Crypto" class="w-8 h-8 rounded-full object-cover" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                                                <span>→</span>
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s" alt="EVC" class="w-8 h-8 rounded-full object-cover" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                                            </div>
+                                            <p class="font-semibold text-sm">Crypto → EVC</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="exchangeCryptoSelection" class="hidden">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Dooro Crypto Currency</label>
+                                    <div class="grid grid-cols-3 gap-2" id="exchangeCryptoOptions">
+                                        <!-- Crypto options will be generated here -->
+                                    </div>
+                                </div>
+                                
+                                <button onclick="processExchange()" class="w-full deep-music text-white py-3 px-6 rounded-lg font-semibold">
+                                    Badal Lacagta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Chat Section -->
+                    <div id="aiChatSection" class="hidden">
+                        <h2 class="section-title mb-6">🤖 AI Assistant - Kaaliyaha Casriga</h2>
+                        
+                        <div class="card max-w-4xl mx-auto">
+                            <div class="text-center mb-6">
+                                <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold">AI Kaaliyaha Casriga</h3>
+                                <p class="text-gray-600">Weydiiso wax walba oo ku saabsan sirkan ama codsii sawir</p>
+                            </div>
+                            
+                            <div id="chatMessages" class="bg-gray-50 rounded-lg p-4 h-96 overflow-y-auto mb-4">
+                                <div class="text-center text-gray-500 py-8">
+                                    <p>🤖 Soo dhawoow! Waxaan ahay AI kaaliyahaaga. Weydiiso wax walba!</p>
+                                    <p class="text-sm mt-2">Tusaale: "ii sameey sawir geel" ama "maxay tahay sirkan?"</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-2">
+                                <input type="text" id="chatInput" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg" placeholder="Qor farriintaada halkan..." onkeypress="if(event.key==='Enter') sendMessage()">
+                                <button onclick="sendMessage()" class="deep-music text-white px-6 py-3 rounded-lg font-semibold">
+                                    Dir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Referral Section -->
+                    <div id="referralSection" class="hidden">
+                        <h2 class="section-title mb-6">👥 Referral System - Soo Jiid Saaxiibada</h2>
+                        
+                        <div class="card max-w-2xl mx-auto">
+                            <div class="text-center mb-6">
+                                <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.196-2.121M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.196-2.121M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold">Soo Jiid Saaxiibada</h3>
+                                <p class="text-gray-600">Hel $0.10 qof kasta oo aad soo jiidasho!</p>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-sm text-gray-600 mb-2">Referral Link-kaaga:</p>
+                                <div class="flex gap-2">
+                                    <input type="text" id="referralLink" class="flex-1 px-3 py-2 border rounded" readonly value="https://uuriye.com/ref/252634567890">
+                                    <button onclick="copyReferralLink()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                        📋 Copy
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="bg-green-100 p-4 rounded-lg text-center">
+                                    <p class="text-2xl font-bold text-green-600" id="referralCount">0</p>
+                                    <p class="text-sm text-gray-600">Dadka aad soo jiidasho</p>
+                                </div>
+                                <div class="bg-blue-100 p-4 rounded-lg text-center">
+                                    <p class="text-2xl font-bold text-blue-600">$<span id="referralEarnings">0.00</span></p>
+                                    <p class="text-sm text-gray-600">Lacagta referral</p>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <p class="text-sm text-gray-600">💡 Qof kasta oo link-kaaga isticmaala $0.10 ayaad heli doontaa!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transactions Section -->
+                    <div id="transactionsSection" class="hidden">
+                        <h2 class="section-title mb-6">📊 Transactions - Dhaqdhaqaaqa Lacagta</h2>
+                        
+                        <div class="card">
+                            <div class="mb-4">
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <button onclick="filterTransactions('all')" class="filter-btn active bg-blue-500 text-white px-4 py-2 rounded">Dhammaan</button>
+                                    <button onclick="filterTransactions('deposit')" class="filter-btn bg-gray-200 px-4 py-2 rounded">Deposit</button>
+                                    <button onclick="filterTransactions('withdraw')" class="filter-btn bg-gray-200 px-4 py-2 rounded">Withdraw</button>
+                                    <button onclick="filterTransactions('purchase')" class="filter-btn bg-gray-200 px-4 py-2 rounded">Iibsasho</button>
+                                    <button onclick="filterTransactions('referral')" class="filter-btn bg-gray-200 px-4 py-2 rounded">Referral</button>
+                                    <button onclick="filterTransactions('contact')" class="filter-btn bg-gray-200 px-4 py-2 rounded">Contacts</button>
+                                    <button onclick="filterTransactions('item_added')" class="filter-btn bg-gray-200 px-4 py-2 rounded">Items</button>
+                                </div>
+                            </div>
+                            
+                            <div id="transactionsList" class="space-y-3">
+                                <div class="text-center text-gray-500 py-8">
+                                    <p>Wali dhaqdhaqaaq ma jiro</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sell Items Section -->
+                    <div id="sellItemsSection" class="hidden">
+                        <h2 class="section-title mb-6">🛒 Sell Items - Iibso Alaabta</h2>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- Add Item Form -->
+                            <div class="card">
+                                <h3 class="text-lg font-semibold mb-4">Ku Dar Alaab Cusub</h3>
+                                <form id="addItemForm" class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Magaca Alaabta</label>
+                                        <input type="text" id="itemName" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Gali magaca alaabta" required>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Qiimaha ($)</label>
+                                        <input type="number" id="itemPrice" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Gali qiimaha" step="0.01" required>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Sawirka Alaabta (JPG/PNG)</label>
+                                        <input type="file" id="itemImage" class="w-full px-4 py-3 border border-gray-300 rounded-lg" accept="image/jpeg,image/jpg,image/png" required>
+                                        <p class="text-xs text-gray-500 mt-1">📸 Soo geli sawir qurux badan oo JPG ama PNG ah</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">WhatsApp Number</label>
+                                        <input type="tel" id="sellerWhatsApp" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="252634567890" pattern="252[0-9]{9}" required>
+                                        <p class="text-xs text-gray-500 mt-1">📱 Gali WhatsApp number-kaaga si dadku kula xiriiri karaan</p>
+                                        <p class="text-xs text-blue-600 mt-1">💡 Tusaale: 252634567890</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                                        <select id="itemCategory" class="w-full px-4 py-3 border border-gray-300 rounded-lg" required>
+                                            <option value="">Dooro category</option>
+                                            <option value="clothing">Dhar</option>
+                                            <option value="phones">Telefon</option>
+                                            <option value="medicine">Dawo</option>
+                                            <option value="electronics">Electronics</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <button type="submit" class="w-full deep-music text-white py-3 px-6 rounded-lg font-semibold">
+                                        Ku Dar Market-ka
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <!-- My Items -->
+                            <div class="card">
+                                <h3 class="text-lg font-semibold mb-4">Alaabta Aad Iibineyso</h3>
+                                <div id="myItemsList" class="space-y-3">
+                                    <div class="text-center text-gray-500 py-8">
+                                        <p>Wali alaab ma ku darin</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-semibold mb-6">Deposit Lacag</h3>
+            <form id="depositForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+                    <input type="number" id="depositAmount" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Gali lacagta" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dooro Payment Method</label>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="payment-method" onclick="selectPaymentMethod('evc', 'deposit')">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s" alt="EVC Plus" class="w-16 h-16 mx-auto rounded-full object-cover mb-2" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                            <p class="font-semibold">EVC Plus</p>
+                        </div>
+                        <div class="payment-method" onclick="selectPaymentMethod('crypto', 'deposit')">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s" alt="Crypto" class="w-16 h-16 mx-auto rounded-full object-cover mb-2" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                            <p class="font-semibold">Crypto</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="depositPaymentImage" class="text-center mb-4 hidden">
+                    <img id="depositSelectedImage" src="" alt="" class="w-24 h-24 mx-auto rounded-full object-cover border-4 border-blue-500 shadow-lg" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                    <p id="depositSelectedText" class="mt-2 font-semibold"></p>
+                </div>
+                
+                <div id="cryptoSelection" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dooro Crypto Currency</label>
+                    <div class="grid grid-cols-3 gap-2 mb-4" id="depositCryptoOptions">
+                        <!-- Crypto options will be generated here -->
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Number/Crypto Address</label>
+                    <input type="text" id="depositAddress" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="EVC Plus ama Crypto Address" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📸 Sawirka Bixinta</label>
+                    <input type="file" id="depositScreenshot" class="w-full px-4 py-3 border border-gray-300 rounded-lg" accept="image/*">
+                    <p class="text-sm text-red-600 mt-2">📋 Muhiim: Sawirka bixinta soo qaad si loo xaqiijiyo</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button type="submit" class="flex-1 deep-music text-white py-3 px-6 rounded-lg font-semibold">
+                        Confirm
+                    </button>
+                    <button type="button" onclick="closeDeposit()" class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-lg font-semibold">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="withdrawModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-semibold mb-6">Withdraw Lacag</h3>
+            <form id="withdrawForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+                    <input type="number" id="withdrawAmount" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Gali lacagta" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dooro Payment Method</label>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="payment-method" onclick="selectPaymentMethod('evc', 'withdraw')">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s" alt="EVC Plus" class="w-16 h-16 mx-auto rounded-full object-cover mb-2" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                            <p class="font-semibold">EVC Plus</p>
+                        </div>
+                        <div class="payment-method" onclick="selectPaymentMethod('crypto', 'withdraw')">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s" alt="Crypto" class="w-16 h-16 mx-auto rounded-full object-cover mb-2" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                            <p class="font-semibold">Crypto</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="withdrawPaymentImage" class="text-center mb-4 hidden">
+                    <img id="withdrawSelectedImage" src="" alt="" class="w-24 h-24 mx-auto rounded-full object-cover border-4 border-green-500 shadow-lg" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                    <p id="withdrawSelectedText" class="mt-2 font-semibold"></p>
+                </div>
+                
+                <div id="withdrawCryptoSelection" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dooro Crypto Currency</label>
+                    <div class="grid grid-cols-3 gap-2 mb-4" id="withdrawCryptoOptions">
+                        <!-- Crypto options will be generated here -->
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Number/Crypto Address</label>
+                    <input type="text" id="withdrawAddress" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="EVC Plus ama Crypto Address" required>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button type="submit" class="flex-1 deep-music text-white py-3 px-6 rounded-lg font-semibold">
+                        Confirm
+                    </button>
+                    <button type="button" onclick="closeWithdraw()" class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-lg font-semibold">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- USSD Modal -->
+    <div id="ussdModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <h3 class="text-xl font-semibold mb-6">USSD Payment</h3>
+            <form id="ussdForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+                    <input type="number" id="ussdAmount" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Gali lacagta" required>
+                </div>
+                <div class="flex space-x-4">
+                    <button type="submit" class="flex-1 deep-music text-white py-3 px-6 rounded-lg font-semibold">
+                        Send
+                    </button>
+                    <button type="button" onclick="closeUSSD()" class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-lg font-semibold">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let userBalance = 0;
+        let activeRobots = [];
+        let robotTimers = {};
+        let selectedPaymentMethod = null;
+        let selectedCrypto = null;
+        let userTransactions = [];
+        let userItems = [];
+        let referralCount = 0;
+        let referralEarnings = 0;
+
+        // Crypto currencies with images and live prices
+        const cryptoCurrencies = {
+            bitcoin: { name: 'Bitcoin', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s', price: 43250.50, change: 2.5 },
+            trx: { name: 'TRX', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyl2gUu50dRfhM-4MEqpjI_g8Ez_RY8dCt_A&s', price: 0.085, change: -1.2 },
+            doge: { name: 'Dogecoin', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVKDkE9oAzbwr1Xx4Ntf8xRlmCSSo2Rjwrkg&s', price: 0.078, change: 5.8 },
+            cardano: { name: 'Cardano', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh7E8TWRuSN2dLP7-p31_xAuO7PyVfa4LUOQ&s', price: 0.45, change: 3.2 },
+            xrp: { name: 'XRP', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdoAJ0ng9MuiTEGDOOAqdRG-tk9c-MXecDnA&s', price: 0.52, change: -0.8 },
+            ton: { name: 'TON', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8SO0rgVxiWnoXrkvqaJ1Q055G6hpcAG_ReA&s', price: 2.15, change: 4.1 },
+            hamster: { name: 'Hamster', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWBs5Jp5QkDcAilfUYZN7X38kGJIkiERKHyw&s', price: 0.0025, change: 12.5 },
+            memefi: { name: 'MemeFi', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk-fBbOXw62dgsAK2sK2MEUrDkgIicveobKQ&s', price: 0.0018, change: -3.4 },
+            ethereum: { name: 'Ethereum', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_q9ddg2N_bK1-5cpK7_BbOq3rHkSwrrKT9w&s', price: 2650.75, change: 1.8 }
+        };
+
+        // AI Image database for generating images
+        const aiImageDatabase = {
+            'geel': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8xEutZEF86rFg0gsROTmoe3A-l7fxjSqrA&s',
+            'daauska': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKd3dAFaCYjAX3xYF9eLbSd-FHHUMHETjCQw&s',
+            'libaax': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnA30VdCSdoftah-h1-C4BDVEUM4mRKbRkcw&s',
+            'eey': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4T_5syqabNK9_wYxbqRD0VREg6rCFUSxZdA&s',
+            'bakeyle': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ10PC_PGGyY3CC54iJrwoWuaVDu7_pviX9KQ&s',
+            'daanyeer': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgzCtC9jf604AFOsnzVS_bHJS6-0RlEkLmOg&s',
+            'maroodi': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRWBFMfd0QXsRSalpO4HVu2Ac6tWE0Fpl7wg&s',
+            'robot': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCc_TUVYqoAWFxidlvhYBCqr6vu8W6iB3gBQ&s',
+            'dameer': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDOpuzntPqIBJvnjSYziUv1AQZogouWiK_3A&s',
+            'lo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7TDoDjj_YMNxoLHTtYlgIIqiLuNnW9_r1JA&s',
+            'mas': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GpKOuhz9LgZsF75xZ-67xrCbJ6NoQ-fEnQ&s',
+            'ari': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk7p2EabUDtQyRwc-haRTSejvn4ZQoFiLhZA&s',
+            'ariga': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk7p2EabUDtQyRwc-haRTSejvn4ZQoFiLhZA&s',
+            'baabuur': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyD8QQhpDvtL2WKkVd5X8jF4uGQqQvQqQvQA&s',
+            'calan': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEhNz5tvSD5OrlvvaXHLj7Gmq6u910GB4oEg&s',
+            'masaajid': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP08hQ-tDTE7QptExXJ4aJFCS1pfCmIzHFaw&s',
+            'guri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQqQvQqQvQqQvQqQvQqQvQqQvQqQvQA&s',
+            'qorrax': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbr6lCKQuxbRQEACeUvGOXqG0YWb0kZgkCEQ&s',
+            'biyaha': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQqQvQqQvQqQvQqQvQqQvQqQvQqQvQA&s',
+            'dhir': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQqQvQqQvQqQvQqQvQqQvQqQvQqQvQA&s',
+            'qof': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQqQvQqQvQqQvQqQvQqQvQqQvQqQvQA&s'
+        };
+
+        // Market items organized by categories
+        const marketCategories = {
+            clothing: [
+                    { name: 'kabaha buudka', price: 6.25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM2ZjMp8O6Quu2i-PZGv6wibTWhOnoAxrUeA&s' },           
+                    { name: 'kabaha isport', price: 3.65, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz9CUieYt5uQrKoChj3firWTeK2KBaIYe50A&s' },
+                    { name: 'kabaha dumarka', price: 8, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZZFT7rd2a9iVvJpXQQmY7gYUTGHphk363WQ&s' },
+                    { name: 'kabaha labiska dumarka', price: 12.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYTuNB_gEEqYnzV1zZr6P0jTuN-zVQNWOImQ&s' },
+                    { name: 'kabaha labiska raga', price: 18.9, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1xa2BF4o5TynoRJPeyUwxCcU8ICpIlN1XrQ&s' },
+            ],
+            cosmetics: [
+                    { name: 'rooseetada', price: 12, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0kZGpb-swedBdyAW7aJgbGtCHJC6K0lNaYA&s' },
+                    { name: 'kareenka wajiga', price: 4, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWNr0OOSwfHGh5MWDwDVHrgUJp8Qj5IuQEpA&s' },
+                    { name: 'saliida timaha bixisa', price: 12, image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgbobbER89X_v46O7iH0rtLkBXgq42r_WzKA&s' },
+                    { name: 'barfuunada kala duwan', price: 9.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKuKZYpGWaAZHYqvBryVbCvJsnXZLEhjhWxQ&s' },
+                    { name: 'qurxinta cidiyaha', price: 5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4Fb7XMvYa4PR2StRGrfMr6v479bQTgLMXNA&s' },
+            ],
+            phones: [
+                    { name: 'iPhone 15', price: 1.389, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXJtSHEU295H48LTgCjNJ3Oa0a6ybvd-nuuA&s' },
+                    { name: 'Samsung Galaxy', price: 880, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz6O3cAr6A13ZitURScnkAZEr-H2__st96Qw&s' },
+                    { name: 'Redmi Note', price: 310, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWPwHdrWnP5hdtN64jwabmn9z28WgHMzM12w&s' },
+                    { name: 'Infinix Hot', price: 60, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXMtyW4RorxAE3l6puGNj03_rJmQ7bw0_g3g&s' },
+                    { name: 'Vivo V30', price: 600, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6xDXrCJuI_SFPu98csraHMGMIzTXRgDVDSw&s' },
+                    { name: 'Oppo Reno', price: 225, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7NvWbajDTx_jQU63SiZPmj1zVUeputa6vUA&s' },
+                    { name: 'Tecno Spark', price: 155, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIiTnXjLQDQU29qr3ivUSoR6NWLdlGK0W_tg&s' },
+                    { name: 'Itel A58', price: 85, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQidnmfUGBSY0nOt45LxC-RF3Avg-hba5-KNg&s' },
+                    { name: 'Huawei P60', price: 1.449, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVG_soebgs4ggci_q1FKeuc9cSmpKROoN6dA&s' },
+                    { name: 'Nokia 3310', price: 35, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ51ITKS6bgz0G-CV1Haxq1Inf6d55cYGxSPQ&s' },
+                ],
+                medicine: [
+                    { name: 'Paracetamol', price: 3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpM3CKVvurltT3VhHc_hxP_9ugypk80mwSvA&s' },
+                    { name: 'Vitamin C', price: 1.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZAnkLAATWoWEfcy0fl2iPxe89kHMgNbw5dg&s' },
+                    { name: 'Antibiotics', price: 1.42, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSahx1fPXtRuFxEFSx7AVBN8XOcq9ZfU6-_4Q&s' },
+                    { name: 'Pain Relief', price: 1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbBFyXxzFGmYmeraVYzEljeawvf6EMt_xc0Q&s' },
+                    { name: 'Aspirin', price: 8, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdP89jl6EKahib7EeWQWg03Zs9vhDyhAAqtQ&s' },
+                    { name: 'Cough Syrup', price: 15, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIl7rZ74qJ2vqUgMbedptlZscNrst_0Zew7Q&s' },
+                    { name: 'Bandages', price: 0.25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiU4B2eJLOZt5c4EQd5isrAi_Pi5TMzNx2IQ&s' },
+                ],
+                electronics: [
+                    { name: 'Laptop', price: 510, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNy1Nk240JKpHCJX8QUOqBQ31sayD8_GUOCg&s' },
+                    { name: 'Gaming Headset', price: 7.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkrOJpbAw85f3XUlvkY15mNPmTbNTi5KFnqQ&s' },
+                    { name: 'Designer Watch', price: 45, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwAt8lQ523_gpL8lNO5Jowa9iSZ2ZDFA95sw&s' },
+                    { name: 'Luxury Handbag', price: 6, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-suDqgE-bce5CV01_RM6SzEzigZPMvbb52w&s' },
+                    { name: 'Wireless Speaker', price: 11.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr8M9dyvAXx4TibvSmuZZqveejA5tadqjoUg&s' },
+                    { name: 'Smart Watch', price: 40, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMraeWvEijmG6ChhSMEWQDA5toBbT9FlRGSg&s' },
+                    { name: 'Bluetooth Earbuds', price: 8, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXpjRXJpfdsDtAtQOTZ3O07QPXZ0tp0gDANA&s' }
+            ]
+        };
+
+        // Flatten all items for easy access
+        const marketItems = Object.values(marketCategories).flat();
+
+        // Robot configurations
+        const robots = [
+                { name: 'Bitcoin full', price: 400, profit: 8.0, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Crypto King', price: 350, profit: 7.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Stock Genius', price: 320, profit: 7.2, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ0-BwMD4kc4FXCAi2ljaaWCdVbUeUUppKRg&s' },
+                { name: 'Gold Trader', price: 290, profit: 5.8, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDyjzYgo27sMA6i4J0kEcAm0qJhCWTn28t-A&s' },
+                { name: 'Oil Expert', price: 260, profit: 4.6, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGmAB-AIF3rWBs3AM9q-dbcjoQ7EdLD6OnRQ&s' },
+                { name: 'Bond Master', price: 230, profit: 4.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNhgwy2XsjnGR7pUNy9T7tV_jsAlrSkYap2Q&s' },
+                { name: 'Commodity Pro', price: 210, profit: 4.1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2qq8-vcrChw9tpU5sq79QOmK80jpv3Xx02w&s' },
+                { name: 'Index Hunter', price: 190, profit: 2.9, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP4pWPhGZc29S5WkC-Ba3ZlzbGB0HTwHAFeQ&s' },
+                { name: 'Currency Wizard', price: 160, profit: 2.6, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuxhV4QMeANzxwiMMEIkZp_c_3eajY8aoKg&s' },
+                { name: 'Metal Trader', price: 140, profit: 2.4, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyrMp_qbaJzcqtvBha1TLmSfEHwT0YAErmdA&s' },
+                { name: 'Energy Expert', price: 130, profit: 2.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXiHJ7uIcb2IlHaSHioslYh2GEV8Kpm_xCCg&s' },
+                { name: 'Tech Stocks', price: 120, profit: 2.2, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaXp37ZLvnjE8Lcd-PyBPvmSCpEsi5_fdZSA&s' },
+                { name: 'Real Estate', price: 110, profit: 2.1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjXLa-oJLaL8tEspanl5oV5PD4IbtwkpL-Xw&s' },
+                { name: 'Pharma Trader', price: 105, profit: 2.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStN5JDIuRaULTeEXtvtXUJrfbnWGHAErEkUA&s' },
+                { name: 'Auto Industry', price: 70, profit: 1.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnQJFcuf1QeGS-NmYqXgI-CRrawwfYP40U5g&s' },
+                { name: 'Food & Beverage', price: 60, profit: 1.15, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_bj-ltuzt62o9CxP91qNSVc9iheGY4nMfCg&s' },
+                { name: 'Retail Master', price: 50, profit: 1.05, image: 'https://th.bing.com/th/id/OIF.RGVHqT24AG2CUbAT7CNhHA?w=235&h=183&c=7&r=0&o=5&pid=1.7' },
+                { name: 'Banking Pro', price: 40, profit: 1.00, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUhHtnFq30Z-nkcY5Pvhq3MWwcQSzcfgrXkg&s' },
+                { name: 'Insurance Expert', price: 30, profit: 0.35, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnsHUweaPvW6qTrQgew1-667hFAG1dK1-tGw&s' },
+                { name: 'Telecom Trader', price: 20, profit: 0.25, image: 'https://cdn.sanity.io/images/f8lauh0h/production/6b6e8de8b893da63950e390334a9668d4440e3be-6000x4000.jpg' },
+                { name: 'Utility Master', price: 10, profit: 0.2, image: 'https://news.mit.edu/sites/default/files/styles/news_article__image_gallery/public/images/202505/MIT-Differentiable-Interaction-01_0.gif?itok=OtGBTwHK' },
+                { name: 'Transport Pro', price: 5, profit: 0.17, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsixzp9V9j0_lBI7wOB6w_DCP15bEUnxYsIg&s' },
+                { name: 'Media Expert', price: 3, profit: 0.15, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAigmUQKnJXk_u5IpyR3lTSBRUOCCJ5zcQ4g&s' },
+                { name: 'Gaming Stocks', price: 2, profit: 0.1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE5lKEPUJKB04S1g_yEJWCnKO3lNfRwvviGQ&s' },
+                { name: 'Green Energy', price: 1, profit: 0.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN6VSe-GVQNJnAaRtBq3MT1AdQm4_lk_nm8Q&s' }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            generateRobots();
+            generateMarket();
+            generateCryptoOptions();
+            generateLiveCryptoPrices();
+            startCryptoPriceUpdates();
+            
+            // Check if user is logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                userBalance = parseFloat(localStorage.getItem('userBalance') || '0');
+                activeRobots = JSON.parse(localStorage.getItem('activeRobots') || '[]');
+                userTransactions = JSON.parse(localStorage.getItem('userTransactions') || '[]');
+                userItems = JSON.parse(localStorage.getItem('userItems') || '[]');
+                referralCount = parseInt(localStorage.getItem('referralCount') || '0');
+                referralEarnings = parseFloat(localStorage.getItem('referralEarnings') || '0');
+                showDashboard();
+                restoreActiveRobots();
+            }
+        });
+
+        // Generate crypto options for exchange and deposit/withdraw
+        function generateCryptoOptions() {
+            const containers = ['depositCryptoOptions', 'withdrawCryptoOptions', 'exchangeCryptoOptions'];
+            
+            containers.forEach(containerId => {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '';
+                    
+                    Object.keys(cryptoCurrencies).forEach(key => {
+                        const crypto = cryptoCurrencies[key];
+                        const cryptoDiv = document.createElement('div');
+                        cryptoDiv.className = 'crypto-option';
+                        cryptoDiv.onclick = () => selectCrypto(key, containerId);
+                        
+                        const changeColor = crypto.change >= 0 ? 'text-green-500' : 'text-red-500';
+                        const changeIcon = crypto.change >= 0 ? '↗' : '↘';
+                        
+                        cryptoDiv.innerHTML = `
+                            <img src="${crypto.image}" alt="${crypto.name}" class="w-12 h-12 rounded-full object-cover" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                            <p class="text-xs font-semibold">${crypto.name}</p>
+                            <p class="text-xs font-bold">$${crypto.price}</p>
+                            <p class="text-xs ${changeColor}">${changeIcon}${Math.abs(crypto.change)}%</p>
+                        `;
+                        
+                        container.appendChild(cryptoDiv);
+                    });
+                }
+            });
+        }
+
+        // Select crypto currency
+        function selectCrypto(cryptoKey, containerId) {
+            // Remove previous selections in this container
+            const container = document.getElementById(containerId);
+            container.querySelectorAll('.crypto-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select current option
+            event.currentTarget.classList.add('selected');
+            selectedCrypto = cryptoKey;
+            
+            // Update payment image if in deposit/withdraw
+            if (containerId.includes('deposit')) {
+                updatePaymentImage('deposit', 'crypto', cryptoKey);
+            } else if (containerId.includes('withdraw')) {
+                updatePaymentImage('withdraw', 'crypto', cryptoKey);
+            }
+        }
+
+        // Select payment method
+        function selectPaymentMethod(method, type) {
+            // Remove previous selections
+            const container = event.currentTarget.parentElement;
+            container.querySelectorAll('.payment-method').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select current option
+            event.currentTarget.classList.add('selected');
+            selectedPaymentMethod = method;
+            
+            // Show/hide crypto selection
+            const cryptoSelection = document.getElementById(type === 'deposit' ? 'cryptoSelection' : 'withdrawCryptoSelection');
+            if (method === 'crypto') {
+                cryptoSelection.classList.remove('hidden');
+                // Show crypto image
+                updatePaymentImage(type, method);
+            } else {
+                cryptoSelection.classList.add('hidden');
+                // Show EVC Plus image
+                updatePaymentImage(type, method);
+            }
+        }
+
+        // Update payment image
+        function updatePaymentImage(type, method, cryptoKey = null) {
+            const imageContainer = document.getElementById(`${type}PaymentImage`);
+            const image = document.getElementById(`${type}SelectedImage`);
+            const text = document.getElementById(`${type}SelectedText`);
+            
+            if (method === 'evc') {
+                image.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s';
+                text.textContent = 'EVC Plus';
+                imageContainer.classList.remove('hidden');
+            } else if (method === 'crypto') {
+                if (cryptoKey) {
+                    const crypto = cryptoCurrencies[cryptoKey];
+                    image.src = crypto.image;
+                    text.textContent = crypto.name;
+                    imageContainer.classList.remove('hidden');
+                } else {
+                    // Hide image when crypto is selected but no specific crypto chosen yet
+                    imageContainer.classList.add('hidden');
+                }
+            } else {
+                // Hide image for any other case
+                imageContainer.classList.add('hidden');
+            }
+        }
+
+        // Registration
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const number = document.getElementById('regNumber').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Password-yada ma isku mid aha!');
+                return;
+            }
+            
+            // Play deep music effect
+            playDeepMusic();
+            
+            // Show success message
+            setTimeout(() => {
+                showSuccessMessage('Akoon.ayaad.sameysatay.mahadsanid');
+                setTimeout(() => {
+                    showLogin();
+                }, 2000);
+            }, 1000);
+        });
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const number = document.getElementById('loginNumber').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Play deep music effect
+            playDeepMusic();
+            
+            // Show success message
+            setTimeout(() => {
+                showSuccessMessage('Waxaad soo gashay akoonkaaga soo dhawoow');
+                currentUser = {number: number, password: password};
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // Set balance to 0 for new users
+                userBalance = 0;
+                localStorage.setItem('userBalance', '0');
+                
+                setTimeout(() => {
+                    showDashboard();
+                }, 2000);
+            }, 1000);
+        });
+
+        // Deposit
+        document.getElementById('depositForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const address = document.getElementById('depositAddress').value;
+            
+            if (!selectedPaymentMethod) {
+                alert('Fadlan dooro payment method!');
+                return;
+            }
+            
+            if (selectedPaymentMethod === 'crypto' && !selectedCrypto) {
+                alert('Fadlan dooro crypto currency!');
+                return;
+            }
+            
+            // Play deep music effect
+            playDeepMusic();
+            
+            setTimeout(() => {
+                let paymentInfo = selectedPaymentMethod === 'evc' ? 'EVC Plus' : cryptoCurrencies[selectedCrypto].name;
+                const message = `Waxaan soo maalgshaday $${amount} waxaana kasoo diray ${address} (${paymentInfo})`;
+                const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                
+                // Add to balance automatically
+                userBalance += amount;
+                updateBalance();
+                closeDeposit();
+            }, 1000);
+        });
+
+        // Withdraw
+        document.getElementById('withdrawForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const address = document.getElementById('withdrawAddress').value;
+            
+            if (amount > userBalance) {
+                alert('Balance kuma filna!');
+                return;
+            }
+            
+            if (!selectedPaymentMethod) {
+                alert('Fadlan dooro payment method!');
+                return;
+            }
+            
+            if (selectedPaymentMethod === 'crypto' && !selectedCrypto) {
+                alert('Fadlan dooro crypto currency!');
+                return;
+            }
+            
+            // Play deep music effect
+            playDeepMusic();
+            
+            setTimeout(() => {
+                let paymentInfo = selectedPaymentMethod === 'evc' ? 'EVC Plus' : cryptoCurrencies[selectedCrypto].name;
+                const message = `Waxaan labaxay $${amount} waxaan codsanaa in liigu soo diro ${address} (${paymentInfo})`;
+                const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                
+                // Deduct from balance automatically
+                userBalance -= amount;
+                updateBalance();
+                closeWithdraw();
+            }, 1000);
+        });
+
+        // USSD
+        document.getElementById('ussdForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = document.getElementById('ussdAmount').value;
+            
+            // Play deep music effect
+            playDeepMusic();
+            
+            setTimeout(() => {
+                // Simulate USSD call
+                const ussdCode = `*712*618877686*${amount}#`;
+                alert(`Waxaa la wacayaa: ${ussdCode}`);
+                closeUSSD();
+            }, 1000);
+        });
+
+        // Exchange functions
+        let selectedExchangeType = null;
+
+        function selectExchangeType(type) {
+            // Remove previous selections
+            const container = event.currentTarget.parentElement;
+            container.querySelectorAll('.payment-method').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select current option
+            event.currentTarget.classList.add('selected');
+            selectedExchangeType = type;
+            
+            // Show crypto selection
+            const cryptoSelection = document.getElementById('exchangeCryptoSelection');
+            cryptoSelection.classList.remove('hidden');
+            
+            // Reset crypto selection
+            selectedCrypto = null;
+            document.querySelectorAll('#exchangeCryptoOptions .crypto-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+        }
+
+        function processExchange() {
+            const amount = parseFloat(document.getElementById('exchangeAmount').value);
+            
+            if (!amount || amount <= 0) {
+                alert('Fadlan gali lacag sax ah!');
+                return;
+            }
+            
+            if (!selectedExchangeType) {
+                alert('Fadlan dooro exchange type!');
+                return;
+            }
+            
+            if (!selectedCrypto) {
+                alert('Fadlan dooro crypto currency!');
+                return;
+            }
+            
+            playDeepMusic();
+            
+            setTimeout(() => {
+                const cryptoName = cryptoCurrencies[selectedCrypto].name;
+                let message = '';
+                
+                if (selectedExchangeType === 'evc-to-crypto') {
+                    message = `Waxaan rabaa inaan badalaa $${amount} EVC Plus → ${cryptoName}`;
+                } else {
+                    message = `Waxaan rabaa inaan badalaa $${amount} ${cryptoName} → EVC Plus`;
+                }
+                
+                const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                
+                alert(`Codsigaaga waa la diray! ${message}`);
+            }, 1000);
+        }
+
+        // Functions
+        function playDeepMusic() {
+            // Visual effect to simulate deep music
+            document.body.style.animation = 'pulse 0.5s ease-in-out';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 500);
+        }
+
+        function showSuccessMessage(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.textContent = message;
+            
+            // Find the active page container
+            const registerPage = document.getElementById('registerPage');
+            const loginPage = document.getElementById('loginPage');
+            
+            let activeContainer;
+            if (!registerPage.classList.contains('hidden')) {
+                activeContainer = registerPage;
+            } else if (!loginPage.classList.contains('hidden')) {
+                activeContainer = loginPage;
+            }
+            
+            if (activeContainer) {
+                activeContainer.insertBefore(successDiv, activeContainer.firstChild);
+            }
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        function showRegister() {
+            document.getElementById('registerPage').classList.remove('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            
+            document.getElementById('userNumber').textContent = currentUser.number;
+            updateBalance();
+            updateRobotsDisplay();
+            showDashboardHome();
+        }
+
+        function updateBalance() {
+            document.getElementById('userBalance').textContent = userBalance.toFixed(2);
+            document.getElementById('totalBalance').textContent = userBalance.toFixed(2);
+            document.getElementById('activeRobotsCount').textContent = activeRobots.length;
+            
+            // Calculate total profit
+            const totalProfit = activeRobots.reduce((sum, robot) => sum + robot.profit, 0);
+            document.getElementById('totalProfit').textContent = totalProfit.toFixed(2);
+            
+            // Auto-save all user data when balance changes
+            saveUserData();
+        }
+
+        function showDashboardHome() {
+            hideAllSections();
+            document.getElementById('dashboardHome').classList.remove('hidden');
+            updateSidebarActive('showDashboardHome()');
+        }
+
+        function showExchange() {
+            playDeepMusic();
+            setTimeout(() => {
+                // Reset exchange selections
+                selectedExchangeType = null;
+                selectedCrypto = null;
+                document.getElementById('exchangeCryptoSelection').classList.add('hidden');
+                
+                // Reset form
+                document.querySelectorAll('.payment-method').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                document.querySelectorAll('.crypto-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                hideAllSections();
+                document.getElementById('exchangeSection').classList.remove('hidden');
+                updateSidebarActive('showExchange()');
+            }, 500);
+        }
+
+        function generateRobots() {
+            const container = document.getElementById('robotsContainer');
+            container.innerHTML = '';
+            
+            robots.forEach(robot => {
+                const robotDiv = document.createElement('div');
+                robotDiv.className = 'robot-card';
+                robotDiv.id = `robot-${robot.id}`;
+                
+                robotDiv.innerHTML = `
+                    <div class="text-center mb-4">
+                        <img src="${robot.image}" alt="${robot.name}" class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-white shadow-lg" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-center">${robot.name}</h3>
+                    <p class="mb-2 text-center">Qiimo: $${robot.price}</p>
+                    <p class="mb-2 text-center">Faaido: $${robot.profit}</p>
+                    <p class="mb-4 text-center">Muddo: ${robot.duration} saac</p>
+                    <div id="timer-${robot.id}" class="timer mb-4 text-center" style="display: none;"></div>
+                    <button onclick="buyRobot(${robot.id})" class="deep-music w-full py-2 px-4 rounded-lg font-semibold text-white">
+                        Iibso
+                    </button>
+                `;
+                
+                container.appendChild(robotDiv);
+            });
+        }
+
+        function generateMarket(category = 'all') {
+            const container = document.getElementById('marketContainer');
+            container.innerHTML = '';
+            
+            let itemsToShow = [];
+            if (category === 'all') {
+                itemsToShow = marketItems;
+            } else {
+                itemsToShow = marketCategories[category] || [];
+            }
+            
+            itemsToShow.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'robot-card';
+                itemDiv.id = `market-${item.id}`;
+                
+                itemDiv.innerHTML = `
+                    <div class="text-center mb-4">
+                        <img src="${item.image}" alt="${item.name}" class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-white shadow-lg" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-center">${item.name}</h3>
+                    <p class="mb-4 text-center">Qiimo: $${item.price}</p>
+                    <button onclick="buyMarketItem(${item.id})" class="deep-music w-full py-2 px-4 rounded-lg font-semibold text-white">
+                        Iibso
+                    </button>
+                `;
+                
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function showCategory(category) {
+            // Update tab styles
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active', 'bg-gradient-to-r', 'from-blue-500', 'to-purple-600', 'text-white');
+                tab.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            // Activate selected tab
+            event.target.classList.remove('bg-gray-200', 'text-gray-700');
+            event.target.classList.add('active', 'bg-gradient-to-r', 'from-blue-500', 'to-purple-600', 'text-white');
+            
+            // Generate market items for selected category
+            generateMarket(category);
+        }
+
+        function buyRobot(robotId) {
+            const robot = robots.find(r => r.id === robotId);
+            
+            if (userBalance < robot.price) {
+                alert('Balance kuma filna robotkan iibsashada!');
+                return;
+            }
+            
+            // Play deep music effect
+            playDeepMusic();
+            
+            // Deduct price from balance
+            userBalance -= robot.price;
+            updateBalance();
+            
+            // Activate robot
+            const activeRobot = {
+                ...robot,
+                startTime: Date.now(),
+                endTime: Date.now() + (robot.duration * 60 * 60 * 1000)
+            };
+            
+            activeRobots.push(activeRobot);
+            localStorage.setItem('activeRobots', JSON.stringify(activeRobots));
+            
+            // Start timer
+            startRobotTimer(activeRobot);
+            updateRobotsDisplay();
+        }
+
+        function startRobotTimer(robot) {
+            const timerId = setInterval(() => {
+                const now = Date.now();
+                const remaining = robot.endTime - now;
+                
+                if (remaining <= 0) {
+                    // Robot finished
+                    clearInterval(timerId);
+                    completeRobot(robot.id);
+                } else {
+                    // Update timer display
+                    const hours = Math.floor(remaining / (1000 * 60 * 60));
+                    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+                    
+                    const timerElement = document.getElementById(`timer-${robot.id}`);
+                    if (timerElement) {
+                        timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                        timerElement.style.display = 'block';
+                    }
+                }
+            }, 1000);
+            
+            robotTimers[robot.id] = timerId;
+        }
+
+        function completeRobot(robotId) {
+            const robot = robots.find(r => r.id === robotId);
+            
+            // Add profit to balance automatically
+            userBalance += robot.price + robot.profit;
+            updateBalance();
+            
+            // Remove from active robots
+            activeRobots = activeRobots.filter(r => r.id !== robotId);
+            localStorage.setItem('activeRobots', JSON.stringify(activeRobots));
+            
+            // Log transaction
+            logTransaction(`Robot ${robot.name} completed`, robot.price + robot.profit, 'robot_complete');
+            
+            // Show completion message
+            showSuccessMessage(`🤖 Robotkaadii ${robot.name} shaqada waa uu dhameeye! Lacagta waa lagu daray balance-kaaga: $${(robot.price + robot.profit).toFixed(2)}`);
+            
+            updateRobotsDisplay();
+        }
+
+        function updateRobotsDisplay() {
+            robots.forEach(robot => {
+                const robotElement = document.getElementById(`robot-${robot.id}`);
+                const isActive = activeRobots.some(r => r.id === robot.id);
+                
+                if (isActive) {
+                    robotElement.classList.add('robot-active');
+                } else {
+                    robotElement.classList.remove('robot-active');
+                    const timerElement = document.getElementById(`timer-${robot.id}`);
+                    if (timerElement) {
+                        timerElement.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        function restoreActiveRobots() {
+            activeRobots.forEach(robot => {
+                if (Date.now() < robot.endTime) {
+                    startRobotTimer(robot);
+                } else {
+                    completeRobot(robot.id);
+                }
+            });
+            updateRobotsDisplay();
+        }
+
+        function showDeposit() {
+            playDeepMusic();
+            setTimeout(() => {
+                // Reset selections
+                selectedPaymentMethod = null;
+                selectedCrypto = null;
+                document.getElementById('depositPaymentImage').classList.add('hidden');
+                document.getElementById('cryptoSelection').classList.add('hidden');
+                
+                // Reset form
+                document.querySelectorAll('.payment-method').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                document.querySelectorAll('.crypto-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                document.getElementById('depositModal').classList.remove('hidden');
+            }, 500);
+        }
+
+        function closeDeposit() {
+            document.getElementById('depositModal').classList.add('hidden');
+        }
+
+        function showWithdraw() {
+            playDeepMusic();
+            setTimeout(() => {
+                // Reset selections
+                selectedPaymentMethod = null;
+                selectedCrypto = null;
+                document.getElementById('withdrawPaymentImage').classList.add('hidden');
+                document.getElementById('withdrawCryptoSelection').classList.add('hidden');
+                
+                // Reset form
+                document.querySelectorAll('.payment-method').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                document.querySelectorAll('.crypto-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                document.getElementById('withdrawModal').classList.remove('hidden');
+            }, 500);
+        }
+
+        function closeWithdraw() {
+            document.getElementById('withdrawModal').classList.add('hidden');
+        }
+
+        function showUSSD() {
+            playDeepMusic();
+            setTimeout(() => {
+                document.getElementById('ussdModal').classList.remove('hidden');
+            }, 500);
+        }
+
+        function closeUSSD() {
+            document.getElementById('ussdModal').classList.add('hidden');
+        }
+
+        function openWhatsApp() {
+            playDeepMusic();
+            setTimeout(() => {
+                window.open('https://wa.me/618877686', '_blank');
+            }, 500);
+        }
+
+        function buyAllRobots() {
+            // Calculate total cost of all robots
+            const totalCost = robots.reduce((sum, robot) => sum + robot.price, 0);
+            
+            if (userBalance < totalCost) {
+                alert(`Balance kuma filna! Waxaad u baahan tahay $${totalCost.toFixed(2)} laakiin waxaad leedahay $${userBalance.toFixed(2)}`);
+                return;
+            }
+            
+            // Play deep music effect
+            playDeepMusic();
+            
+            // Confirm purchase
+            if (confirm(`Ma hubtaa inaad iibsanayso dhamaan 25 robots? Qiimaha guud: $${totalCost.toFixed(2)}`)) {
+                // Deduct total cost from balance
+                userBalance -= totalCost;
+                updateBalance();
+                
+                // Activate all robots
+                robots.forEach(robot => {
+                    // Check if robot is not already active
+                    if (!activeRobots.some(r => r.id === robot.id)) {
+                        const activeRobot = {
+                            ...robot,
+                            startTime: Date.now(),
+                            endTime: Date.now() + (robot.duration * 60 * 60 * 1000)
+                        };
+                        
+                        activeRobots.push(activeRobot);
+                        startRobotTimer(activeRobot);
+                    }
+                });
+                
+                localStorage.setItem('activeRobots', JSON.stringify(activeRobots));
+                updateRobotsDisplay();
+                
+                alert('Dhamaan robotyada waa la iibsaday! Waxay bilaabeen shaqada.');
+            }
+        }
+
+        function buyMarketItem(itemId) {
+            const item = marketItems.find(i => i.id === itemId);
+            
+            if (userBalance < item.price) {
+                alert('Balance kuma filna alaabtaan iibsashada!');
+                return;
+            }
+            
+            // Play deep music effect
+            playDeepMusic();
+            
+            // Deduct price from balance
+            userBalance -= item.price;
+            updateBalance();
+            
+            alert(`Waxaad iibsatay ${item.name} qiimaha $${item.price}. Mahadsanid!`);
+        }
+
+        function showMarket() {
+            playDeepMusic();
+            setTimeout(() => {
+                hideAllSections();
+                document.getElementById('marketSection').classList.remove('hidden');
+                updateSidebarActive('showMarket()');
+                generateMarket(); // Refresh market with user items
+            }, 500);
+        }
+
+        function showRobots() {
+            playDeepMusic();
+            setTimeout(() => {
+                hideAllSections();
+                document.getElementById('robotsSection').classList.remove('hidden');
+                updateSidebarActive('showRobots()');
+            }, 300);
+        }
+
+        function logout() {
+            playDeepMusic();
+            setTimeout(() => {
+                // Save all data before logout - NEVER delete user data
+                saveUserData();
+                
+                // Only show login page, but keep all data intact
+                showLogin();
+                
+                // Keep timers running in background
+                // Keep all variables intact
+                // Data persists forever
+            }, 500);
+        }
+
+        // Auto-save data continuously to prevent loss
+        function saveUserData() {
+            if (currentUser) {
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                localStorage.setItem('userBalance', userBalance.toString());
+                localStorage.setItem('activeRobots', JSON.stringify(activeRobots));
+                localStorage.setItem('userTransactions', JSON.stringify(userTransactions));
+                localStorage.setItem('userItems', JSON.stringify(userItems));
+                localStorage.setItem('referralCount', referralCount.toString());
+                localStorage.setItem('referralEarnings', referralEarnings.toString());
+            }
+        }
+
+        // Transaction logging
+        function logTransaction(description, amount, type) {
+            const transaction = {
+                id: Date.now(),
+                description: description,
+                amount: amount,
+                type: type,
+                date: new Date().toLocaleString(),
+                timestamp: Date.now()
+            };
+            
+            userTransactions.unshift(transaction);
+            localStorage.setItem('userTransactions', JSON.stringify(userTransactions));
+            updateTransactionsList();
+        }
+
+        // Referral functions
+        function copyReferralLink() {
+            const referralLink = document.getElementById('referralLink');
+            referralLink.select();
+            referralLink.setSelectionRange(0, 99999);
+            
+            try {
+                navigator.clipboard.writeText(referralLink.value).then(() => {
+                    showSuccessMessage('🎉 Referral link waa la copy gareeyay!');
+                }).catch(() => {
+                    document.execCommand('copy');
+                    showSuccessMessage('🎉 Referral link waa la copy gareeyay!');
+                });
+            } catch (err) {
+                document.execCommand('copy');
+                showSuccessMessage('🎉 Referral link waa la copy gareeyay!');
+            }
+            
+            // Simulate referral bonus (automatic $0.10 when copied)
+            setTimeout(() => {
+                userBalance += 0.10;
+                referralCount += 1;
+                referralEarnings += 0.10;
+                updateBalance();
+                updateReferralStats();
+                logTransaction('Referral bonus', 0.10, 'referral');
+                showSuccessMessage('🎉 Referral bonus $0.10 waa lagu daray!');
+            }, 2000);
+        }
+
+        function updateReferralStats() {
+            document.getElementById('referralCount').textContent = referralCount;
+            document.getElementById('referralEarnings').textContent = referralEarnings.toFixed(2);
+        }
+
+        // Show sections functions
+        function showReferral() {
+            playDeepMusic();
+            setTimeout(() => {
+                hideAllSections();
+                document.getElementById('referralSection').classList.remove('hidden');
+                updateSidebarActive('showReferral()');
+                
+                // Update referral link with user number
+                if (currentUser) {
+                    document.getElementById('referralLink').value = `https://uuriye.com/ref/${currentUser.number}`;
+                }
+            }, 500);
+        }
+
+        function showTransactions() {
+            playDeepMusic();
+            setTimeout(() => {
+                hideAllSections();
+                document.getElementById('transactionsSection').classList.remove('hidden');
+                updateSidebarActive('showTransactions()');
+                updateTransactionsList();
+            }, 500);
+        }
+
+        function showSellItems() {
+            playDeepMusic();
+            setTimeout(() => {
+                hideAllSections();
+                document.getElementById('sellItemsSection').classList.remove('hidden');
+                updateSidebarActive('showSellItems()');
+                updateMyItemsList();
+            }, 500);
+        }
+
+        function hideAllSections() {
+            const sections = ['dashboardHome', 'robotsSection', 'marketSection', 'exchangeSection', 'aiChatSection', 'referralSection', 'transactionsSection', 'sellItemsSection'];
+            sections.forEach(section => {
+                document.getElementById(section).classList.add('hidden');
+            });
+        }
+
+        function updateSidebarActive(functionName) {
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+            const activeItem = document.querySelector(`.sidebar-item[onclick="${functionName}"]`);
+            if (activeItem) activeItem.classList.add('active');
+        }
+
+        // Transaction filtering
+        function filterTransactions(type) {
+            // Update filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-500', 'text-white');
+                btn.classList.add('bg-gray-200');
+            });
+            event.target.classList.add('active', 'bg-blue-500', 'text-white');
+            event.target.classList.remove('bg-gray-200');
+            
+            updateTransactionsList(type);
+        }
+
+        function updateTransactionsList(filterType = 'all') {
+            const container = document.getElementById('transactionsList');
+            let filteredTransactions = userTransactions;
+            
+            if (filterType !== 'all') {
+                filteredTransactions = userTransactions.filter(t => t.type === filterType);
+            }
+            
+            if (filteredTransactions.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 py-8"><p>Dhaqdhaqaaq ma jiro</p></div>';
+                return;
+            }
+            
+            container.innerHTML = filteredTransactions.map(transaction => {
+                const typeIcon = {
+                    'deposit': '💰',
+                    'withdraw': '💸',
+                    'purchase': '🛒',
+                    'referral': '👥',
+                    'robot_complete': '🤖',
+                    'contact': '📞',
+                    'item_added': '🏪'
+                };
+                
+                const amountColor = transaction.amount >= 0 ? 'text-green-600' : 'text-red-600';
+                const amountSign = transaction.amount >= 0 ? '+' : '';
+                
+                return `
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">${typeIcon[transaction.type] || '💼'}</span>
+                            <div>
+                                <p class="font-semibold">${transaction.description}</p>
+                                <p class="text-sm text-gray-500">${transaction.date}</p>
+                            </div>
+                        </div>
+                        <p class="font-bold ${amountColor}">${amountSign}$${Math.abs(transaction.amount).toFixed(2)}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Add item form handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const addItemForm = document.getElementById('addItemForm');
+            if (addItemForm) {
+                addItemForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('itemName').value;
+                    const price = parseFloat(document.getElementById('itemPrice').value);
+                    const imageFile = document.getElementById('itemImage').files[0];
+                    const whatsapp = document.getElementById('sellerWhatsApp').value;
+                    const category = document.getElementById('itemCategory').value;
+                    
+                    if (!imageFile) {
+                        alert('Fadlan dooro sawir!');
+                        return;
+                    }
+                    
+                    // Validate WhatsApp number
+                    if (!whatsapp.match(/^252\d{9}$/)) {
+                        alert('Fadlan gali WhatsApp number sax ah! Tusaale: 252634567890');
+                        return;
+                    }
+                    
+                    // Convert image to base64
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const newItem = {
+                            id: Date.now() + Math.random(), // Unique ID
+                            name: name,
+                            price: price,
+                            image: e.target.result,
+                            whatsapp: whatsapp,
+                            category: category,
+                            seller: currentUser.number,
+                            dateAdded: new Date().toLocaleString(),
+                            isUserItem: true
+                        };
+                        
+                        // Add to user's personal items
+                        userItems.push(newItem);
+                        localStorage.setItem('userItems', JSON.stringify(userItems));
+                        
+                        // Add to global marketplace (visible to all users)
+                        const globalItems = JSON.parse(localStorage.getItem('globalUserItems') || '[]');
+                        globalItems.push(newItem);
+                        localStorage.setItem('globalUserItems', JSON.stringify(globalItems));
+                        
+                        playDeepMusic();
+                        showSuccessMessage('🎉 Alaabta waa lagu daray market-ka guud! Dadka oo dhan ayaa arki kara.');
+                        
+                        // Reset form
+                        addItemForm.reset();
+                        updateMyItemsList();
+                        
+                        // Log transaction
+                        logTransaction(`Added item: ${name}`, 0, 'item_added');
+                        
+                        // Refresh market if currently viewing
+                        if (!document.getElementById('marketSection').classList.contains('hidden')) {
+                            generateMarket();
+                        }
+                    };
+                    
+                    reader.readAsDataURL(imageFile);
+                });
+            }
+        });
+
+        function updateMyItemsList() {
+            const container = document.getElementById('myItemsList');
+            
+            if (userItems.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 py-8"><p>Wali alaab ma ku darin</p></div>';
+                return;
+            }
+            
+            container.innerHTML = userItems.map(item => `
+                <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                    <div class="flex-1">
+                        <h4 class="font-semibold">${item.name}</h4>
+                        <p class="text-sm text-gray-600">$${item.price}</p>
+                        <p class="text-xs text-gray-500">${item.dateAdded}</p>
+                    </div>
+                    <button onclick="removeItem(${item.id})" class="text-red-500 hover:text-red-700">
+                        🗑️
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeItem(itemId) {
+            if (confirm('Ma hubtaa inaad tirtireyso alaabtan?')) {
+                userItems = userItems.filter(item => item.id !== itemId);
+                localStorage.setItem('userItems', JSON.stringify(userItems));
+                updateMyItemsList();
+                showSuccessMessage('Alaabta waa la tirtiray!');
+            }
+        }
+
+        // Generate 2 million unique WhatsApp numbers for sellers
+        function generateSellerWhatsApp() {
+            const baseNumbers = [
+                '252634', '252635', '252636', '252637', '252638', '252639', 
+                '252640', '252641', '252642', '252643', '252644', '252645',
+                '252646', '252647', '252648', '252649', '252650', '252651',
+                '252652', '252653', '252654', '252655', '252656', '252657',
+                '252658', '252659', '252660', '252661', '252662', '252663'
+            ];
+            
+            const randomBase = baseNumbers[Math.floor(Math.random() * baseNumbers.length)];
+            const randomSuffix = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
+            return randomBase + randomSuffix;
+        }
+
+        // Enhanced market generation with user items and WhatsApp integration
+        function generateMarket(category = 'all') {
+            const container = document.getElementById('marketContainer');
+            container.innerHTML = '';
+            
+            // Get all user items from localStorage (global marketplace)
+            const allUserItems = JSON.parse(localStorage.getItem('globalUserItems') || '[]');
+            
+            let itemsToShow = [];
+            if (category === 'all') {
+                // Mix default items with all user items
+                itemsToShow = marketItems.concat(allUserItems.map(item => ({...item, isUserItem: true})));
+            } else {
+                // Filter by category
+                const defaultItems = marketCategories[category] || [];
+                const userCategoryItems = allUserItems.filter(item => item.category === category);
+                itemsToShow = defaultItems.concat(userCategoryItems.map(item => ({...item, isUserItem: true})));
+            }
+            
+            // Shuffle items for better distribution
+            itemsToShow = itemsToShow.sort(() => Math.random() - 0.5);
+            
+            itemsToShow.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'robot-card';
+                itemDiv.id = `market-${item.id}`;
+                
+                // Generate unique WhatsApp for each item if not user item
+                const whatsappNumber = item.isUserItem ? item.whatsapp : generateSellerWhatsApp();
+                
+                // Show seller info for user items
+                const sellerInfo = item.isUserItem ? 
+                    `<p class="text-xs text-gray-400 mb-2">📱 Seller: ${item.seller}</p>` : 
+                    `<p class="text-xs text-gray-400 mb-2">📱 ${whatsappNumber}</p>`;
+                
+                // Request/Contact button for all items
+                const contactButton = `<button onclick="contactSeller('${whatsappNumber}', '${item.name}', ${item.price})" class="w-full bg-green-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-600 transition-all duration-300">
+                    📞 Dalbo
+                </button>`;
+                
+                itemDiv.innerHTML = `
+                    <div class="text-center mb-4">
+                        <img src="${item.image}" alt="${item.name}" class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-white shadow-lg" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-center">${item.name}</h3>
+                    <p class="mb-2 text-center font-bold text-green-600">Qiimo: $${item.price}</p>
+                    ${sellerInfo}
+                    ${contactButton}
+                `;
+                
+                container.appendChild(itemDiv);
+            });
+            
+            // Update market statistics
+            updateMarketStatistics(itemsToShow, allUserItems);
+        }
+
+        function updateMarketStatistics(itemsToShow, allUserItems) {
+            const totalItems = itemsToShow.length;
+            const userItems = allUserItems.length;
+            const uniqueSellers = new Set(allUserItems.map(item => item.seller)).size;
+            
+            document.getElementById('totalItemsCount').textContent = totalItems;
+            document.getElementById('userItemsCount').textContent = userItems;
+            document.getElementById('sellersCount').textContent = uniqueSellers;
+        }
+
+        function contactSeller(whatsapp, itemName, price) {
+            const message = `Waxaan rabaa inaaniibsado ${itemName} qiimaha $${price}. Fadlan ii sheeg waxa aad iga dhimeyso adigoo mahadsan.`;
+            const whatsappUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            // Log the contact attempt
+            logTransaction(`Contacted seller for ${itemName}`, 0, 'contact');
+            showSuccessMessage(`📞 WhatsApp ayaa la furay si aad ula xiriirto iibiyaha ${itemName}!`);
+        }
+
+        function requestItem(whatsapp, itemName, price) {
+            contactSeller(whatsapp, itemName, price);
+        }
+
+        // Enhanced buy market item with WhatsApp integration
+        function buyMarketItem(itemId) {
+            const item = marketItems.find(i => i.id === itemId);
+            
+            if (userBalance < item.price) {
+                alert('Balance kuma filna alaabtaan iibsashada!');
+                return;
+            }
+            
+            // Play deep music effect
+            playDeepMusic();
+            
+            // Deduct price from balance
+            userBalance -= item.price;
+            updateBalance();
+            
+            // Log transaction
+            logTransaction(`Iibsaday ${item.name}`, -item.price, 'purchase');
+            
+            // Generate random WhatsApp numbers for 2 million potential sellers
+            const whatsappNumbers = [
+                '252634567890', '252635123456', '252636789012', '252637345678', 
+                '252638901234', '252639567890', '252640123456', '252641789012',
+                '252642345678', '252643901234', '252644567890', '252645123456'
+            ];
+            
+            const randomWhatsApp = whatsappNumbers[Math.floor(Math.random() * whatsappNumbers.length)];
+            const message = `Waxaan rabaa inaaniibsado ${item.name} qiimaha $${item.price}. Fadlan ii sheeg waxa aad iga dhimeyso adigoo mahadsan.`;
+            const whatsappUrl = `https://wa.me/${randomWhatsApp}?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank');
+            showSuccessMessage(`🛒 Waxaad iibsatay ${item.name}! WhatsApp ayaa la furay si aad ula xiriirto iibiyaha.`);
+        }
+
+        // Save data every 5 seconds
+        setInterval(saveUserData, 5000);
+
+        // Save data before page unload (refresh, close, etc.)
+        window.addEventListener('beforeunload', function() {
+            saveUserData();
+        });
+
+        // Save data when page becomes hidden (switching tabs, minimizing)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                saveUserData();
+            }
+        });
+
+        // Generate live crypto prices display
+        function generateLiveCryptoPrices() {
+            const container = document.getElementById('liveCryptoPrices');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            Object.keys(cryptoCurrencies).forEach(key => {
+                const crypto = cryptoCurrencies[key];
+                const changeColor = crypto.change >= 0 ? 'text-green-500' : 'text-red-500';
+                const changeIcon = crypto.change >= 0 ? '↗' : '↘';
+                
+                const priceDiv = document.createElement('div');
+                priceDiv.className = 'text-center p-3 bg-white rounded-lg border hover:shadow-md transition-all duration-300';
+                priceDiv.id = `live-price-${key}`;
+                
+                priceDiv.innerHTML = `
+                    <img src="${crypto.image}" alt="${crypto.name}" class="w-12 h-12 mx-auto rounded-full object-cover mb-2" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                    <p class="text-xs font-semibold">${crypto.name}</p>
+                    <p class="text-sm font-bold">$${crypto.price}</p>
+                    <p class="text-xs ${changeColor}">${changeIcon}${Math.abs(crypto.change)}%</p>
+                `;
+                
+                container.appendChild(priceDiv);
+            });
+        }
+
+        // Start crypto price updates
+        function startCryptoPriceUpdates() {
+            setInterval(() => {
+                Object.keys(cryptoCurrencies).forEach(key => {
+                    const crypto = cryptoCurrencies[key];
+                    
+                    // Simulate price changes
+                    const changePercent = (Math.random() - 0.5) * 10; // -5% to +5%
+                    const newPrice = crypto.price * (1 + changePercent / 100);
+                    crypto.price = Math.max(0.0001, parseFloat(newPrice.toFixed(6)));
+                    crypto.change = changePercent;
+                    
+                    // Update display
+                    const priceElement = document.getElementById(`live-price-${key}`);
+                    if (priceElement) {
+                        const changeColor = crypto.change >= 0 ? 'text-green-500' : 'text-red-500';
+                        const changeIcon = crypto.change >= 0 ? '↗' : '↘';
+                        
+                        priceElement.innerHTML = `
+                            <img src="${crypto.image}" alt="${crypto.name}" class="w-12 h-12 mx-auto rounded-full object-cover mb-2" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+                            <p class="text-xs font-semibold">${crypto.name}</p>
+                            <p class="text-sm font-bold">$${crypto.price}</p>
+                            <p class="text-xs ${changeColor}">${changeIcon}${Math.abs(crypto.change).toFixed(1)}%</p>
+                        `;
+                        
+                        // Add animation effect
+                        priceElement.style.animation = 'pulse 0.5s ease-in-out';
+                        setTimeout(() => {
+                            priceElement.style.animation = '';
+                        }, 500);
+                    }
+                });
+                
+                // Also update crypto options in exchange
+                generateCryptoOptions();
+            }, 3000); // Update every 3 seconds
+        }
+
+        // Show AI Chat
+        function showAIChat() {
+            playDeepMusic();
+            setTimeout(() => {
+                hideAllSections();
+                document.getElementById('aiChatSection').classList.remove('hidden');
+                updateSidebarActive('showAIChat()');
+            }, 500);
+        }
+
+        // Send AI message
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addChatMessage(message, 'user');
+            input.value = '';
+            
+            // Process AI response
+            setTimeout(() => {
+                const response = processAIMessage(message);
+                addChatMessage(response.text, 'ai', response.image, response.downloadable);
+            }, 1000);
+        }
+
+        // Add chat message
+        function addChatMessage(message, sender, image = null, downloadable = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `mb-4 ${sender === 'user' ? 'text-right' : 'text-left'}`;
+            
+            const bubbleClass = sender === 'user' 
+                ? 'bg-blue-500 text-white ml-12' 
+                : 'bg-white text-gray-800 mr-12 border';
+            
+            let imageHtml = '';
+            if (image) {
+                const downloadBtn = downloadable ? `<button onclick="downloadImage('${image}', 'ai-generated-image.jpg')" class="mt-2 bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">📥 Degsii Sawirka</button>` : '';
+                imageHtml = `<img src="${image}" alt="AI Generated" class="w-48 h-48 rounded-lg object-cover mb-2" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">${downloadBtn}`;
+            }
+            
+            messageDiv.innerHTML = `
+                <div class="inline-block p-3 rounded-lg ${bubbleClass} max-w-xs">
+                    ${sender === 'ai' ? '🤖 ' : ''}${imageHtml}${message}
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Download image function
+        function downloadImage(imageUrl, filename) {
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = filename;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Process AI message
+        function processAIMessage(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Check for image requests
+            for (const [keyword, imageUrl] of Object.entries(aiImageDatabase)) {
+                if (lowerMessage.includes(keyword) && (lowerMessage.includes('sawir') || lowerMessage.includes('sameey') || lowerMessage.includes('tus'))) {
+                    return {
+                        text: `Waa kan sawirka ${keyword}! 🎨`,
+                        image: imageUrl,
+                        downloadable: true
+                    };
+                }
+            }
+            
+            // General questions about the platform
+            if (lowerMessage.includes('maxay tahay') || lowerMessage.includes('waa maxay')) {
+                return {
+                    text: `🌟 Uuriye Investment waa platform maalgashi oo casri ah oo ku saabsan:
+                    
+📱 **Robots** - Maalgashi otomaatig ah oo 24 saac shaqeeya
+💰 **Exchange** - Badalka EVC Plus iyo Crypto
+🛒 **Market** - Iibinta alaabta kala duwan
+💳 **Deposit/Withdraw** - Lacag gelinta iyo bixinta
+🤖 **AI Assistant** - Kaaliye casri ah (aniga!)
+
+Waxaad ku biiri kartaa maalgashiga mustaqbalka!`,
+                    image: null
+                };
+            }
+            
+            if (lowerMessage.includes('robot') && (lowerMessage.includes('maxay') || lowerMessage.includes('sidee'))) {
+                return {
+                    text: `🤖 **Robotyada Maalgashiga:**
+
+✅ Waxay shaqeeyaan 24 saac oo aan joogsanayn
+💰 Waxay ku siiyaan faa'iido muddo 24 saac gudahood
+📈 25 nooc oo kala duwan oo robots ah
+⚡ Otomaatig ah - ma u baahna inaad la socoto
+
+**Sidee loo isticmaalo:**
+1. Dooro robot
+2. Bixii lacagta
+3. Sug 24 saac
+4. Hel lacagta + faa'iidada!`,
+                    image: null
+                };
+            }
+            
+            if (lowerMessage.includes('exchange') || lowerMessage.includes('badal')) {
+                return {
+                    text: `💱 **Exchange - Lacag Badalka:**
+
+🔄 **EVC Plus ↔ Crypto** - Labada dhinac
+📊 **Live Prices** - Qiimaha suuqa ee dhabta ah
+📈 **Real-time Updates** - Isbeddelka qiimaha si toos ah
+💹 **9 Crypto** - Bitcoin, Ethereum, TRX, Dogecoin iwm
+
+**Sidee loo isticmaalo:**
+1. Dooro exchange type (EVC→Crypto ama Crypto→EVC)
+2. Dooro crypto currency
+3. Gali lacagta
+4. Confirm!`,
+                    image: null
+                };
+            }
+            
+            if (lowerMessage.includes('market') || lowerMessage.includes('iibso')) {
+                return {
+                    text: `🛒 **Market - Iibinta Alaabta:**
+
+📱 **Telefonnada** - iPhone, Samsung, Redmi iwm
+👕 **Dharka** - Kabaha, labiska, qurxinta
+💊 **Dawada** - Paracetamol, Vitamin C iwm  
+💻 **Electronics** - Laptop, headset, watch iwm
+
+**Categories:**
+• Dhammaan - Wax walba
+• Dhar - Kabaha iyo labiska
+• Telefon - Telefonnada cusub
+• Dawo - Dawada caafimaadka
+• Electronics - Qalabka casriga ah`,
+                    image: null
+                };
+            }
+            
+            // Default responses
+            const responses = [
+                "🤖 Waan ku caawinayaa! Weydiiso wax kale ama codsii sawir.",
+                "💡 Tusaale: 'ii sameey sawir geel' ama 'maxay yihiin robotyada?'",
+                "🌟 Waxaan kaaga jawaabi karaa su'aalaha ku saabsan Uuriye Investment!",
+                "🎯 Haddii aad rabto sawir, qor: 'ii sameey sawir [magaca shayga]'",
+                "📚 Su'aal kale oo ku saabsan sirkan miyaad leedahay?"
+            ];
+            
+            return {
+                text: responses[Math.floor(Math.random() * responses.length)],
+                image: null
+            };
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96e5e756f54e73e1',t:'MTc1NTA2Mzg5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
