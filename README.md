@@ -1,2 +1,0 @@
-# caawiye
-shaqo fudud
