@@ -1,0 +1,2485 @@
+<!DOCTYPE html>
+<html lang="so"><script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAblsizDBhsLbQOyjfLuGLG-NZwriezglw",
+    authDomain: "horseed-85d3f.firebaseapp.com",
+    projectId: "horseed-85d3f",
+    storageBucket: "horseed-85d3f.firebasestorage.app",
+    messagingSenderId: "1088937896030",
+    appId: "1:1088937896030:web:0eea3aaf7f42fac62d6ccf",
+    measurementId: "G-MW88JM63YS"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>InvestMarket Pro 2025 - Maalgashi & Suuq</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
+        * {
+            font-family: 'Space Grotesk', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Modern 2025 Background */
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            position: relative;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 25%, #ff006e33 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, #8338ec33 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #3a86ff22 0%, transparent 50%);
+            animation: bgPulse 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes bgPulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        /* Floating Particles */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: float-particle 15s infinite linear;
+        }
+        
+        @keyframes float-particle {
+            0% { 
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Glass Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 50px rgba(131, 56, 236, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.8s;
+        }
+        
+        .glass:hover::before {
+            left: 100%;
+        }
+        
+        /* Neon Text Effects */
+        .neon-primary {
+            color: #ff006e;
+            text-shadow: 
+                0 0 10px #ff006e,
+                0 0 20px #ff006e,
+                0 0 40px #ff006e,
+                0 0 80px #ff006e;
+            animation: neonFlicker 3s ease-in-out infinite alternate;
+        }
+        
+        .neon-secondary {
+            color: #8338ec;
+            text-shadow: 
+                0 0 10px #8338ec,
+                0 0 20px #8338ec,
+                0 0 40px #8338ec;
+        }
+        
+        .neon-accent {
+            color: #3a86ff;
+            text-shadow: 
+                0 0 10px #3a86ff,
+                0 0 20px #3a86ff;
+        }
+        
+        @keyframes neonFlicker {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 10px #ff006e,
+                    0 0 20px #ff006e,
+                    0 0 40px #ff006e,
+                    0 0 80px #ff006e;
+            }
+            50% { 
+                text-shadow: 
+                    0 0 5px #ff006e,
+                    0 0 10px #ff006e,
+                    0 0 20px #ff006e,
+                    0 0 40px #ff006e;
+            }
+        }
+        
+        /* Modern Buttons */
+        .modern-btn {
+            position: relative;
+            background: linear-gradient(135deg, #ff006e, #8338ec, #3a86ff);
+            border: none;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .modern-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .modern-btn:hover::before {
+            left: 100%;
+        }
+        
+        .modern-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Cards */
+        .modern-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 0, 110, 0.1) 0%,
+                rgba(131, 56, 236, 0.1) 50%,
+                rgba(58, 134, 255, 0.1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .modern-card:hover {
+            transform: translateY(-5px);
+            border: 1px solid rgba(255, 0, 110, 0.3);
+            box-shadow: 0 20px 40px rgba(255, 0, 110, 0.2);
+        }
+        
+        /* Input Styling */
+        .modern-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .modern-input:focus {
+            border: 2px solid #ff006e;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 110, 0.3),
+                inset 0 0 20px rgba(255, 0, 110, 0.1);
+            background: rgba(255, 0, 110, 0.05);
+            outline: none;
+        }
+        
+        /* Status Indicators */
+        .status-active {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.8), 0 0 40px rgba(0, 255, 136, 0.3); }
+        }
+        
+        /* Page Transitions */
+        .page {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+        }
+        
+        .page.hidden {
+            opacity: 0;
+            transform: translateY(100vh);
+            pointer-events: none;
+        }
+        
+        /* Grid Layout */
+        .grid-layout {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            padding: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-layout {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                padding: 1rem;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading-dots::after {
+            content: '';
+            animation: loadingDots 1.5s infinite;
+        }
+        
+        @keyframes loadingDots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+        
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ff006e, #8338ec);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #8338ec, #3a86ff);
+        }
+        
+        /* Message System */
+        .message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .message-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .message-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .message-overlay.show .message-box {
+            transform: scale(1);
+        }
+        
+        .message-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .message-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .message-text {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .message-success {
+            border-color: #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+        
+        .message-error {
+            border-color: #ff4757;
+            box-shadow: 0 0 30px rgba(255, 71, 87, 0.3);
+        }
+        
+        .message-warning {
+            border-color: #ffa502;
+            box-shadow: 0 0 30px rgba(255, 165, 2, 0.3);
+        }
+        
+        .message-info {
+            border-color: #3742fa;
+            box-shadow: 0 0 30px rgba(55, 66, 250, 0.3);
+        }
+        
+        /* Enhanced Responsive Design for All Devices */
+        
+        /* Mobile Phones (320px - 480px) */
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+            
+            .grid-layout {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+                padding: 0.8rem;
+            }
+            
+            .modern-card {
+                padding: 1rem;
+                min-height: auto;
+            }
+            
+            .glass {
+                padding: 1.2rem;
+                margin: 0.5rem;
+            }
+            
+            .message-box {
+                padding: 15px;
+                margin: 5px;
+                max-width: 95%;
+            }
+            
+            .message-icon {
+                font-size: 2.5rem;
+            }
+            
+            .message-title {
+                font-size: 1.1rem;
+            }
+            
+            .message-text {
+                font-size: 0.9rem;
+            }
+            
+            .modern-input {
+                padding: 12px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .modern-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            h1 {
+                font-size: 2rem !important;
+            }
+            
+            h2 {
+                font-size: 1.5rem !important;
+            }
+            
+            .text-6xl {
+                font-size: 3rem !important;
+            }
+            
+            .text-5xl {
+                font-size: 2.5rem !important;
+            }
+            
+            .text-4xl {
+                font-size: 2rem !important;
+            }
+            
+            .text-3xl {
+                font-size: 1.5rem !important;
+            }
+        }
+        
+        /* Large Mobile Phones (481px - 600px) */
+        @media (min-width: 481px) and (max-width: 600px) {
+            .grid-layout {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .modern-card {
+                padding: 1.3rem;
+            }
+            
+            .glass {
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Tablets Portrait (601px - 768px) */
+        @media (min-width: 601px) and (max-width: 768px) {
+            .grid-layout {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.2rem;
+                padding: 1.2rem;
+            }
+            
+            .modern-card {
+                padding: 1.5rem;
+            }
+            
+            .glass {
+                padding: 1.8rem;
+            }
+        }
+        
+        /* Tablets Landscape (769px - 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .grid-layout {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+            
+            .modern-card {
+                padding: 1.8rem;
+            }
+            
+            .glass {
+                padding: 2rem;
+            }
+        }
+        
+        /* Small Laptops (1025px - 1366px) */
+        @media (min-width: 1025px) and (max-width: 1366px) {
+            .grid-layout {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.8rem;
+                padding: 1.8rem;
+            }
+            
+            .modern-card {
+                padding: 2rem;
+            }
+            
+            .glass {
+                padding: 2.2rem;
+            }
+        }
+        
+        /* Large Laptops & Desktops (1367px - 1920px) */
+        @media (min-width: 1367px) and (max-width: 1920px) {
+            .grid-layout {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 2rem;
+                padding: 2rem;
+            }
+            
+            .modern-card {
+                padding: 2.2rem;
+            }
+            
+            .glass {
+                padding: 2.5rem;
+            }
+        }
+        
+        /* Ultra-wide Screens (1921px+) */
+        @media (min-width: 1921px) {
+            .grid-layout {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 2.5rem;
+                padding: 2.5rem;
+                max-width: 2400px;
+                margin: 0 auto;
+            }
+            
+            .modern-card {
+                padding: 2.5rem;
+            }
+            
+            .glass {
+                padding: 3rem;
+            }
+        }
+        
+        /* Orientation-specific adjustments */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .page {
+                min-height: auto;
+            }
+            
+            .glass {
+                padding: 1rem;
+            }
+            
+            .grid-layout {
+                padding: 1rem;
+                gap: 1rem;
+            }
+        }
+        
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .modern-card {
+                border-width: 0.5px;
+            }
+            
+            .glass {
+                border-width: 0.5px;
+            }
+        }
+        
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .modern-btn {
+                min-height: 44px; /* iOS touch target minimum */
+                min-width: 44px;
+            }
+            
+            .modern-card {
+                cursor: default;
+            }
+            
+            .modern-card:hover {
+                transform: none;
+            }
+            
+            .modern-card:active {
+                transform: scale(0.98);
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .glass, .modern-card {
+                background: white !important;
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+            }
+            
+            .particle, .message-overlay {
+                display: none !important;
+            }
+        }
+        
+        /* Robot Timer Styling */
+        .robot-timer {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 10px 0;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            animation: timerPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes timerPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+                transform: scale(1.05);
+            }
+        }
+        
+        /* Balance Display Enhancement */
+        .balance-display {
+            background: linear-gradient(135deg, #ff006e, #8338ec, #3a86ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: balanceGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes balanceGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Message Overlay -->
+    <div id="messageOverlay" class="message-overlay">
+        <div id="messageBox" class="message-box">
+            <div id="messageIcon" class="message-icon">✅</div>
+            <div id="messageTitle" class="message-title">SUCCESS</div>
+            <div id="messageText" class="message-text">Operation completed successfully!</div>
+        </div>
+    </div>
+
+    <!-- Floating Particles -->
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 8s;"></div>
+    <div class="particle" style="left: 60%; animation-delay: 10s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 12s;"></div>
+    <div class="particle" style="left: 80%; animation-delay: 14s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 16s;"></div>
+
+    <!-- Home/Register Page -->
+    <div id="homePage" class="page flex items-center justify-center p-6">
+        <div class="glass rounded-3xl p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <div class="mb-6">
+                    <h1 class="text-5xl font-bold neon-primary mb-2">💎 InvestMarket</h1>
+                    <div class="text-xl font-bold neon-secondary mono">PRO 2025</div>
+                </div>
+                <p class="text-xl text-gray-300 font-light">🚀 Mustaqbalka Maalgashiga & Suuqga</p>
+                <div class="flex justify-center mt-4">
+                    <div class="w-32 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 rounded-full"></div>
+                </div>
+            </div>
+            
+            <div id="registerForm">
+                <h2 class="text-3xl font-bold text-white mb-6 text-center neon-accent">✨ Bilow Safarkaaga</h2>
+                <div class="space-y-5">
+                    <div class="relative">
+                        <input type="tel" id="regNumber" placeholder="📱 Lambarka Telefoonka" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                    </div>
+                    <div class="relative">
+                        <input type="password" id="regPassword" placeholder="🔐 Sirta Amaanka leh" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                    </div>
+                    <div class="relative">
+                        <input type="password" id="regConfirmPassword" placeholder="✅ Xaqiiji Sirta" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                    </div>
+                    <button onclick="playBeep('register'); register()" class="w-full modern-btn text-white p-4 rounded-2xl font-bold text-xl shadow-2xl">
+                        🚀 BILOW HADDA
+                    </button>
+                </div>
+                <div class="text-center mt-8">
+                    <p class="text-gray-400 mb-4 text-lg">Miyaad horay u leedahay akoon?</p>
+                    <button onclick="playBeep('login'); showLogin()" class="neon-accent font-bold hover:text-pink-400 transition-colors text-lg">
+                        ⚡ GAL AKOONKAAGA
+                    </button>
+                </div>
+            </div>
+            
+            <div id="loginForm" class="hidden">
+                <h2 class="text-3xl font-bold text-white mb-6 text-center neon-accent">🎯 Ku Soo Dhawoow</h2>
+                <div class="space-y-5">
+                    <div class="relative">
+                        <input type="tel" id="loginNumber" placeholder="📱 Lambarka Telefoonka" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                    </div>
+                    <div class="relative">
+                        <input type="password" id="loginPassword" placeholder="🔐 Sirta" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                    </div>
+                    <button onclick="playBeep('login'); login()" class="w-full modern-btn text-white p-4 rounded-2xl font-bold text-xl shadow-2xl">
+                        ⚡ GAL HADDA
+                    </button>
+                </div>
+                <div class="text-center mt-8">
+                    <p class="text-gray-400 mb-4 text-lg">Cusub ma tahay?</p>
+                    <button onclick="playBeep('register'); showRegister()" class="neon-accent font-bold hover:text-pink-400 transition-colors text-lg">
+                        ✨ SAMEE AKOON CUSUB
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="page hidden">
+        <div class="p-6">
+            <!-- Header -->
+            <div class="glass rounded-3xl p-8 mb-8 modern-card">
+                <div class="text-center">
+                    <h1 class="text-4xl font-bold neon-primary mb-3">🎯 COMMAND CENTER</h1>
+                    <p class="text-lg text-gray-300 mono mb-6">Maamulka Akoonkaaga • 2025</p>
+                    <div class="text-center">
+                        <p class="text-gray-400 text-sm mono mb-2">💰 HARAAGAAGA</p>
+                        <p class="text-5xl font-bold balance-display mono">$<span id="userBalance">0.00</span></p>
+                        <div class="flex justify-center items-center gap-2 mt-2">
+                            <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                            <span class="text-green-400 text-sm font-bold">✅ LIVE BALANCE</span>
+                            <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Actions Grid -->
+            <div class="grid-layout">
+                <button onclick="playBeep('deposit'); showDeposit()" class="modern-card p-8 rounded-2xl text-white text-center hover:scale-105 transition-transform">
+                    <div class="text-6xl mb-4">💎</div>
+                    <div class="font-bold text-xl neon-accent mb-2">DHIG LACAG</div>
+                    <div class="text-sm text-gray-400 mono">Kordhii haraagaaga</div>
+                </button>
+                
+                <button onclick="playBeep('withdraw'); showWithdraw()" class="modern-card p-8 rounded-2xl text-white text-center hover:scale-105 transition-transform">
+                    <div class="text-6xl mb-4">💸</div>
+                    <div class="font-bold text-xl neon-accent mb-2">KA SAAR LACAG</div>
+                    <div class="text-sm text-gray-400 mono">Soo saari lacagta</div>
+                </button>
+                
+                <button onclick="playBeep('ussd'); showUSSD()" class="modern-card p-8 rounded-2xl text-white text-center hover:scale-105 transition-transform">
+                    <div class="text-6xl mb-4">📱</div>
+                    <div class="font-bold text-xl neon-accent mb-2">USSD FLASH</div>
+                    <div class="text-sm text-gray-400 mono">Wareejin degdeg ah</div>
+                </button>
+                
+                <button onclick="playBeep('robot'); showRobots()" class="modern-card p-8 rounded-2xl text-white text-center hover:scale-105 transition-transform">
+                    <div class="text-6xl mb-4">🤖</div>
+                    <div class="font-bold text-xl neon-accent mb-2">AI ROBOTS</div>
+                    <div class="text-sm text-gray-400 mono">Maalgashi 24/7</div>
+                </button>
+                
+                <button onclick="playBeep('market'); showMarket()" class="modern-card p-8 rounded-2xl text-white text-center hover:scale-105 transition-transform">
+                    <div class="text-6xl mb-4">🛒</div>
+                    <div class="font-bold text-xl neon-accent mb-2">CYBER SUUQ</div>
+                    <div class="text-sm text-gray-400 mono">Iibso alaabta</div>
+                </button>
+                
+                <button onclick="playBeep('exchange'); showExchange()" class="modern-card p-8 rounded-2xl text-white text-center hover:scale-105 transition-transform">
+                    <div class="text-6xl mb-4">💱</div>
+                    <div class="font-bold text-xl neon-accent mb-2">EXCHANGE</div>
+                    <div class="text-sm text-gray-400 mono">Lacag is badalka</div>
+                </button>
+                
+                <button onclick="playBeep('ai'); showAI()" class="modern-card p-8 rounded-2xl text-white text-center hover:scale-105 transition-transform">
+                    <div class="text-6xl mb-4">🧠</div>
+                    <div class="font-bold text-xl neon-accent mb-2">AI ASSISTANT</div>
+                    <div class="text-sm text-gray-400 mono">Caawi AI ah</div>
+                </button>
+                
+                <button onclick="playBeep('upload'); showUploadProduct()" class="modern-card p-8 rounded-2xl text-white text-center hover:scale-105 transition-transform">
+                    <div class="text-6xl mb-4">📤</div>
+                    <div class="font-bold text-xl neon-accent mb-2">SOOGALI ALAAB</div>
+                    <div class="text-sm text-gray-400 mono">Iibso alaabta</div>
+                </button>
+                
+                <button onclick="playBeep('referral'); showReferral()" class="modern-card p-8 rounded-2xl text-white text-center hover:scale-105 transition-transform">
+                    <div class="text-6xl mb-4">🔗</div>
+                    <div class="font-bold text-xl neon-accent mb-2">REFERRAL</div>
+                    <div class="text-sm text-gray-400 mono">Soo jiito saaxiib</div>
+                </button>
+                
+                <button onclick="playBeep('logout'); logout()" class="modern-card p-8 rounded-2xl text-white text-center hover:scale-105 transition-transform bg-red-500/20">
+                    <div class="text-6xl mb-4">🚪</div>
+                    <div class="font-bold text-xl neon-accent mb-2">LOGOUT</div>
+                    <div class="text-sm text-gray-400 mono">Ka bax akoonka</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Page -->
+    <div id="depositPage" class="page hidden flex items-center justify-center p-6">
+        <div class="glass rounded-3xl p-8 w-full max-w-md modern-card">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">💎</div>
+                <h2 class="text-4xl font-bold neon-primary mb-3">DHIG LACAG</h2>
+                <p class="text-gray-300 mono text-lg">Kordhii haraagaaga si degdeg ah</p>
+            </div>
+            
+            <div class="space-y-5">
+                <input type="number" id="depositAmount" placeholder="💰 Qaddarka ($)" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                
+                <select id="depositMethod" class="w-full p-4 rounded-2xl modern-input text-white focus:outline-none text-lg" onchange="showPaymentImage('deposit')">
+                    <option value="evcplus">📱 EVC Plus - Degdeg ah</option>
+                    <option value="crypto">₿ Crypto - Amaanka leh</option>
+                </select>
+                
+                <div id="depositPaymentImage" class="text-center hidden">
+                    <img id="depositImage" src="" alt="Payment Method" class="w-32 h-32 mx-auto rounded-xl object-cover">
+                </div>
+                
+                <input type="text" id="depositAddress" placeholder="🎯 Gali cinwaanka/lambarka" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                
+                <div class="flex gap-4 mt-8">
+                    <button onclick="playBeep('confirm'); confirmDeposit()" class="flex-1 modern-btn text-white p-4 rounded-2xl font-bold text-lg">
+                        ✅ XAQIIJI
+                    </button>
+                    <button onclick="playBeep('back'); showDashboard()" class="flex-1 glass text-white p-4 rounded-2xl font-bold hover:bg-red-500/20 text-lg">
+                        ← DIB
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Page -->
+    <div id="withdrawPage" class="page hidden flex items-center justify-center p-6">
+        <div class="glass rounded-3xl p-8 w-full max-w-md modern-card">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">💸</div>
+                <h2 class="text-4xl font-bold neon-primary mb-3">KA SAAR LACAG</h2>
+                <p class="text-gray-300 mono text-lg">Soo saari lacagta si amaanka leh</p>
+            </div>
+            
+            <div class="space-y-5">
+                <input type="number" id="withdrawAmount" placeholder="💸 Qaddarka ($)" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                
+                <select id="withdrawMethod" class="w-full p-4 rounded-2xl modern-input text-white focus:outline-none text-lg" onchange="showPaymentImage('withdraw')">
+                    <option value="evcplus">📱 EVC Plus - Degdeg ah</option>
+                    <option value="crypto">₿ Crypto - Amaanka leh</option>
+                </select>
+                
+                <div id="withdrawPaymentImage" class="text-center hidden">
+                    <img id="withdrawImage" src="" alt="Payment Method" class="w-32 h-32 mx-auto rounded-xl object-cover">
+                </div>
+                
+                <input type="text" id="withdrawAddress" placeholder="🎯 Gali cinwaanka/lambarka" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                
+                <div class="flex gap-4 mt-8">
+                    <button onclick="playBeep('confirm'); confirmWithdraw()" class="flex-1 modern-btn text-white p-4 rounded-2xl font-bold text-lg">
+                        ✅ XAQIIJI
+                    </button>
+                    <button onclick="playBeep('back'); showDashboard()" class="flex-1 glass text-white p-4 rounded-2xl font-bold hover:bg-red-500/20 text-lg">
+                        ← DIB
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- USSD Page -->
+    <div id="ussdPage" class="page hidden flex items-center justify-center p-6">
+        <div class="glass rounded-3xl p-8 w-full max-w-md modern-card">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">📱</div>
+                <h2 class="text-4xl font-bold neon-primary mb-3">USSD FLASH</h2>
+                <p class="text-gray-300 mono text-lg">Wareejin degdeg ah oo casri ah</p>
+            </div>
+            
+            <div class="space-y-5">
+                <input type="number" id="ussdAmount" placeholder="⚡ Qaddarka ($)" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                
+                <div class="flex gap-4 mt-8">
+                    <button onclick="playBeep('ussd'); sendUSSD()" class="flex-1 modern-btn text-white p-4 rounded-2xl font-bold text-lg">
+                        📞 DIR HADDA
+                    </button>
+                    <button onclick="playBeep('back'); showDashboard()" class="flex-1 glass text-white p-4 rounded-2xl font-bold hover:bg-red-500/20 text-lg">
+                        ← DIB
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Robots Page -->
+    <div id="robotsPage" class="page hidden">
+        <div class="p-6">
+            <div class="glass rounded-3xl p-6 mb-8 modern-card">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold neon-primary mb-2">🤖 AI ROBOTS</h1>
+                        <p class="text-lg text-gray-300 mono">Maalgashi 24/7 • AI Powered</p>
+                    </div>
+                    <button onclick="playBeep('back'); showDashboard()" class="glass px-6 py-3 rounded-xl text-white font-bold text-lg">
+                        ← DIB
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid-layout" id="robotsList">
+                <!-- Robots will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Exchange Page -->
+    <div id="exchangePage" class="page hidden flex items-center justify-center p-6">
+        <div class="glass rounded-3xl p-8 w-full max-w-md modern-card">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">💱</div>
+                <h2 class="text-4xl font-bold neon-primary mb-3">EXCHANGE</h2>
+                <p class="text-gray-300 mono text-lg">Lacag is badalka si degdeg ah</p>
+            </div>
+            
+            <div class="space-y-5">
+                <div class="glass p-4 rounded-2xl">
+                    <p class="text-gray-400 text-sm mb-2">Ka:</p>
+                    <div class="flex items-center gap-3 mb-2">
+                        <img id="fromCurrencyImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s" alt="Currency" class="w-8 h-8 rounded-full">
+                        <span id="fromCurrencyPrice" class="text-green-400 font-bold mono text-sm">$1.00</span>
+                        <span id="fromCurrencyChange" class="text-green-400 text-xs">📈 +2.5%</span>
+                    </div>
+                    <select id="fromCurrency" class="w-full p-3 rounded-xl modern-input text-white focus:outline-none" onchange="updateExchangeRate()">
+                        <option value="evc">📱 EVC Plus</option>
+                        <option value="bitcoin">₿ Bitcoin</option>
+                        <option value="ethereum">Ξ Ethereum</option>
+                        <option value="trx">🔥 Tron (TRX)</option>
+                        <option value="doge">🐕 Dogecoin</option>
+                        <option value="cardano">🔷 Cardano</option>
+                        <option value="xrp">💧 XRP</option>
+                        <option value="ton">💎 TON</option>
+                        <option value="hamster">🐹 Hamster</option>
+                        <option value="memefi">🎮 MemeFi</option>
+                    </select>
+                </div>
+                
+                <div class="text-center">
+                    <button onclick="swapCurrencies()" class="modern-btn p-3 rounded-full text-white">
+                        🔄
+                    </button>
+                </div>
+                
+                <div class="glass p-4 rounded-2xl">
+                    <p class="text-gray-400 text-sm mb-2">Ilaa:</p>
+                    <div class="flex items-center gap-3 mb-2">
+                        <img id="toCurrencyImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s" alt="Currency" class="w-8 h-8 rounded-full">
+                        <span id="toCurrencyPrice" class="text-green-400 font-bold mono text-sm">$45,000.00</span>
+                        <span id="toCurrencyChange" class="text-red-400 text-xs">📉 -1.2%</span>
+                    </div>
+                    <select id="toCurrency" class="w-full p-3 rounded-xl modern-input text-white focus:outline-none" onchange="updateExchangeRate()">
+                        <option value="bitcoin">₿ Bitcoin</option>
+                        <option value="evc">📱 EVC Plus</option>
+                        <option value="ethereum">Ξ Ethereum</option>
+                        <option value="trx">🔥 Tron (TRX)</option>
+                        <option value="doge">🐕 Dogecoin</option>
+                        <option value="cardano">🔷 Cardano</option>
+                        <option value="xrp">💧 XRP</option>
+                        <option value="ton">💎 TON</option>
+                        <option value="hamster">🐹 Hamster</option>
+                        <option value="memefi">🎮 MemeFi</option>
+                    </select>
+                </div>
+                
+                <input type="number" id="exchangeAmount" placeholder="💰 Qaddarka" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg" oninput="calculateExchange()">
+                
+                <div class="glass p-4 rounded-2xl text-center">
+                    <p class="text-gray-400 text-sm mb-2">Qiimaha Live:</p>
+                    <p id="exchangeRate" class="text-2xl font-bold neon-secondary mono">1 EVC = 0.000022 BTC</p>
+                    <div id="exchangeResult" class="text-lg text-white mt-2"></div>
+                    <div class="text-xs text-gray-400 mt-2">📊 Suuqa waa live oo wuu is beddelayaa</div>
+                </div>
+                
+                <div class="flex gap-4 mt-8">
+                    <button onclick="playBeep('confirm'); confirmExchange()" class="flex-1 modern-btn text-white p-4 rounded-2xl font-bold text-lg">
+                        💱 BADALKA
+                    </button>
+                    <button onclick="playBeep('back'); showDashboard()" class="flex-1 glass text-white p-4 rounded-2xl font-bold hover:bg-red-500/20 text-lg">
+                        ← DIB
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Page -->
+    <div id="aiPage" class="page hidden">
+        <div class="p-6">
+            <div class="glass rounded-3xl p-6 mb-8 modern-card">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold neon-primary mb-2">🧠 AI ASSISTANT</h1>
+                        <p class="text-lg text-gray-300 mono">Caawi AI ah • 24/7 Available</p>
+                    </div>
+                    <button onclick="playBeep('back'); showDashboard()" class="glass px-6 py-3 rounded-xl text-white font-bold text-lg">
+                        ← DIB
+                    </button>
+                </div>
+            </div>
+            
+            <div class="glass rounded-3xl p-6 modern-card">
+                <div id="chatMessages" class="h-96 overflow-y-auto mb-4 space-y-4">
+                    <div class="text-center text-gray-400 text-sm">
+                        🤖 Ahlan! Waxaan ahay AI Assistant. Su'aal kasta oo ku saabsan sirkan ama wax kasta oo aad rabto in aan ku caawiyo, i weydiiso!
+                    </div>
+                </div>
+                
+                <div class="flex gap-3">
+                    <input type="text" id="userMessage" placeholder="🗨️ Qor fariintaada halkan..." class="flex-1 p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none" onkeypress="if(event.key==='Enter') sendMessage()">
+                    <button onclick="sendMessage()" class="modern-btn px-6 py-4 rounded-2xl text-white font-bold">
+                        📤
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Page -->
+    <div id="referralPage" class="page hidden flex items-center justify-center p-6">
+        <div class="glass rounded-3xl p-8 w-full max-w-md modern-card">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">🔗</div>
+                <h2 class="text-4xl font-bold neon-primary mb-3">REFERRAL LINK</h2>
+                <p class="text-gray-300 mono text-lg">Soo jiito saaxiib oo kasab lacag</p>
+            </div>
+            
+            <div class="space-y-5">
+                <div class="glass p-4 rounded-2xl">
+                    <p class="text-gray-400 text-sm mb-2">Linkkaaga:</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="referralLink" value="" readonly class="flex-1 p-3 rounded-xl modern-input text-white focus:outline-none text-sm">
+                        <button onclick="copyReferralLink()" class="modern-btn px-4 py-3 rounded-xl text-white font-bold">
+                            📋
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="glass p-4 rounded-2xl text-center">
+                    <p class="text-gray-400 text-sm mb-2">Faa'iidada Referral:</p>
+                    <p class="text-2xl font-bold neon-secondary">$0.10</p>
+                    <p class="text-gray-400 text-xs mt-1">Qof kasta oo isdiiwaan gala</p>
+                </div>
+                
+                <div class="flex gap-4 mt-8">
+                    <button onclick="shareReferralWhatsApp()" class="flex-1 modern-btn text-white p-4 rounded-2xl font-bold text-lg">
+                        📱 WADAAG
+                    </button>
+                    <button onclick="playBeep('back'); showDashboard()" class="flex-1 glass text-white p-4 rounded-2xl font-bold hover:bg-red-500/20 text-lg">
+                        ← DIB
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Product Page -->
+    <div id="uploadProductPage" class="page hidden flex items-center justify-center p-6">
+        <div class="glass rounded-3xl p-8 w-full max-w-md modern-card">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">📤</div>
+                <h2 class="text-4xl font-bold neon-primary mb-3">SOOGALI ALAAB</h2>
+                <p class="text-gray-300 mono text-lg">Ku dar alaabta aad iibineyso</p>
+            </div>
+            
+            <div class="space-y-5">
+                <input type="text" id="productName" placeholder="📦 Magaca Alaabta" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                
+                <input type="text" id="productCategory" placeholder="🏷️ Nooca (Dharka, Kabaha, iwm)" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                
+                <input type="number" id="productPrice" placeholder="💰 Qiimaha ($)" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                
+                <div class="space-y-3">
+                    <input type="file" id="productImageFile" accept="image/*" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg" onchange="previewImage()">
+                    <div id="imagePreview" class="hidden text-center">
+                        <img id="previewImg" src="" alt="Preview" class="w-32 h-32 mx-auto rounded-xl object-cover">
+                        <p class="text-green-400 text-sm mt-2">✅ Sawirka waa diyaar</p>
+                    </div>
+                </div>
+                
+                <input type="tel" id="sellerWhatsApp" placeholder="📱 WhatsApp Number" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg">
+                
+                <textarea id="productDescription" placeholder="📝 Sharaxaad gaaban" class="w-full p-4 rounded-2xl modern-input text-white placeholder-gray-400 focus:outline-none text-lg h-24 resize-none"></textarea>
+                
+                <div class="flex gap-4 mt-8">
+                    <button onclick="playBeep('confirm'); uploadProduct()" class="flex-1 modern-btn text-white p-4 rounded-2xl font-bold text-lg">
+                        ✅ SOOGALI
+                    </button>
+                    <button onclick="playBeep('back'); showDashboard()" class="flex-1 glass text-white p-4 rounded-2xl font-bold hover:bg-red-500/20 text-lg">
+                        ← DIB
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Market Page -->
+    <div id="marketPage" class="page hidden">
+        <div class="p-6">
+            <div class="glass rounded-3xl p-6 mb-8 modern-card">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold neon-primary mb-2">🛒 CYBER SUUQ</h1>
+                        <p class="text-lg text-gray-300 mono">Premium Collection 2025</p>
+                    </div>
+                    <button onclick="playBeep('back'); showDashboard()" class="glass px-6 py-3 rounded-xl text-white font-bold text-lg">
+                        ← DIB
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid-layout" id="marketItems">
+                <!-- Market items will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Audio Context for beep sounds
+        let audioContext;
+        
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        function playBeep(type = 'default') {
+            initAudio();
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Different beep sounds for each button
+            switch(type) {
+                case 'register':
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1400, audioContext.currentTime + 0.2);
+                    break;
+                case 'login':
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1000, audioContext.currentTime + 0.15);
+                    break;
+                case 'deposit':
+                    oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1600, audioContext.currentTime + 0.2);
+                    break;
+                case 'withdraw':
+                    oscillator.frequency.setValueAtTime(1400, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(900, audioContext.currentTime + 0.2);
+                    break;
+                case 'ussd':
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+                    oscillator.frequency.exponentialRampToValueAtTime(1000, audioContext.currentTime + 0.2);
+                    break;
+                case 'robot':
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1100, audioContext.currentTime + 0.1);
+                    oscillator.frequency.exponentialRampToValueAtTime(850, audioContext.currentTime + 0.2);
+                    break;
+                case 'market':
+                    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1400, audioContext.currentTime + 0.15);
+                    break;
+                case 'whatsapp':
+                    oscillator.frequency.setValueAtTime(750, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1050, audioContext.currentTime + 0.1);
+                    break;
+                case 'confirm':
+                    oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1500, audioContext.currentTime + 0.1);
+                    oscillator.frequency.exponentialRampToValueAtTime(1300, audioContext.currentTime + 0.2);
+                    break;
+                case 'back':
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(450, audioContext.currentTime + 0.1);
+                    break;
+                case 'logout':
+                    oscillator.frequency.setValueAtTime(700, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(450, audioContext.currentTime + 0.3);
+                    break;
+                case 'buy':
+                    oscillator.frequency.setValueAtTime(950, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1350, audioContext.currentTime + 0.1);
+                    oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.2);
+                    break;
+                case 'rent':
+                    oscillator.frequency.setValueAtTime(850, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1150, audioContext.currentTime + 0.15);
+                    break;
+                default:
+                    oscillator.frequency.setValueAtTime(900, audioContext.currentTime);
+                    break;
+            }
+            
+            oscillator.type = 'sine';
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+
+        // User data storage - supports up to 8 million users
+        let users = JSON.parse(localStorage.getItem('investMarketUsers') || '{}');
+        let currentUser = localStorage.getItem('currentUser');
+        let userBalances = JSON.parse(localStorage.getItem('userBalances') || '{}');
+        let activeRobots = JSON.parse(localStorage.getItem('activeRobots') || '{}');
+        let userActivities = JSON.parse(localStorage.getItem('userActivities') || '[]');
+        let marketProducts = JSON.parse(localStorage.getItem('marketProducts') || '[]');
+
+        // Message System
+        function showMessage(title, text, type = 'info') {
+            const overlay = document.getElementById('messageOverlay');
+            const box = document.getElementById('messageBox');
+            const icon = document.getElementById('messageIcon');
+            const titleEl = document.getElementById('messageTitle');
+            const textEl = document.getElementById('messageText');
+            
+            // Set content
+            titleEl.textContent = title;
+            textEl.textContent = text;
+            
+            // Set icon and style based on type
+            box.className = 'message-box message-' + type;
+            
+            switch(type) {
+                case 'success':
+                    icon.textContent = '✅';
+                    break;
+                case 'error':
+                    icon.textContent = '❌';
+                    break;
+                case 'warning':
+                    icon.textContent = '⚠️';
+                    break;
+                case 'info':
+                    icon.textContent = 'ℹ️';
+                    break;
+                default:
+                    icon.textContent = '💬';
+            }
+            
+            // Show message
+            overlay.classList.add('show');
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                overlay.classList.remove('show');
+            }, 3000);
+            
+            // Hide on click
+            overlay.onclick = () => {
+                overlay.classList.remove('show');
+            };
+        }
+
+        // Navigation functions
+        function hideAllPages() {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+        }
+
+        // Initialize
+        if (currentUser && users[currentUser]) {
+            showDashboard();
+        }
+
+        function showRegister() {
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+        }
+
+        function register() {
+            const number = document.getElementById('regNumber').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (!number || !password || !confirmPassword) {
+                showMessage('🚨 FADLAN BUUXI DHAMMAAN GOOBAHA', 'Fadlan buuxi dhammaan goobaha si aad u bilowdo safarkaaga!', 'warning');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage('⚠️ SIRTU MA ISKU MID AHA', 'Sirtu ma isku mid aha - isku day mar kale!', 'error');
+                return;
+            }
+
+            if (users[number]) {
+                showMessage('🔄 ISTICMAALAHAN HORAY UU U JIRAY', 'Isticmaalahan horay ayuu u jiray - gal akoonkaaga!', 'info');
+                return;
+            }
+
+            // Check if we've reached the 8 million user limit
+            if (Object.keys(users).length >= 8000000) {
+                showMessage('⚠️ XADKA UGU BADAN', 'Waxaan gaadhay xadka ugu badan ee isticmaalayaasha!', 'error');
+                return;
+            }
+
+            users[number] = { password: password };
+            userBalances[number] = 0;
+            localStorage.setItem('investMarketUsers', JSON.stringify(users));
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            // Log registration activity
+            const tempUser = currentUser;
+            currentUser = number;
+            logActivity('register', { message: 'Isdiiwaan galinta cusub' });
+            currentUser = tempUser;
+            
+            showMessage('🎉 GUUL! AKOONKAAGA WAA LA SAMEEYAY', 'Hadda gal oo bilow maalgashiga!', 'success');
+            setTimeout(() => showLogin(), 2000);
+        }
+
+        function login() {
+            const number = document.getElementById('loginNumber').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!users[number] || users[number].password !== password) {
+                showMessage('❌ AQOONSIGA WAA KHALAD', 'Hubi lambarka iyo sirta - isku day mar kale!', 'error');
+                return;
+            }
+
+            currentUser = number;
+            localStorage.setItem('currentUser', currentUser);
+            showMessage('🎯 KU SOO DHAWOOW', 'Waxaad si guul leh u gashay akoonkaaga!', 'success');
+            setTimeout(() => showDashboard(), 1500);
+        }
+
+        function showDashboard() {
+            hideAllPages();
+            document.getElementById('dashboard').classList.remove('hidden');
+            updateBalance();
+        }
+
+        function updateBalance() {
+            if (currentUser) {
+                document.getElementById('userBalance').textContent = (userBalances[currentUser] || 0).toFixed(2);
+            }
+        }
+
+        function logActivity(type, details) {
+            const activity = {
+                user: currentUser,
+                type: type,
+                details: details,
+                timestamp: new Date().toLocaleString('so-SO'),
+                amount: details.amount || 0
+            };
+            userActivities.unshift(activity);
+            
+            // Keep only last 1000 activities
+            if (userActivities.length > 1000) {
+                userActivities = userActivities.slice(0, 1000);
+            }
+            
+            localStorage.setItem('userActivities', JSON.stringify(userActivities));
+        }
+
+        function showDeposit() {
+            hideAllPages();
+            document.getElementById('depositPage').classList.remove('hidden');
+        }
+
+        function showWithdraw() {
+            hideAllPages();
+            document.getElementById('withdrawPage').classList.remove('hidden');
+        }
+
+        function showUSSD() {
+            hideAllPages();
+            document.getElementById('ussdPage').classList.remove('hidden');
+        }
+
+        function confirmDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const method = document.getElementById('depositMethod').value;
+            const address = document.getElementById('depositAddress').value;
+
+            if (!amount || amount <= 0 || !address) {
+                showMessage('⚠️ BUUXI DHAMMAAN GOOBAHA', 'Fadlan buuxi dhammaan goobaha xog sax ah si loo dhammeeyo!', 'warning');
+                return;
+            }
+
+            const message = `🚀 Waxaan kusoo shubanayaa lacag si aan wax ugu iibsado ama aan wax umaalgashado $${amount.toFixed(2)} waxaana kasoodiray ${address}`;
+            const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            // Automatically add to balance
+            userBalances[currentUser] = (userBalances[currentUser] || 0) + amount;
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            // Log deposit activity
+            logActivity('deposit', { 
+                message: `Lacag dhigid $${amount.toFixed(2)} - ${method}`,
+                amount: amount,
+                method: method,
+                address: address
+            });
+            
+            showMessage('💎 LACAG LA DHIGAY', `$${amount.toFixed(2)} ayaa lagu daray haraagaaga!`, 'success');
+            setTimeout(() => showDashboard(), 2000);
+        }
+
+        function confirmWithdraw() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const method = document.getElementById('withdrawMethod').value;
+            const address = document.getElementById('withdrawAddress').value;
+
+            if (!amount || amount <= 0 || !address) {
+                showMessage('⚠️ BUUXI DHAMMAAN GOOBAHA', 'Fadlan buuxi dhammaan goobaha xog sax ah!', 'warning');
+                return;
+            }
+
+            if (amount > (userBalances[currentUser] || 0)) {
+                showMessage('💰 HARAAGA MA KU FILNA', 'Haraagaagu ma ku filna - dhig lacag dheeraad ah!', 'error');
+                return;
+            }
+
+            const message = `💸 Waxaan kusoo shubanayaa lacag si aan ugu dhaqmo ama aan wax umaalgashado $${amount.toFixed(2)} sidaan kasoodiray ${address}`;
+            const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            // Automatically deduct from balance
+            userBalances[currentUser] = (userBalances[currentUser] || 0) - amount;
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            // Log withdrawal activity
+            logActivity('withdraw', { 
+                message: `Lacag ka bixid $${amount.toFixed(2)} - ${method}`,
+                amount: amount,
+                method: method,
+                address: address
+            });
+            
+            showMessage('💸 LACAG LA KA SAARAY', `$${amount.toFixed(2)} ayaa laga saaray haraagaaga!`, 'success');
+            setTimeout(() => showDashboard(), 2000);
+        }
+
+        function sendUSSD() {
+            const amount = parseFloat(document.getElementById('ussdAmount').value);
+            
+            if (!amount || amount <= 0) {
+                showMessage('⚡ GARI QADDAR SAX AH', 'Fadlan gari qaddar sax ah si loo wareejiyyo!', 'warning');
+                return;
+            }
+
+            const ussdCode = `*712*618877686*1#`;
+            
+            // Try to make the phone call directly
+            try {
+                window.location.href = `tel:${ussdCode}`;
+                showMessage('📞 USSD LA DIRAY', 'USSD waa la diray! Raac tilmaamaha telefoonkaaga!', 'success');
+            } catch (error) {
+                // Fallback: Show the USSD code to dial manually
+                showMessage('📱 USSD CODE', `Dir lambarka: ${ussdCode}`, 'info');
+            }
+            
+            // Log USSD activity without changing balance
+            logActivity('ussd', { 
+                message: `USSD wareejin: $${amount.toFixed(2)}`,
+                amount: amount,
+                ussdCode: ussdCode
+            });
+            
+            setTimeout(() => showDashboard(), 2000);
+        }
+
+        function showRobots() {
+            hideAllPages();
+            document.getElementById('robotsPage').classList.remove('hidden');
+            generateRobots();
+        }
+
+        function generateRobots() {
+            const robotsList = document.getElementById('robotsList');
+            robotsList.innerHTML = '';
+            
+            // Generate 25 robots with different prices and rewards
+            const robotData = [
+                { name: 'Crypto Starter', price: 1, reward: 0.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Bitcoin Mini', price: 2, reward: 0.1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Ethereum Lite', price: 3, reward: 0.15, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Altcoin Hunter', price: 5, reward: 0.17, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'DeFi Explorer', price: 10, reward: 0.2, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'NFT Trader', price: 20, reward: 0.25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Blockchain Pro', price: 30, reward: 0.35, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Smart Contract', price: 40, reward: 1.00, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Yield Farmer', price: 50, reward: 1.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Staking Master', price: 60, reward: 1.15, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Mining Expert', price: 70, reward: 1.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Arbitrage Bot', price: 105, reward: 2.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Flash Loan Pro', price: 110, reward: 2.1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Liquidity Pool', price: 120, reward: 2.2, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Cross Chain', price: 130, reward: 2.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'MEV Hunter', price: 140, reward: 2.4, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Layer 2 Master', price: 160, reward: 2.6, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Whale Tracker', price: 190, reward: 2.9, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Market Maker', price: 210, reward: 4.1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Algo Trading', price: 230, reward: 4.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Futures King', price: 260, reward: 4.6, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Options Master', price: 290, reward: 5.8, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Derivatives Pro', price: 320, reward: 7.2, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Crypto King', price: 350, reward: 7.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Bitcoin Full', price: 400, reward: 8.0, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' }
+            ];
+            
+            for (let i = 0; i < robotData.length; i++) {
+                const robot = robotData[i];
+                const price = robot.price;
+                const reward = robot.reward;
+                const isActive = activeRobots[currentUser] && activeRobots[currentUser][i];
+                
+                const robotCard = document.createElement('div');
+                robotCard.className = 'modern-card rounded-2xl p-6 text-center';
+                robotCard.innerHTML = `
+                    <div class="mb-6 ${isActive ? 'status-active rounded-xl p-3' : ''}">
+                        <img src="${robot.image}" alt="${robot.name}" class="w-16 h-16 mx-auto mb-3 rounded-xl object-cover" style="width: 140px; height: 140px;">
+                        <h3 class="text-lg font-bold neon-accent mono">${robot.name}</h3>
+                    </div>
+                    <div class="space-y-3 mb-6 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">💰 Qiimaha:</span>
+                            <span class="text-white font-bold">$${price}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">🎯 Faa'iidada:</span>
+                            <span class="neon-secondary font-bold">$${reward}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">⏱️ Waqtiga:</span>
+                            <span class="text-yellow-400 font-bold">24h</span>
+                        </div>
+                    </div>
+                    ${isActive ? `
+                        <div class="status-active text-white p-4 rounded-xl mb-4">
+                            <div class="flex items-center justify-center gap-2 mb-2">
+                                <div class="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                                <span class="font-bold mono">🔥 SHAQAYNAYA</span>
+                            </div>
+                            <div id="timer-${i}" class="mono font-bold text-center"></div>
+                        </div>
+                    ` : `
+                        <button onclick="playBeep('rent'); rentRobot(${i}, ${price}, ${reward})" class="w-full modern-btn text-white p-4 rounded-xl font-bold">
+                            🚀 KIRAYI
+                        </button>
+                    `}
+                `;
+                robotsList.appendChild(robotCard);
+            }
+            
+            if (activeRobots[currentUser] && Object.keys(activeRobots[currentUser]).length > 0) {
+                updateRobotTimer();
+            }
+        }
+
+        function rentRobot(robotId, price, reward) {
+            if ((userBalances[currentUser] || 0) < price) {
+                showMessage('💰 HARAAGA MA KU FILNA', 'Macamiil si aad robot u kireysato lacag kushubo haraaga xisaabtaada kuuguma filna mahadsanid!', 'warning');
+                return;
+            }
+
+            if (!activeRobots[currentUser]) {
+                activeRobots[currentUser] = {};
+            }
+
+            if (activeRobots[currentUser][robotId]) {
+                showMessage('🤖 ROBOTKA WAA SHAQAYNAYA', 'Robotkani wuu shaqaynayaa hadda! Sug ilaa uu dhamaado!', 'info');
+                return;
+            }
+
+            // Check if any robot is already active
+            for (let id in activeRobots[currentUser]) {
+                if (activeRobots[currentUser][id]) {
+                    showMessage('⚠️ ROBOT KALE AYAA SHAQAYNAYA', 'Robot kale ayaa shaqaynaya! Sug ilaa uu dhamaado ka hor intaadan mid kale kirayn!', 'warning');
+                    return;
+                }
+            }
+
+            const confirmed = confirm(`🤖 ROBOT KIREYN - OGEYSIIS MUHIIM AH
+
+✅ Robotkan waa AI casri ah oo loo tababaray shareecada Islaamka
+📊 Wuxuu ka shaqeeyaa suuqyada xalaasha ah oo keliya  
+💰 Faa'iido: Wuu kuu soo saari karaa lacag dheeraad ah
+⚠️ Khatarta: Qasaaro way dhici kartaa sida suuqa oo dhan
+🕐 Waqtiga: 24 saacadood oo joogto ah
+💎 Qiimaha: $${price} + Faa'iidada: $${reward}
+
+🎯 Ma qanacsantahay inaad kireysato robotkan AI ah?`);
+            
+            if (confirmed) {
+                userBalances[currentUser] = (userBalances[currentUser] || 0) - price;
+                localStorage.setItem('userBalances', JSON.stringify(userBalances));
+                
+                activeRobots[currentUser][robotId] = {
+                    robotId: robotId,
+                    price: price,
+                    reward: parseFloat(reward),
+                    startTime: Date.now(),
+                    endTime: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+                };
+                localStorage.setItem('activeRobots', JSON.stringify(activeRobots));
+                
+                showMessage('🚀 ROBOT LA KIREEYAY', `Robot #${robotId + 1} waa la kireeyay! Wuxuu shaqayn doonaa 24 saacadood!`, 'success');
+                
+                generateRobots();
+                updateBalance();
+                setTimeout(updateRobotTimer, 100);
+            }
+        }
+
+        function updateRobotTimer() {
+            if (!activeRobots[currentUser]) return;
+            
+            let hasActiveRobots = false;
+            
+            for (let robotId in activeRobots[currentUser]) {
+                const robot = activeRobots[currentUser][robotId];
+                const now = Date.now();
+                const remaining = robot.endTime - now;
+                
+                if (remaining <= 0) {
+                    // Robot finished - add original price + reward to balance
+                    const totalReturn = robot.price + robot.reward;
+                    userBalances[currentUser] = (userBalances[currentUser] || 0) + totalReturn;
+                    localStorage.setItem('userBalances', JSON.stringify(userBalances));
+                    
+                    delete activeRobots[currentUser][robotId];
+                    localStorage.setItem('activeRobots', JSON.stringify(activeRobots));
+                    
+                    showMessage('🎉 ROBOT DHAMAADAY!', `AI Robot #${parseInt(robotId) + 1} wuu dhamaaday! Waxaad kasabtay $${totalReturn.toFixed(2)} - Guul!`, 'success');
+                    
+                    // Send WhatsApp message about robot completion
+                    const robotMessage = `🤖 Waad ikireysatay Robot #${parseInt(robotId) + 1}. Waxaan kushaqeeya shareecada islaamka, faaidana waan kuu soo saari karaa, qasaarana way dhici kartaa. Aqbal ama iska daa.`;
+                    const whatsappUrl = `https://wa.me/${currentUser}?text=${encodeURIComponent(robotMessage)}`;
+                    window.open(whatsappUrl, '_blank');
+                    
+                    generateRobots();
+                    updateBalance();
+                } else {
+                    hasActiveRobots = true;
+                    
+                    const hours = Math.floor(remaining / (1000 * 60 * 60));
+                    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+                    
+                    const timerElement = document.getElementById(`timer-${robotId}`);
+                    if (timerElement) {
+                        timerElement.innerHTML = `
+                            <div class="robot-timer">
+                                ⏰ ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}
+                            </div>
+                        `;
+                    }
+                }
+            }
+            
+            if (hasActiveRobots) {
+                setTimeout(updateRobotTimer, 1000);
+            }
+        }
+
+        function showMarket() {
+            hideAllPages();
+            document.getElementById('marketPage').classList.remove('hidden');
+            generateMarketItems();
+        }
+
+        function generateMarketItems() {
+            const marketItems = document.getElementById('marketItems');
+            marketItems.innerHTML = '';
+            
+            // Show ALL user uploaded products to EVERYONE (visible to all users)
+            marketProducts.forEach((product, index) => {
+                const productCard = document.createElement('div');
+                productCard.className = 'modern-card rounded-2xl p-6 text-center cursor-pointer hover:scale-105 transition-transform';
+                productCard.innerHTML = `
+                    <div class="mb-4">
+                        <img src="${product.image}" alt="${product.name}" class="w-32 h-32 mx-auto mb-3 rounded-xl object-cover" style="width: 140px; height: 140px;">
+                        <h3 class="text-lg font-bold text-white mb-1 neon-accent">${product.name}</h3>
+                        <p class="text-gray-400 text-sm mb-3 mono">${product.category}</p>
+                        <p class="text-gray-300 text-xs mb-3">${product.description}</p>
+                        <div class="text-xs text-green-400 mb-2">👤 Iibiye: ${product.seller}</div>
+                        <div class="text-xs text-blue-400 mb-2">📅 ${new Date(product.timestamp).toLocaleDateString('so-SO')}</div>
+                        <div class="text-xs text-purple-400 mb-2">📱 ${product.whatsapp}</div>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-2xl font-bold neon-secondary mono">$${product.price}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="playBeep('buy'); buyFromUser('${product.name}', ${product.price}, '${product.whatsapp}')" class="flex-1 modern-btn text-white p-3 rounded-xl font-bold">
+                            🛒 IIBSO
+                        </button>
+                        <button onclick="playBeep('whatsapp'); requestProduct('${product.name}', '${product.whatsapp}')" class="flex-1 glass text-white p-3 rounded-xl font-bold">
+                            📞 DALBO
+                        </button>
+                        ${product.seller === currentUser ? `
+                        <button onclick="deleteProduct(${index})" class="bg-red-500/20 text-red-400 p-3 rounded-xl font-bold hover:bg-red-500/40">
+                            🗑️
+                        </button>
+                        ` : ''}
+                    </div>
+                `;
+                marketItems.appendChild(productCard);
+            });
+            
+            const products = [
+                // Men's Clothing
+                { name: 'Suit Premium Rag', category: 'Dharka Ragga', price: 250, image: '👔', type: 'clothing' },
+                { name: 'Shirt Casri ah', category: 'Dharka Ragga', price: 45, image: '👕', type: 'clothing' },
+                { name: 'Jeans Designer', category: 'Dharka Ragga', price: 80, image: '👖', type: 'clothing' },
+                
+                // Women's Clothing
+                { name: 'Dress Qurux badan', category: 'Dharka Dumarka', price: 120, image: '👗', type: 'clothing' },
+                { name: 'Hijab Premium', category: 'Dharka Dumarka', price: 35, image: '🧕', type: 'clothing' },
+                { name: 'Abaya Casri ah', category: 'Dharka Dumarka', price: 95, image: '👘', type: 'clothing' },
+                
+                // Shoes
+                { name: 'kabaha buudka', category: 'Kabaha', price: 6.25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM2ZjMp8O6Quu2i-PZGv6wibTWhOnoAxrUeA&s', type: 'shoes' },
+                { name: 'kabaha isport', category: 'Kabaha', price: 3.65, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz9CUieYt5uQrKoChj3firWTeK2KBaIYe50A&s', type: 'shoes' },
+                { name: 'kabaha dumarka', category: 'Kabaha', price: 8, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZZFT7rd2a9iVvJpXQQmY7gYUTGHphk363WQ&s', type: 'shoes' },
+                { name: 'kabaha labiska dumarka', category: 'Kabaha', price: 12.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYTuNB_gEEqYnzV1zZr6P0jTuN-zVQNWOImQ&s', type: 'shoes' },
+                { name: 'kabaha labiska raga', category: 'Kabaha', price: 18.9, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1xa2BF4o5TynoRJPeyUwxCcU8ICpIlN1XrQ&s', type: 'shoes' },
+                
+                // Cosmetics
+                { name: 'rooseetada', category: 'Kosmatiks', price: 12, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0kZGpb-swedBdyAW7aJgbGtCHJC6K0lNaYA&s', type: 'cosmetics' },
+                { name: 'kareenka wajiga', category: 'Kosmatiks', price: 4, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWNr0OOSwfHGh5MWDwDVHrgUJp8Qj5IuQEpA&s', type: 'cosmetics' },
+                { name: 'saliida timaha bixisa', category: 'Kosmatiks', price: 12, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgbobbER89X_v46O7iH0rtLkBXgq42r_WzKA&s', type: 'cosmetics' },
+                { name: 'barfuunada kala duwan', category: 'Kosmatiks', price: 9.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKuKZYpGWaAZHYqvBryVbCvJsnXZLEhjhWxQ&s', type: 'cosmetics' },
+                { name: 'qurxinta cidiyaha', category: 'Kosmatiks', price: 5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4Fb7XMvYa4PR2StRGrfMr6v479bQTgLMXNA&s', type: 'cosmetics' },
+                
+                // Mobile Phones
+                { name: 'iPhone 15 Pro Max', category: 'Apple', price: 1200, image: '📱', type: 'mobile' },
+                { name: 'Samsung Galaxy S24', category: 'Samsung', price: 900, image: '📱', type: 'mobile' },
+                { name: 'Redmi Note 13', category: 'Redmi', price: 250, image: '📱', type: 'mobile' },
+                { name: 'Infinix Hot 40', category: 'Infinix', price: 180, image: '📱', type: 'mobile' },
+                { name: 'Vivo V30', category: 'Vivo', price: 320, image: '📱', type: 'mobile' },
+                { name: 'Oppo Reno 11', category: 'Oppo', price: 380, image: '📱', type: 'mobile' },
+                { name: 'Tecno Spark 20', category: 'Tecno', price: 150, image: '📱', type: 'mobile' },
+                { name: 'Itel A70', category: 'Itel', price: 90, image: '📱', type: 'mobile' },
+                { name: 'Huawei P60', category: 'Huawei', price: 450, image: '📱', type: 'mobile' },
+                { name: 'Nokia G42', category: 'Nokia', price: 200, image: '📱', type: 'mobile' },
+                
+                // Medicines
+                { name: 'Panadol Extra', category: 'Daawooyinka', price: 8, image: '💊', type: 'medicine' },
+                { name: 'Vitamin D3', category: 'Daawooyinka', price: 15, image: '💊', type: 'medicine' },
+                { name: 'Omega 3', category: 'Daawooyinka', price: 25, image: '💊', type: 'medicine' },
+                { name: 'Multivitamin', category: 'Daawooyinka', price: 20, image: '💊', type: 'medicine' }
+            ];
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'modern-card rounded-2xl p-6 text-center cursor-pointer hover:scale-105 transition-transform';
+                productCard.innerHTML = `
+                    <div class="mb-4">
+                        ${product.image.startsWith('http') ? 
+                            `<img src="${product.image}" alt="${product.name}" class="w-32 h-32 mx-auto mb-3 rounded-xl object-cover" style="width: 140px; height: 140px;">` : 
+                            `<div class="text-5xl mb-3">${product.image}</div>`
+                        }
+                        <h3 class="text-lg font-bold text-white mb-1 neon-accent">${product.name}</h3>
+                        <p class="text-gray-400 text-sm mb-3 mono">${product.category}</p>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-2xl font-bold neon-secondary mono">$${product.price}</p>
+                    </div>
+                    <button onclick="playBeep('buy'); buyProductWhatsApp('${product.name}', ${product.price})" class="w-full modern-btn text-white p-3 rounded-xl font-bold">
+                        🛒 IIBSO
+                    </button>
+                `;
+                marketItems.appendChild(productCard);
+            });
+        }
+
+        function buyProductWhatsApp(name, price) {
+            const message = `🛒 Waxaan rabaa inaan iibsado ${name} qiimaha $${price}. Fadlan ii sheeg waxa aad iga dhimeyso adigoo mahadsanid.`;
+            const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            // Log purchase activity
+            logActivity('purchase', { 
+                message: `Iibsasho: ${name} - $${price}`,
+                amount: price,
+                product: name
+            });
+        }
+
+        function openWhatsApp() {
+            const message = "🚀 Waan kusaalamay maamuule waxaan rabaa inaad icaawiso adigoo mahadsanid";
+            const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function logout() {
+            // Only remove current user session, keep all other data
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            hideAllPages();
+            document.getElementById('homePage').classList.remove('hidden');
+            
+            // Clear form fields
+            document.getElementById('loginNumber').value = '';
+            document.getElementById('loginPassword').value = '';
+            showLogin();
+            
+            // Show logout message
+            showMessage('👋 KU MAHAD CELIYE', 'Waxaad si guul leh uga baxday akoonkaaga. Xogta waa la keydiyay!', 'success');
+        }
+
+        // Payment method images
+        function showPaymentImage(type) {
+            const method = document.getElementById(type + 'Method').value;
+            const imageDiv = document.getElementById(type + 'PaymentImage');
+            const image = document.getElementById(type + 'Image');
+            
+            if (method === 'evcplus') {
+                image.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s';
+                imageDiv.classList.remove('hidden');
+            } else if (method === 'crypto') {
+                image.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s';
+                imageDiv.classList.remove('hidden');
+            }
+        }
+
+        // Exchange functions
+        const currencyImages = {
+            evc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s',
+            bitcoin: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s',
+            trx: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyl2gUu50dRfhM-4MEqpjI_g8Ez_RY8dCt_A&s',
+            doge: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVKDkE9oAzbwr1Xx4Ntf8xRlmCSSo2Rjwrkg&s',
+            cardano: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh7E8TWRuSN2dLP7-p31_xAuO7PyVfa4LUOQ&s',
+            xrp: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdoAJ0ng9MuiTEGDOOAqdRG-tk9c-MXecDnA&s',
+            ton: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8SO0rgVxiWnoXrkvqaJ1Q055G6hpcAG_ReA&s',
+            hamster: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWBs5Jp5QkDcAilfUYZN7X38kGJIkiERKHyw&s',
+            memefi: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk-fBbOXw62dgsAK2sK2MEUrDkgIicveobKQ&s',
+            ethereum: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_q9ddg2N_bK1-5cpK7_BbOq3rHkSwrrKT9w&s'
+        };
+
+        let exchangeRates = {
+            evc: 1.00,
+            bitcoin: 45000.00,
+            ethereum: 2800.00,
+            trx: 0.12,
+            doge: 0.08,
+            cardano: 0.45,
+            xrp: 0.52,
+            ton: 2.15,
+            hamster: 0.003,
+            memefi: 0.001
+        };
+
+        function showExchange() {
+            hideAllPages();
+            document.getElementById('exchangePage').classList.remove('hidden');
+            updateExchangeRate();
+            startLiveRateUpdates();
+        }
+
+        function updateExchangeRate() {
+            const from = document.getElementById('fromCurrency').value;
+            const to = document.getElementById('toCurrency').value;
+            const rateDisplay = document.getElementById('exchangeRate');
+            
+            // Update currency images and prices
+            updateCurrencyDisplay(from, 'from');
+            updateCurrencyDisplay(to, 'to');
+            
+            // Calculate exchange rate
+            const fromRate = exchangeRates[from];
+            const toRate = exchangeRates[to];
+            const rate = fromRate / toRate;
+            
+            // Format the rate display
+            const currencyNames = {
+                evc: 'EVC',
+                bitcoin: 'BTC',
+                ethereum: 'ETH',
+                trx: 'TRX',
+                doge: 'DOGE',
+                cardano: 'ADA',
+                xrp: 'XRP',
+                ton: 'TON',
+                hamster: 'HMSTR',
+                memefi: 'MEMEFI'
+            };
+            
+            if (rate < 0.001) {
+                rateDisplay.textContent = `1 ${currencyNames[from]} = ${rate.toFixed(8)} ${currencyNames[to]}`;
+            } else if (rate < 1) {
+                rateDisplay.textContent = `1 ${currencyNames[from]} = ${rate.toFixed(6)} ${currencyNames[to]}`;
+            } else {
+                rateDisplay.textContent = `1 ${currencyNames[from]} = ${rate.toFixed(2)} ${currencyNames[to]}`;
+            }
+            
+            calculateExchange();
+        }
+
+        function updateCurrencyDisplay(currency, type) {
+            const image = document.getElementById(type + 'CurrencyImage');
+            const price = document.getElementById(type + 'CurrencyPrice');
+            const change = document.getElementById(type + 'CurrencyChange');
+            
+            image.src = currencyImages[currency];
+            price.textContent = `$${exchangeRates[currency].toFixed(exchangeRates[currency] < 1 ? 6 : 2)}`;
+            
+            // Generate random price change
+            const changePercent = (Math.random() - 0.5) * 10; // -5% to +5%
+            const isPositive = changePercent > 0;
+            change.textContent = `${isPositive ? '📈' : '📉'} ${isPositive ? '+' : ''}${changePercent.toFixed(1)}%`;
+            change.className = `text-xs ${isPositive ? 'text-green-400' : 'text-red-400'}`;
+        }
+
+        function calculateExchange() {
+            const amount = parseFloat(document.getElementById('exchangeAmount').value) || 0;
+            const from = document.getElementById('fromCurrency').value;
+            const to = document.getElementById('toCurrency').value;
+            const resultDiv = document.getElementById('exchangeResult');
+            
+            if (amount > 0) {
+                const fromRate = exchangeRates[from];
+                const toRate = exchangeRates[to];
+                const result = (amount * fromRate) / toRate;
+                
+                const currencyNames = {
+                    evc: 'EVC',
+                    bitcoin: 'BTC',
+                    ethereum: 'ETH',
+                    trx: 'TRX',
+                    doge: 'DOGE',
+                    cardano: 'ADA',
+                    xrp: 'XRP',
+                    ton: 'TON',
+                    hamster: 'HMSTR',
+                    memefi: 'MEMEFI'
+                };
+                
+                if (result < 0.001) {
+                    resultDiv.textContent = `= ${result.toFixed(8)} ${currencyNames[to]}`;
+                } else if (result < 1) {
+                    resultDiv.textContent = `= ${result.toFixed(6)} ${currencyNames[to]}`;
+                } else {
+                    resultDiv.textContent = `= ${result.toFixed(2)} ${currencyNames[to]}`;
+                }
+            } else {
+                resultDiv.textContent = '';
+            }
+        }
+
+        function swapCurrencies() {
+            const fromSelect = document.getElementById('fromCurrency');
+            const toSelect = document.getElementById('toCurrency');
+            
+            const temp = fromSelect.value;
+            fromSelect.value = toSelect.value;
+            toSelect.value = temp;
+            
+            updateExchangeRate();
+        }
+
+        function startLiveRateUpdates() {
+            setInterval(() => {
+                // Simulate live rate changes for all currencies
+                for (let currency in exchangeRates) {
+                    if (currency !== 'evc') { // Keep EVC stable as base
+                        const variation = (Math.random() - 0.5) * 0.04; // ±2% variation
+                        const currentRate = exchangeRates[currency];
+                        const newRate = currentRate * (1 + variation);
+                        
+                        // Set reasonable bounds for each currency
+                        const bounds = {
+                            bitcoin: { min: 40000, max: 50000 },
+                            ethereum: { min: 2500, max: 3200 },
+                            trx: { min: 0.10, max: 0.15 },
+                            doge: { min: 0.06, max: 0.12 },
+                            cardano: { min: 0.35, max: 0.55 },
+                            xrp: { min: 0.45, max: 0.65 },
+                            ton: { min: 1.80, max: 2.50 },
+                            hamster: { min: 0.002, max: 0.005 },
+                            memefi: { min: 0.0008, max: 0.0015 }
+                        };
+                        
+                        if (bounds[currency]) {
+                            exchangeRates[currency] = Math.max(bounds[currency].min, 
+                                Math.min(bounds[currency].max, newRate));
+                        }
+                    }
+                }
+                
+                updateExchangeRate();
+            }, 2000); // Update every 2 seconds
+        }
+
+        function confirmExchange() {
+            const amount = parseFloat(document.getElementById('exchangeAmount').value);
+            const from = document.getElementById('fromCurrency').value;
+            const to = document.getElementById('toCurrency').value;
+            
+            if (!amount || amount <= 0) {
+                showMessage('⚠️ GALI QADDAR SAX AH', 'Fadlan gali qaddar sax ah!', 'warning');
+                return;
+            }
+            
+            if (amount > (userBalances[currentUser] || 0)) {
+                showMessage('💰 HARAAGA MA KU FILNA', 'Haraagaagu ma ku filna!', 'error');
+                return;
+            }
+            
+            const currencyNames = {
+                evc: 'EVC',
+                bitcoin: 'BTC',
+                ethereum: 'ETH',
+                trx: 'TRX',
+                doge: 'DOGE',
+                cardano: 'ADA',
+                xrp: 'XRP',
+                ton: 'TON',
+                hamster: 'HMSTR',
+                memefi: 'MEMEFI'
+            };
+            
+            const confirmed = confirm(`💱 Ma hubtaa inaad rabto inaad $${amount} ${currencyNames[from]} ku badalto ${currencyNames[to]}?`);
+            
+            if (confirmed) {
+                // Calculate exchange result
+                const fromRate = exchangeRates[from];
+                const toRate = exchangeRates[to];
+                const result = (amount * fromRate) / toRate;
+                
+                // Auto-open WhatsApp with exchange details
+                let resultText;
+                if (result < 0.001) {
+                    resultText = result.toFixed(8);
+                } else if (result < 1) {
+                    resultText = result.toFixed(6);
+                } else {
+                    resultText = result.toFixed(2);
+                }
+                
+                const exchangeMessage = `💱 EXCHANGE REQUEST - CODSIGA BADALKA
+
+📱 Isticmaale: ${currentUser}
+💰 Qaddarka: $${amount} ${currencyNames[from]}
+🔄 Badalka: ${resultText} ${currencyNames[to]}
+📊 Qiimaha Live: 1 ${currencyNames[from]} = ${(fromRate/toRate).toFixed(6)} ${currencyNames[to]}
+
+✅ Fadlan xaqiiji badalkan si loo dhammeeyo!`;
+                
+                const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(exchangeMessage)}`;
+                window.open(whatsappUrl, '_blank');
+                
+                // Deduct original amount from balance
+                userBalances[currentUser] = (userBalances[currentUser] || 0) - amount;
+                
+                // Add exchanged amount to balance (converted back to USD equivalent)
+                const usdValue = result * toRate;
+                userBalances[currentUser] = userBalances[currentUser] + usdValue;
+                
+                localStorage.setItem('userBalances', JSON.stringify(userBalances));
+                
+                // Log exchange activity
+                logActivity('exchange', { 
+                    message: `Exchange: $${amount} ${currencyNames[from]} → ${resultText} ${currencyNames[to]}`,
+                    amount: amount,
+                    fromCurrency: from,
+                    toCurrency: to,
+                    result: result
+                });
+                
+                showMessage('✅ BADALKA LA DHAMMAYSTIRAY', `Waxaad heshay ${resultText} ${currencyNames[to]}! WhatsApp waa la furay xaqiijinta!`, 'success');
+                setTimeout(() => showDashboard(), 3000);
+            }
+        }
+
+        // AI Assistant functions
+        const animalImages = {
+            // Xayawaanka
+            'geel': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8xEutZEF86rFg0gsROTmoe3A-l7fxjSqrA&s',
+            'eey': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4T_5syqabNK9_wYxbqRD0VREg6rCFUSxZdA&s',
+            'libaax': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnA30VdCSdoftah-h1-C4BDVEUM4mRKbRkcw&s',
+            'bakeyle': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ10PC_PGGyY3CC54iJrwoWuaVDu7_pviX9KQ&s',
+            'daanyeer': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgzCtC9jf604AFOsnzVS_bHJS6-0RlEkLmOg&s',
+            'maroodi': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRWBFMfd0QXsRSalpO4HVu2Ac6tWE0Fpl7wg&s',
+            'dameer': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDOpuzntPqIBJvnjSYziUv1AQZogouWiK_3A&s',
+            'lo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7TDoDjj_YMNxoLHTtYlgIIqiLuNnW9_r1JA&s',
+            'ari': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk7p2EabUDtQyRwc-haRTSejvn4ZQoFiLhZA&s',
+            'ariga': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk7p2EabUDtQyRwc-haRTSejvn4ZQoFiLhZA&s',
+            'shabeel': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWBs5Jp5QkDcAilfUYZN7X38kGJIkiERKHyw&s',
+            'faraska': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdoAJ0ng9MuiTEGDOOAqdRG-tk9c-MXecDnA&s',
+            'bisad': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgzCtC9jf604AFOsnzVS_bHJS6-0RlEkLmOg&s',
+            'eyga': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4T_5syqabNK9_wYxbqRD0VREg6rCFUSxZdA&s',
+            'shimbiraha': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ10PC_PGGyY3CC54iJrwoWuaVDu7_pviX9KQ&s',
+            'kalluun': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRWBFMfd0QXsRSalpO4HVu2Ac6tWE0Fpl7wg&s',
+            'jiir': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnA30VdCSdoftah-h1-C4BDVEUM4mRKbRkcw&s',
+            'dofaar': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8xEutZEF86rFg0gsROTmoe3A-l7fxjSqrA&s',
+            'digaag': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKd3dAFaCYjAX3xYF9eLbSd-FHHUMHETjCQw&s',
+            'daauska': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKd3dAFaCYjAX3xYF9eLbSd-FHHUMHETjCQw&s',
+            'mas': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GpKOuhz9LgZsF75xZ-67xrCbJ6NoQ-fEnQ&s',
+            'yey': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4T_5syqabNK9_wYxbqRD0VREg6rCFUSxZdA&s',
+            
+            // Waxyaabaha kale
+            'qorax': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZZFT7rd2a9iVvJpXQQmY7gYUTGHphk363WQ&s',
+            'dayax': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYTuNB_gEEqYnzV1zZr6P0jTuN-zVQNWOImQ&s',
+            'masaajid': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1xa2BF4o5TynoRJPeyUwxCcU8ICpIlN1XrQ&s',
+            'biyo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0kZGpb-swedBdyAW7aJgbGtCHJC6K0lNaYA&s',
+            'qof': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWNr0OOSwfHGh5MWDwDVHrgUJp8Qj5IuQEpA&s',
+            'robot': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCc_TUVYqoAWFxidlvhYBCqr6vu8W6iB3gBQ&s',
+            'baabuur': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgbobbER89X_v46O7iH0rtLkBXgq42r_WzKA&s',
+            'diyaarad': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKuKZYpGWaAZHYqvBryVbCvJsnXZLEhjhWxQ&s',
+            'markab': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4Fb7XMvYa4PR2StRGrfMr6v479bQTgLMXNA&s',
+            'geed': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM2ZjMp8O6Quu2i-PZGv6wibTWhOnoAxrUeA&s',
+            'ubax': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz9CUieYt5uQrKoChj3firWTeK2KBaIYe50A&s',
+            'guri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZZFT7rd2a9iVvJpXQQmY7gYUTGHphk363WQ&s',
+            'miis': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYTuNB_gEEqYnzV1zZr6P0jTuN-zVQNWOImQ&s',
+            'kursi': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1xa2BF4o5TynoRJPeyUwxCcU8ICpIlN1XrQ&s',
+            'buug': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0kZGpb-swedBdyAW7aJgbGtCHJC6K0lNaYA&s',
+            'qalin': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWNr0OOSwfHGh5MWDwDVHrgUJp8Qj5IuQEpA&s',
+            'warqad': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgbobbER89X_v46O7iH0rtLkBXgq42r_WzKA&s',
+            'telefoon': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKuKZYpGWaAZHYqvBryVbCvJsnXZLEhjhWxQ&s',
+            'kombuyuutar': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4Fb7XMvYa4PR2StRGrfMr6v479bQTgLMXNA&s',
+            'saacad': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM2ZjMp8O6Quu2i-PZGv6wibTWhOnoAxrUeA&s',
+            'lacag': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz9CUieYt5uQrKoChj3firWTeK2KBaIYe50A&s'
+        };
+
+        function showAI() {
+            hideAllPages();
+            document.getElementById('aiPage').classList.remove('hidden');
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('userMessage');
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+            
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // Add user message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'text-right';
+            userDiv.innerHTML = `
+                <div class="inline-block bg-blue-600 text-white p-3 rounded-2xl max-w-xs">
+                    ${message}
+                </div>
+            `;
+            chatMessages.appendChild(userDiv);
+            
+            // Generate AI response
+            setTimeout(() => {
+                const aiResponse = generateAIResponse(message);
+                const aiDiv = document.createElement('div');
+                aiDiv.className = 'text-left';
+                aiDiv.innerHTML = `
+                    <div class="inline-block glass text-white p-3 rounded-2xl max-w-xs">
+                        ${aiResponse}
+                    </div>
+                `;
+                chatMessages.appendChild(aiDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+            
+            messageInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function generateAIResponse(message) {
+            const lowerMessage = message.toLowerCase().trim();
+            
+            // Check for exact matches first, then partial matches
+            let foundImage = null;
+            let foundName = null;
+            
+            // First check for exact word matches
+            for (let item in animalImages) {
+                if (lowerMessage === item || lowerMessage === `sawirka ${item}` || lowerMessage === `${item} sawir`) {
+                    foundImage = animalImages[item];
+                    foundName = item;
+                    break;
+                }
+            }
+            
+            // If no exact match, check for words containing the item name
+            if (!foundImage) {
+                for (let item in animalImages) {
+                    const words = lowerMessage.split(' ');
+                    if (words.includes(item)) {
+                        foundImage = animalImages[item];
+                        foundName = item;
+                        break;
+                    }
+                }
+            }
+            
+            // If still no match, check for partial matches (but be more specific)
+            if (!foundImage) {
+                for (let item in animalImages) {
+                    if (lowerMessage.includes(item) && lowerMessage.length <= item.length + 10) {
+                        foundImage = animalImages[item];
+                        foundName = item;
+                        break;
+                    }
+                }
+            }
+            
+            if (foundImage && foundName) {
+                return `🖼️ Halkan waa sawirka ${foundName}:<br><img src="${foundImage}" alt="${foundName}" class="w-32 h-32 rounded-xl mt-2 object-cover"><br><button onclick="downloadImage('${foundImage}', '${foundName}')" class="modern-btn px-4 py-2 rounded-xl text-white mt-2">📥 Soo Degso Sawirka</button>`;
+            }
+            
+            // Check for platform questions
+            if (lowerMessage.includes('robot') || lowerMessage.includes('maalgashi')) {
+                return '🤖 AI Robots waa nidaam casri ah oo 24/7 shaqeeya. Waxay ku shaqeeyaan suuqyada xalaasha ah oo ay ku sameeyaan faa\'iido. Qiimaha ugu yar waa $1 oo waxay ku soo celiyaan lacag iyo faa\'iido 24 saacadood gudahood.';
+            }
+            
+            if (lowerMessage.includes('suuq') || lowerMessage.includes('market')) {
+                return '🛒 Cyber Suuq waa meel aad ka iibsan karto alaab kala duwan sida dharka, kabaha, kosmatikada, iyo telefoonada. Dhammaan alaabtu waa mid casri ah oo qiimo jaban leh.';
+            }
+            
+            if (lowerMessage.includes('exchange') || lowerMessage.includes('badalka')) {
+                return '💱 Exchange waxay kuu ogolaanaysaa inaad lacagta EVC Plus iyo Crypto iskula badalto. Qiimaha wuu is beddelaa si live ah sida suuqa runta ah.';
+            }
+            
+            if (lowerMessage.includes('lacag') || lowerMessage.includes('haraaga')) {
+                return '💰 Si aad lacag u dhigto, riix "DHIG LACAG" oo dooro habka aad rabto (EVC Plus ama Crypto). Lacagta waxay ku dari doontaa haraagaaga si degdeg ah.';
+            }
+            
+            // Default responses
+            const responses = [
+                '🤖 Waan fahmay su\'aashaada. Waxaan halkan ahay si aan kuu caawiyo dhammaan arrimaha sirkan.',
+                '💡 Tani waa su\'aal fiican! InvestMarket Pro 2025 waa platform casri ah oo aad ku maalgasho karto oo aad wax ka iibsan karto.',
+                '🎯 Fadlan ii sheeg wax dheeraad ah si aan si fiican kuugu jawaabo.',
+                '⚡ Waxaan ku caawin karaa dhammaan arrimaha maalgashiga, suuqa, iyo isticmaalka sirkan.',
+                '🚀 Ma jirto wax aan ku caawin karin! Su\'aal kasta oo aad qabto, i weydiiso.'
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Referral functions
+        function showReferral() {
+            hideAllPages();
+            document.getElementById('referralPage').classList.remove('hidden');
+            generateReferralLink();
+        }
+
+        function generateReferralLink() {
+            const referralLink = `https://investmarket.pro/ref/${currentUser}`;
+            document.getElementById('referralLink').value = referralLink;
+        }
+
+        function copyReferralLink() {
+            const linkInput = document.getElementById('referralLink');
+            linkInput.select();
+            document.execCommand('copy');
+            
+            // Add $0.10 to balance for copying referral link
+            userBalances[currentUser] = (userBalances[currentUser] || 0) + 0.10;
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            logActivity('referral', { 
+                message: 'Referral link la copy garay - $0.10 bonus',
+                amount: 0.10
+            });
+            
+            showMessage('🔗 LINK LA COPY GARAY', '$0.10 ayaa lagu daray haraagaaga!', 'success');
+            updateBalance();
+        }
+
+        function shareReferralWhatsApp() {
+            const referralLink = document.getElementById('referralLink').value;
+            const message = `🚀 Ku soo biir InvestMarket Pro 2025! Maalgashi, suuq, iyo AI robots. Isticmaal linkigan: ${referralLink}`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Download image function
+        function downloadImage(imageUrl, animalName) {
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = `${animalName}_image.jpg`;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert(`📥 Sawirka ${animalName} waa la soo degay!`);
+        }
+
+        // Product upload functions
+        function showUploadProduct() {
+            hideAllPages();
+            document.getElementById('uploadProductPage').classList.remove('hidden');
+        }
+
+        function previewImage() {
+            const fileInput = document.getElementById('productImageFile');
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+
+        function uploadProduct() {
+            const name = document.getElementById('productName').value;
+            const category = document.getElementById('productCategory').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const fileInput = document.getElementById('productImageFile');
+            const whatsapp = document.getElementById('sellerWhatsApp').value;
+            const description = document.getElementById('productDescription').value;
+
+            if (!name || !category || !price || !fileInput.files[0] || !whatsapp) {
+                showMessage('⚠️ BUUXI DHAMMAAN GOOBAHA', 'Fadlan buuxi dhammaan goobaha muhiimka ah oo sawir dooro!', 'warning');
+                return;
+            }
+
+            // Convert image to base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageData = e.target.result;
+
+                const product = {
+                    name: name,
+                    category: category,
+                    price: price,
+                    image: imageData, // Store base64 image data
+                    whatsapp: whatsapp,
+                    description: description,
+                    seller: currentUser,
+                    timestamp: new Date().toISOString(),
+                    id: Date.now() // Unique ID for deletion
+                };
+
+                marketProducts.push(product);
+                localStorage.setItem('marketProducts', JSON.stringify(marketProducts));
+
+                logActivity('upload', { 
+                    message: `Alaab cusub la soo galiyay: ${name} - $${price}`,
+                    amount: price,
+                    product: name
+                });
+
+                showMessage('✅ ALAAB LA SOO GALIYAY', 'Alaabta waa la soo galiyay! Hadda waxay ka muuqan doontaa suuqa!', 'success');
+                
+                // Clear form
+                document.getElementById('productName').value = '';
+                document.getElementById('productCategory').value = '';
+                document.getElementById('productPrice').value = '';
+                document.getElementById('productImageFile').value = '';
+                document.getElementById('sellerWhatsApp').value = '';
+                document.getElementById('productDescription').value = '';
+                document.getElementById('imagePreview').classList.add('hidden');
+                
+                setTimeout(() => showDashboard(), 2000);
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+
+        function buyFromUser(name, price, whatsapp) {
+            const message = `🛒 Waxaan rabaa inaan iibsado ${name} qiimaha $${price}. Fadlan ii sheeg waxa aad iga dhimeyso adigoo mahadsanid.`;
+            const whatsappUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            logActivity('purchase', { 
+                message: `Iibsasho: ${name} - $${price} (User Product)`,
+                amount: price,
+                product: name
+            });
+        }
+
+        function requestProduct(name, whatsapp) {
+            const message = `📞 Waxaan rabaa inaan dalbo ${name}. Fadlan ii sheeg waxa aad iga dhimeyso adigoo mahadsanid.`;
+            const whatsappUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function deleteProduct(index) {
+            const product = marketProducts[index];
+            
+            if (product.seller !== currentUser) {
+                showMessage('❌ MA TIRTIRI KARTID', 'Waxaad tirtiri kartaa alaabta aad soo galisay oo keliya!', 'error');
+                return;
+            }
+            
+            const confirmed = confirm(`🗑️ Ma hubtaa inaad rabto inaad tirtirto "${product.name}"?`);
+            
+            if (confirmed) {
+                marketProducts.splice(index, 1);
+                localStorage.setItem('marketProducts', JSON.stringify(marketProducts));
+                
+                logActivity('delete', { 
+                    message: `Alaab la tirtiray: ${product.name}`,
+                    product: product.name
+                });
+                
+                showMessage('✅ ALAAB LA TIRTIRAY', 'Alaabta waa la tirtiray!', 'success');
+                generateMarketItems(); // Refresh the market display
+            }
+        }
+
+        // Initialize robot timers on page load
+        if (activeRobots[currentUser] && Object.keys(activeRobots[currentUser]).length > 0) {
+            updateRobotTimer();
+        }
+
+        // Smooth scrolling for better mobile experience
+        document.addEventListener('touchstart', function(e) {
+            // Allow natural scrolling
+        });
+
+        document.addEventListener('touchmove', function(e) {
+            // Allow natural scrolling
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96f362edb019e279',t:'MTc1NTIwNTI3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
