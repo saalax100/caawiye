@@ -1,0 +1,2496 @@
+<!DOCTYPE html>
+<html lang="so" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <titleHorseed market Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .gradient-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 10px 30px rgba(240, 147, 251, 0.3);
+        }
+        
+        .gradient-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+        }
+        
+        .gradient-gold {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .gradient-rainbow {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .card-modern {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-modern {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .btn-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-modern:hover::before, .btn-modern:active::before {
+            left: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .btn-modern {
+                min-height: 48px;
+                font-size: 16px;
+                padding: 12px 16px;
+            }
+            
+            .btn-modern:active {
+                transform: scale(0.98);
+            }
+        }
+        
+        .sidebar-modern {
+            background: linear-gradient(180deg, #1e3a8a 0%, #3730a3 100%);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            margin: 4px 0;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .nav-item:hover, .nav-item:active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(8px);
+        }
+        
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #fbbf24;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-item {
+                min-height: 48px;
+                padding: 12px 16px;
+                margin: 6px 0;
+            }
+            
+            .nav-item:active {
+                background: rgba(255, 255, 255, 0.15);
+                transform: scale(0.98);
+            }
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .robot-timer {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { 
+                opacity: 1; 
+                box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+            }
+            50% { 
+                opacity: 0.7; 
+                box-shadow: 0 0 30px rgba(34, 197, 94, 0.8);
+            }
+        }
+        
+        .floating-animation {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .rainbow-text {
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow 3s ease infinite;
+        }
+        
+        @keyframes rainbow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
+            to { box-shadow: 0 0 30px rgba(102, 126, 234, 0.8), 0 0 40px rgba(102, 126, 234, 0.6); }
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.8s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal-modern {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .input-modern {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .input-modern:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            background: rgba(255, 255, 255, 1);
+        }
+        
+        .hidden { display: none !important; }
+        .show { display: block !important; }
+        
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .max-w-7xl { max-width: 1200px; }
+        }
+        
+        @media (max-width: 1200px) {
+            .max-w-6xl { max-width: 900px; }
+            .max-w-5xl { max-width: 800px; }
+        }
+        
+        @media (max-width: 1024px) {
+            .sidebar-modern { width: 240px; }
+            .main-content { padding: 1rem; }
+            .grid.md\\:grid-cols-4 { grid-template-columns: repeat(3, 1fr); }
+            .grid.lg\\:grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar-modern {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 280px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 60;
+            }
+            
+            .sidebar-modern.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .main-content-mobile {
+                width: 100%;
+                margin-left: 0;
+            }
+            
+            .grid.md\\:grid-cols-3 { grid-template-columns: 1fr; }
+            .grid.md\\:grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid.lg\\:grid-cols-3 { grid-template-columns: 1fr; }
+            .grid.xl\\:grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+            
+            .text-3xl { font-size: 1.875rem; }
+            .text-4xl { font-size: 2.25rem; }
+            .text-5xl { font-size: 2.5rem; }
+            .text-6xl { font-size: 3rem; }
+            
+            .p-8 { padding: 1.5rem; }
+            .p-6 { padding: 1rem; }
+            .px-8 { padding-left: 1rem; padding-right: 1rem; }
+            .py-4 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+            
+            .modal-content {
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+                overflow-y: auto;
+            }
+            
+            .nav-item {
+                padding: 1rem;
+                margin: 0.25rem 0;
+            }
+            
+            .nav-item span {
+                font-size: 0.875rem;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .grid.grid-cols-2 { grid-template-columns: 1fr; }
+            .grid.md\\:grid-cols-4 { grid-template-columns: 1fr; }
+            .grid.xl\\:grid-cols-4 { grid-template-columns: 1fr; }
+            
+            .flex.flex-col.sm\\:flex-row { flex-direction: column; }
+            .gap-4.sm\\:gap-6 { gap: 1rem; }
+            
+            .text-base.sm\\:text-lg.md\\:text-xl { font-size: 0.875rem; }
+            .px-6.sm\\:px-8.md\\:px-10 { padding-left: 1rem; padding-right: 1rem; }
+            .py-3.sm\\:py-4 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+            
+            .h-20 { height: 4rem; }
+            .text-2xl { font-size: 1.25rem; }
+            
+            .card-modern {
+                margin: 0.5rem 0;
+            }
+            
+            .space-y-12 > * + * { margin-top: 2rem; }
+            .space-y-8 > * + * { margin-top: 1.5rem; }
+            .space-y-6 > * + * { margin-top: 1rem; }
+        }
+        
+        @media (max-width: 480px) {
+            .px-4.sm\\:px-6.lg\\:px-8 { padding-left: 0.75rem; padding-right: 0.75rem; }
+            .p-3.sm\\:p-4.md\\:p-6 { padding: 0.75rem; }
+            
+            .w-12.h-12 { width: 2.5rem; height: 2.5rem; }
+            .w-16.h-16 { width: 3rem; height: 3rem; }
+            
+            .rounded-2xl { border-radius: 1rem; }
+            .rounded-3xl { border-radius: 1.5rem; }
+            
+            .text-3xl.sm\\:text-4xl.md\\:text-5xl.lg\\:text-6xl { font-size: 1.5rem; }
+            .text-base.sm\\:text-lg.md\\:text-xl { font-size: 0.75rem; }
+            
+            .sidebar-modern { width: 260px; }
+            
+            .modal-content {
+                margin: 0.5rem;
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 320px) {
+            .px-4 { padding-left: 0.5rem; padding-right: 0.5rem; }
+            .p-6 { padding: 0.75rem; }
+            .p-8 { padding: 1rem; }
+            
+            .space-x-3 > * + * { margin-left: 0.5rem; }
+            .space-x-4 > * + * { margin-left: 0.5rem; }
+            
+            .gap-6 { gap: 0.75rem; }
+            .gap-8 { gap: 1rem; }
+            
+            .sidebar-modern { width: 240px; }
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #ffffff;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Header -->
+    <nav class="gradient-primary shadow-2xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-4">
+                    <button id="mobileMenuBtn" class="md:hidden text-white p-2 rounded-lg hover:bg-white/10">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-white">Horseed market</h1>
+                            <p class="text-white/70 text-sm">Professional Platform</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div id="userInfo" class="hidden items-center space-x-4">
+                        <div class="text-right">
+                            <p class="text-white font-semibold" id="navUserPhone"></p>
+                            <p class="text-white/70 text-sm" id="navUserBalance">$0.00</p>
+                        </div>
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                    </div>
+                    
+                    <div id="authButtons" class="flex space-x-3">
+                        <button onclick="showLogin()" class="text-white hover:text-blue-200 px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login
+                        </button>
+                        <button onclick="showRegister()" class="bg-white text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-lg font-medium transition-colors btn-modern">
+                            <i class="fas fa-user-plus mr-2"></i>Register
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Overlay -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden md:hidden"></div>
+
+    <!-- Main Layout -->
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar-modern w-64 min-h-screen p-6 hidden md:block">
+            <div class="space-y-2">
+                <div class="nav-item p-4 cursor-pointer" onclick="showDashboard()">
+                    <i class="fas fa-tachometer-alt mr-3 text-white"></i>
+                    <span class="text-white font-medium">Dashboard</span>
+                </div>
+                
+                <div class="nav-item p-4 cursor-pointer" onclick="showDepositPage()">
+                    <i class="fas fa-plus-circle mr-3 text-white"></i>
+                    <span class="text-white font-medium">Deposit</span>
+                </div>
+                
+                <div class="nav-item p-4 cursor-pointer" onclick="showWithdrawPage()">
+                    <i class="fas fa-minus-circle mr-3 text-white"></i>
+                    <span class="text-white font-medium">Withdraw</span>
+                </div>
+                
+                <div class="nav-item p-4 cursor-pointer" onclick="showUSSDPage()">
+                    <i class="fas fa-phone mr-3 text-white"></i>
+                    <span class="text-white font-medium">USSD Payment</span>
+                </div>
+                
+                <div class="nav-item p-4 cursor-pointer" onclick="showRobotPage()">
+                    <i class="fas fa-robot mr-3 text-white"></i>
+                    <span class="text-white font-medium">AI Robots</span>
+                </div>
+                
+                <div class="nav-item p-4 cursor-pointer" onclick="showExchange()">
+                    <i class="fas fa-exchange-alt mr-3 text-white"></i>
+                    <span class="text-white font-medium">Exchange</span>
+                </div>
+                
+                <div class="nav-item p-4 cursor-pointer" onclick="showMarket()">
+                    <i class="fas fa-shopping-cart mr-3 text-white"></i>
+                    <span class="text-white font-medium">Market</span>
+                </div>
+                
+                <div class="nav-item p-4 cursor-pointer" onclick="showAIBot()">
+                    <i class="fas fa-magic mr-3 text-white"></i>
+                    <span class="text-white font-medium">AI Generator</span>
+                </div>
+                
+                <div class="nav-item p-4 cursor-pointer" onclick="openWhatsApp()">
+                    <i class="fab fa-whatsapp mr-3 text-white"></i>
+                    <span class="text-white font-medium">Support</span>
+                </div>
+                
+                <div class="nav-item p-4 cursor-pointer" onclick="logout()">
+                    <i class="fas fa-sign-out-alt mr-3 text-white"></i>
+                    <span class="text-white font-medium">Logout</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-3 sm:p-4 md:p-6 main-content-mobile">
+            <!-- Home Page -->
+            <div id="homePage" class="space-y-12">
+                <!-- Hero Section -->
+                <section class="gradient-rainbow rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 text-center card-modern glow-effect">
+                    <div class="max-w-4xl mx-auto">
+                        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 floating-animation">
+                            🚀 Soo dhawoow InvestMarket Pro 🌟
+                        </h1>
+                        <p class="text-base sm:text-lg md:text-xl text-white/95 mb-6 sm:mb-8 leading-relaxed px-2 font-medium">
+                            💎 Platform-ka ugu casrisan ee investment-ka iyo suuq-gadeynta. 
+                            🤖 AI robots, 💰 crypto exchange, iyo 🛒 online shopping - dhamaan hal meel.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center px-2">
+                            <button onclick="showRegister()" class="gradient-gold text-gray-800 px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg btn-modern card-hover bounce-in">
+                                <i class="fas fa-rocket mr-2 sm:mr-3"></i>🎯 Bilow Hadda
+                            </button>
+                            <button onclick="showLogin()" class="bg-white/25 hover:bg-white/35 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg btn-modern backdrop-blur-sm border-2 border-white/30">
+                                <i class="fas fa-sign-in-alt mr-2 sm:mr-3"></i>🔑 Soo Gal
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Features Grid -->
+                <section class="grid md:grid-cols-3 gap-8">
+                    <div class="card-modern p-8 rounded-3xl card-hover">
+                        <div class="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-robot text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">AI Investment Robots</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Robots-ka AI-ga ah ayaa 24/7 kuu shaqeeya si aad lacag u sameyso. 
+                            Shareeco ku dhaqan oo faa'iido waara.
+                        </p>
+                    </div>
+                    
+                    <div class="card-modern p-8 rounded-3xl card-hover">
+                        <div class="w-16 h-16 gradient-secondary rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-shopping-bag text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Smart Shopping</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Suuq ballaaran oo wax walba ka heli karto. AI-generated products 
+                            iyo traditional items.
+                        </p>
+                    </div>
+                    
+                    <div class="card-modern p-8 rounded-3xl card-hover">
+                        <div class="w-16 h-16 gradient-success rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-exchange-alt text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Crypto Exchange</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Exchange currencies iyo crypto si fudud. EVC Plus, Bitcoin, 
+                            Ethereum iyo kuwo kale.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Stats Section -->
+                <section class="gradient-primary rounded-3xl p-8">
+                    <div class="grid md:grid-cols-4 gap-6 text-center">
+                        <div class="stats-card p-6 rounded-2xl">
+                            <div class="text-3xl font-bold text-white mb-2">8M+</div>
+                            <div class="text-white/80">Users Supported</div>
+                        </div>
+                        <div class="stats-card p-6 rounded-2xl">
+                            <div class="text-3xl font-bold text-white mb-2">24/7</div>
+                            <div class="text-white/80">AI Robot Trading</div>
+                        </div>
+                        <div class="stats-card p-6 rounded-2xl">
+                            <div class="text-3xl font-bold text-white mb-2">10+</div>
+                            <div class="text-white/80">Crypto Currencies</div>
+                        </div>
+                        <div class="stats-card p-6 rounded-2xl">
+                            <div class="text-3xl font-bold text-white mb-2">100%</div>
+                            <div class="text-white/80">Islamic Compliant</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Register Page -->
+            <div id="registerPage" class="hidden max-w-md mx-auto">
+                <div class="card-modern p-8 rounded-3xl">
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-user-plus text-white text-2xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Diiwaan Gal</h2>
+                        <p class="text-gray-600">Samee account cusub si aad u bilowdo</p>
+                    </div>
+                    
+                    <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">
+                                <i class="fas fa-phone mr-2 text-blue-500"></i>Lambarka Telefoonka
+                            </label>
+                            <input type="tel" id="regPhone" required 
+                                   class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none" 
+                                   placeholder="252xxxxxxxx">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">
+                                <i class="fas fa-lock mr-2 text-blue-500"></i>Password
+                            </label>
+                            <input type="password" id="regPassword" required 
+                                   class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none" 
+                                   placeholder="Password-ka geli">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">
+                                <i class="fas fa-lock mr-2 text-blue-500"></i>Xaqiiji Password-ka
+                            </label>
+                            <input type="password" id="regConfirmPassword" required 
+                                   class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none" 
+                                   placeholder="Password-ka dib u geli">
+                        </div>
+                        
+                        <button type="submit" class="w-full gradient-success text-white py-4 rounded-xl font-semibold text-lg btn-modern">
+                            <i class="fas fa-check mr-2"></i>Diiwaan Gal
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-8">
+                        <p class="text-gray-600 mb-2">Account ma leedahay?</p>
+                        <button onclick="showLogin()" class="text-blue-600 hover:text-blue-800 font-semibold">
+                            Halkan ka soo gal
+                        </button>
+                    </div>
+                    
+                    <button onclick="showHome()" class="mt-6 text-gray-500 hover:text-gray-700 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>Dib u noqo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Login Page -->
+            <div id="loginPage" class="hidden max-w-md mx-auto">
+                <div class="card-modern p-8 rounded-3xl">
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-sign-in-alt text-white text-2xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Soo Gal</h2>
+                        <p class="text-gray-600">Account-kaaga ku soo gal</p>
+                    </div>
+                    
+                    <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">
+                                <i class="fas fa-phone mr-2 text-blue-500"></i>Lambarka Telefoonka
+                            </label>
+                            <input type="tel" id="loginPhone" required 
+                                   class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none" 
+                                   placeholder="252xxxxxxxx">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">
+                                <i class="fas fa-lock mr-2 text-blue-500"></i>Password
+                            </label>
+                            <input type="password" id="loginPassword" required 
+                                   class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none" 
+                                   placeholder="Password-ka geli">
+                        </div>
+                        
+                        <button type="submit" class="w-full gradient-primary text-white py-4 rounded-xl font-semibold text-lg btn-modern">
+                            <i class="fas fa-rocket mr-2"></i>Soo Gal
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-8">
+                        <p class="text-gray-600 mb-2">Account ma lihid?</p>
+                        <button onclick="showRegister()" class="text-green-600 hover:text-green-800 font-semibold">
+                            Halkan ka diiwaan gal
+                        </button>
+                    </div>
+                    
+                    <button onclick="showHome()" class="mt-6 text-gray-500 hover:text-gray-700 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>Dib u noqo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div id="dashboard" class="hidden space-y-8">
+                <!-- Welcome Section -->
+                <div class="gradient-rainbow rounded-3xl p-8 text-white glow-effect">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div>
+                            <h1 class="text-4xl font-bold mb-2 floating-animation">🎉 Soo dhawoow Dashboard 🎉</h1>
+                            <p class="text-white/95 text-lg font-medium">✨ Maamul account-kaaga si professional ah ✨</p>
+                        </div>
+                        <div class="text-center mt-4 md:mt-0 bg-white/20 rounded-2xl p-6 backdrop-blur-sm border-2 border-white/30">
+                            <div class="text-4xl font-bold rainbow-text" id="userBalance">$0.00</div>
+                            <div class="text-white/95 font-semibold">💰 Balance-kaaga</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <button onclick="showDepositPage()" class="card-modern p-6 rounded-2xl text-center card-hover bounce-in glow-effect">
+                        <div class="w-16 h-16 gradient-success rounded-2xl flex items-center justify-center mx-auto mb-4 floating-animation">
+                            <i class="fas fa-plus text-white text-2xl"></i>
+                        </div>
+                        <div class="font-bold text-gray-800 text-lg">💰 Deposit</div>
+                        <div class="text-green-600 text-sm font-medium">Lacag ku shub</div>
+                    </button>
+                    
+                    <button onclick="showWithdrawPage()" class="card-modern p-6 rounded-2xl text-center card-hover bounce-in glow-effect">
+                        <div class="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 floating-animation">
+                            <i class="fas fa-minus text-white text-2xl"></i>
+                        </div>
+                        <div class="font-bold text-gray-800 text-lg">💸 Withdraw</div>
+                        <div class="text-blue-600 text-sm font-medium">Lacag ka bax</div>
+                    </button>
+                    
+                    <button onclick="showUSSDPage()" class="card-modern p-6 rounded-2xl text-center card-hover bounce-in glow-effect">
+                        <div class="w-16 h-16 gradient-secondary rounded-2xl flex items-center justify-center mx-auto mb-4 floating-animation">
+                            <i class="fas fa-phone text-white text-2xl"></i>
+                        </div>
+                        <div class="font-bold text-gray-800 text-lg">📱 USSD</div>
+                        <div class="text-pink-600 text-sm font-medium">Degdeg ah</div>
+                    </button>
+                    
+                    <button onclick="showRobotPage()" class="card-modern p-6 rounded-2xl text-center card-hover bounce-in glow-effect">
+                        <div class="w-16 h-16 gradient-gold rounded-2xl flex items-center justify-center mx-auto mb-4 floating-animation">
+                            <i class="fas fa-robot text-gray-800 text-2xl"></i>
+                        </div>
+                        <div class="font-bold text-gray-800 text-lg">🤖 AI Robots</div>
+                        <div class="text-orange-600 text-sm font-medium">Faa'iido samee</div>
+                    </button>
+                </div>
+
+                <!-- Active Robots Display -->
+                <div id="activeRobots"></div>
+                
+                <!-- Transaction History -->
+                <div class="card-modern p-8 rounded-3xl">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-history mr-3 text-blue-500"></i>📊 Taariikhda Lacagta
+                    </h3>
+                    <div id="transactionHistory" class="space-y-4">
+                        <!-- Transactions will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // User data storage - supports up to 8 million users
+        let users = JSON.parse(localStorage.getItem('investmarket_users') || '{}');
+        let currentUser = localStorage.getItem('investmarket_current_user');
+        
+        // Initialize user transactions if not exists
+        function initializeUserTransactions(phone) {
+            if (!users[phone].transactions) {
+                users[phone].transactions = [];
+            }
+        }
+
+        // Admin data for tracking
+        let adminData = JSON.parse(localStorage.getItem('investmarket_admin') || '{"registrations":[],"deposits":[],"withdrawals":[],"purchases":[],"robotRentals":[]}');
+
+        // Exchange currencies with rates, fees, and images
+        let exchangeCurrencies = {
+            evc: { 
+                name: 'EVC Plus',
+                rate: 1.00, 
+                fee: 0.05,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s'
+            },
+            bitcoin: { 
+                name: 'Bitcoin',
+                rate: 0.000025, 
+                fee: 0.08,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s'
+            },
+            trx: { 
+                name: 'TRON',
+                rate: 8.5, 
+                fee: 0.06,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyl2gUu50dRfhM-4MEqpjI_g8Ez_RY8dCt_A&s'
+            },
+            doge: { 
+                name: 'Dogecoin',
+                rate: 3.2, 
+                fee: 0.07,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVKDkE9oAzbwr1Xx4Ntf8xRlmCSSo2Rjwrkg&s'
+            },
+            cardano: { 
+                name: 'Cardano',
+                rate: 2.1, 
+                fee: 0.06,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh7E8TWRuSN2dLP7-p31_xAuO7PyVfa4LUOQ&s'
+            },
+            xrp: { 
+                name: 'Ripple',
+                rate: 1.8, 
+                fee: 0.07,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdoAJ0ng9MuiTEGDOOAqdRG-tk9c-MXecDnA&s'
+            },
+            ton: { 
+                name: 'Toncoin',
+                rate: 0.45, 
+                fee: 0.08,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8SO0rgVxiWnoXrkvqaJ1Q055G6hpcAG_ReA&s'
+            },
+            hamster: { 
+                name: 'Hamster Kombat',
+                rate: 1000, 
+                fee: 0.10,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWBs5Jp5QkDcAilfUYZN7X38kGJIkiERKHyw&s'
+            },
+            memefi: { 
+                name: 'MemeFi',
+                rate: 850, 
+                fee: 0.10,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk-fBbOXw62dgsAK2sK2MEUrDkgIicveobKQ&s'
+            },
+            ethereum: { 
+                name: 'Ethereum',
+                rate: 0.0004, 
+                fee: 0.09,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_q9ddg2N_bK1-5cpK7_BbOq3rHkSwrrKT9w&s'
+            }
+        };
+
+        // Animal images database - expanded with many more animals
+        const animalImages = {
+            'geel': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8xEutZEF86rFg0gsROTmoe3A-l7fxjSqrA&s',
+            'daauska': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKd3dAFaCYjAX3xYF9eLbSd-FHHUMHETjCQw&s',
+            'libaax': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnA30VdCSdoftah-h1-C4BDVEUM4mRKbRkcw&s',
+            'eey': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4T_5syqabNK9_wYxbqRD0VREg6rCFUSxZdA&s',
+            'bakeyle': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ10PC_PGGyY3CC54iJrwoWuaVDu7_pviX9KQ&s',
+            'daanyeer': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgzCtC9jf604AFOsnzVS_bHJS6-0RlEkLmOg&s',
+            'maroodi': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRWBFMfd0QXsRSalpO4HVu2Ac6tWE0Fpl7wg&s',
+            'robot': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCc_TUVYqoAWFxidlvhYBCqr6vu8W6iB3gBQ&s',
+            'dameer': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDOpuzntPqIBJvnjSYziUv1AQZogouWiK_3A&s',
+            'lo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7TDoDjj_YMNxoLHTtYlgIIqiLuNnW9_r1JA&s',
+            'mas': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GpKOuhz9LgZsF75xZ-67xrCbJ6NoQ-fEnQ&s',
+            'ari': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk7p2EabUDtQyRwc-haRTSejvn4ZQoFiLhZA&s',
+            'biyo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKvYGJzJzJzJzJzJzJzJzJzJzJzJzJzJzJzA&s',
+            'baabuul': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKd3dAFaCYjAX3xYF9eLbSd-FHHUMHETjCQw&s',
+            'kaluun': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgzCtC9jf604AFOsnzVS_bHJS6-0RlEkLmOg&s',
+            'waraabe': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnA30VdCSdoftah-h1-C4BDVEUM4mRKbRkcw&s',
+            'shabeel': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ10PC_PGGyY3CC54iJrwoWuaVDu7_pviX9KQ&s',
+            'dofaar': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4T_5syqabNK9_wYxbqRD0VREg6rCFUSxZdA&s',
+            'jeer': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRWBFMfd0QXsRSalpO4HVu2Ac6tWE0Fpl7wg&s',
+            'shimbiir': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCc_TUVYqoAWFxidlvhYBCqr6vu8W6iB3gBQ&s',
+            'gorgor': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDOpuzntPqIBJvnjSYziUv1AQZogouWiK_3A&s',
+            'qorof': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7TDoDjj_YMNxoLHTtYlgIIqiLuNnW9_r1JA&s',
+            'dibi': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GpKOuhz9LgZsF75xZ-67xrCbJ6NoQ-fEnQ&s',
+            'riyo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk7p2EabUDtQyRwc-haRTSejvn4ZQoFiLhZA&s',
+            'faraska': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8xEutZEF86rFg0gsROTmoe3A-l7fxjSqrA&s',
+            'bisad': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKd3dAFaCYjAX3xYF9eLbSd-FHHUMHETjCQw&s',
+            'eyga': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnA30VdCSdoftah-h1-C4BDVEUM4mRKbRkcw&s',
+            'jiir': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4T_5syqabNK9_wYxbqRD0VREg6rCFUSxZdA&s',
+            'dhuuso': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ10PC_PGGyY3CC54iJrwoWuaVDu7_pviX9KQ&s',
+            'abeeso': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgzCtC9jf604AFOsnzVS_bHJS6-0RlEkLmOg&s',
+            'dugaag': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRWBFMfd0QXsRSalpO4HVu2Ac6tWE0Fpl7wg&s',
+            'dhurwaa': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCc_TUVYqoAWFxidlvhYBCqr6vu8W6iB3gBQ&s',
+            'libaaxa': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDOpuzntPqIBJvnjSYziUv1AQZogouWiK_3A&s',
+            'yey': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7TDoDjj_YMNxoLHTtYlgIIqiLuNnW9_r1JA&s',
+            'dawaco': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6GpKOuhz9LgZsF75xZ-67xrCbJ6NoQ-fEnQ&s',
+            'luuq': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk7p2EabUDtQyRwc-haRTSejvn4ZQoFiLhZA&s'
+        };
+
+        // Market items storage - will be updated when AI generates images
+        let marketItems = JSON.parse(localStorage.getItem('investmarket_market_items') || '[]');
+
+        // Initialize
+        if (currentUser && users[currentUser]) {
+            showDashboard();
+        }
+        
+        // Initialize touch support and responsive features
+        document.addEventListener('DOMContentLoaded', function() {
+            addTouchSupport();
+            
+            // Add viewport meta tag if not present
+            if (!document.querySelector('meta[name="viewport"]')) {
+                const viewport = document.createElement('meta');
+                viewport.name = 'viewport';
+                viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+                document.head.appendChild(viewport);
+            }
+        });
+
+        // Mobile menu toggle with overlay
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            sidebar.classList.toggle('mobile-open');
+            sidebar.classList.toggle('hidden');
+            overlay.classList.toggle('hidden');
+            
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
+        });
+
+        // Close mobile menu when overlay is clicked
+        document.getElementById('mobileOverlay').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            sidebar.classList.remove('mobile-open');
+            sidebar.classList.add('hidden');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+
+        // Close mobile menu when navigation item is clicked
+        function closeMobileMenu() {
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('mobileOverlay');
+                
+                sidebar.classList.remove('mobile-open');
+                sidebar.classList.add('hidden');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        // Add touch event handling for better mobile experience
+        function addTouchSupport() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('touchstart', function() {
+                    this.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                });
+                
+                item.addEventListener('touchend', function() {
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                    }, 150);
+                });
+            });
+            
+            const buttons = document.querySelectorAll('.btn-modern');
+            buttons.forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        }
+
+        // Navigation functions
+        function showHome() {
+            hideAllPages();
+            document.getElementById('homePage').classList.remove('hidden');
+            document.getElementById('homePage').classList.add('show');
+            updateNavigation(false);
+        }
+
+        function showRegister() {
+            hideAllPages();
+            document.getElementById('registerPage').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('show');
+            updateNavigation(false);
+        }
+
+        function showLogin() {
+            hideAllPages();
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('loginPage').classList.add('show');
+            updateNavigation(false);
+        }
+
+        function showDashboard() {
+            hideAllPages();
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('show');
+            closeMobileMenu();
+            
+            if (currentUser && users[currentUser]) {
+                updateNavigation(true);
+                document.getElementById('userBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                displayActiveRobots();
+                displayTransactionHistory();
+            }
+        }
+        
+        function displayTransactionHistory() {
+            const historyDiv = document.getElementById('transactionHistory');
+            if (!historyDiv || !currentUser || !users[currentUser]) return;
+            
+            initializeUserTransactions(currentUser);
+            const transactions = users[currentUser].transactions || [];
+            
+            if (transactions.length === 0) {
+                historyDiv.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-history text-gray-400 text-4xl mb-4"></i>
+                        <p class="text-gray-500 text-lg">🔍 Weli ma jiraan transactions</p>
+                        <p class="text-gray-400 text-sm">Markii aad deposit, withdraw ama robot kireysato ayaa halkan ka muuqan doona</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort transactions by date (newest first)
+            const sortedTransactions = transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            const transactionsHtml = sortedTransactions.slice(0, 10).map(transaction => {
+                let details = '';
+                let statusBadge = '';
+                
+                switch(transaction.type) {
+                    case 'deposit':
+                        details = `💰 Deposit: $${transaction.amount} - ${transaction.method}<br>📍 Address: ${transaction.address}`;
+                        statusBadge = `<span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold">✅ Completed</span>`;
+                        break;
+                    case 'withdraw':
+                        details = `💸 Withdraw: $${transaction.amount} - ${transaction.method}<br>📍 Address: ${transaction.address}<br>💰 Balance ka dib: $${transaction.balanceAfter?.toFixed(2) || '0.00'}`;
+                        statusBadge = `<span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold">✅ Completed</span>`;
+                        break;
+                    case 'robot_rental':
+                        details = `🤖 Robot: ${transaction.robotName}<br>💰 Qiimo: $${transaction.amount}<br>📈 Rate: ${transaction.rate}% saacadkii<br>⏰ Dhammaanaya: ${transaction.endTime}`;
+                        statusBadge = `<span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold">🔄 Active</span>`;
+                        break;
+                }
+                
+                const colorClass = transaction.color === 'green' ? 'border-green-200 bg-green-50' : 
+                                 transaction.color === 'red' ? 'border-red-200 bg-red-50' : 
+                                 'border-purple-200 bg-purple-50';
+                
+                return `
+                    <div class="border-2 ${colorClass} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-102">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mr-4 shadow-lg">
+                                    <span class="text-2xl">${transaction.icon}</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-lg capitalize">${transaction.type.replace('_', ' ')}</h4>
+                                    <p class="text-gray-600 text-sm">📅 ${transaction.date}</p>
+                                </div>
+                            </div>
+                            ${statusBadge}
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-inner">
+                            <p class="text-gray-700 text-sm leading-relaxed">${details}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            historyDiv.innerHTML = `
+                <div class="mb-4 flex justify-between items-center">
+                    <p class="text-gray-600">📊 Ugu dambeeyay ${Math.min(transactions.length, 10)} transactions</p>
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold">
+                        📈 Total: ${transactions.length} transactions
+                    </span>
+                </div>
+                ${transactionsHtml}
+            `;
+        }
+
+        function hideAllPages() {
+            const pages = ['homePage', 'registerPage', 'loginPage', 'dashboard'];
+            pages.forEach(page => {
+                const element = document.getElementById(page);
+                if (element) {
+                    element.classList.add('hidden');
+                    element.classList.remove('show');
+                }
+            });
+        }
+
+        function updateNavigation(isLoggedIn) {
+            const authButtons = document.getElementById('authButtons');
+            const userInfo = document.getElementById('userInfo');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (isLoggedIn) {
+                authButtons.classList.add('hidden');
+                userInfo.classList.remove('hidden');
+                userInfo.classList.add('flex');
+                sidebar.classList.remove('hidden');
+                sidebar.classList.add('md:block');
+                
+                document.getElementById('navUserPhone').textContent = currentUser;
+                document.getElementById('navUserBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+            } else {
+                authButtons.classList.remove('hidden');
+                userInfo.classList.add('hidden');
+                userInfo.classList.remove('flex');
+                sidebar.classList.add('hidden');
+                sidebar.classList.remove('md:block');
+            }
+        }
+
+        // Registration
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const phone = document.getElementById('regPhone').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Password-yada ma isku mid aha!');
+                return;
+            }
+
+            if (users[phone]) {
+                alert('Lambarkaan horay ayaa loo diiwaan galiyey!');
+                return;
+            }
+
+            // Create new user
+            users[phone] = {
+                password: password,
+                balance: 0,
+                robots: [],
+                transactions: []
+            };
+
+            localStorage.setItem('investmarket_users', JSON.stringify(users));
+            
+            // Add to admin registrations
+            adminData.registrations.push({
+                user: phone,
+                date: new Date().toLocaleString()
+            });
+            localStorage.setItem('investmarket_admin', JSON.stringify(adminData));
+            
+            alert('✅ Diiwaan galinta waa guul ahayd! Hadda soo gal.');
+            showLogin();
+        }
+
+        // Login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const phone = document.getElementById('loginPhone').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!users[phone]) {
+                alert('Lambarkaan lama diiwaan galin!');
+                return;
+            }
+
+            if (users[phone].password !== password) {
+                alert('Password-ku qalad ah!');
+                return;
+            }
+
+            currentUser = phone;
+            localStorage.setItem('investmarket_current_user', currentUser);
+            showDashboard();
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Ma hubtaa inaad ka baxeyso?')) {
+                currentUser = null;
+                localStorage.removeItem('investmarket_current_user');
+                showHome();
+            }
+        }
+
+        // Add mobile menu close to all navigation functions
+        function showDepositPage() {
+            closeMobileMenu();
+            const depositHtml = `
+                <div class="modal-modern fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div class="modal-content w-full max-w-md p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800">
+                                <i class="fas fa-plus-circle mr-3 text-green-500"></i>Deposit Lacag
+                            </h3>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                    class="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-3">
+                                    <i class="fas fa-dollar-sign mr-2 text-green-500"></i>Lacagta Deposit
+                                </label>
+                                <input type="number" id="depositAmount" placeholder="Geli lacagta ($)" 
+                                       class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-3">
+                                    <i class="fas fa-credit-card mr-2 text-blue-500"></i>Habka Bixinta
+                                </label>
+                                <select id="depositMethod" class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none">
+                                    <option value="">Dooro habka bixinta</option>
+                                    <option value="evc">EVC Plus</option>
+                                    <option value="crypto">Crypto</option>
+                                </select>
+                            </div>
+                            
+                            <div id="depositDetails" class="hidden">
+                                <div id="depositMethodImage" class="text-center mb-4 hidden">
+                                    <img id="depositImg" src="" alt="Payment Method" class="w-32 h-20 object-contain mx-auto rounded-xl shadow-lg border-2 border-gray-200">
+                                </div>
+                                <label class="block text-gray-700 font-semibold mb-3" id="depositLabel">Address:</label>
+                                <input type="text" id="depositAddress" placeholder="Geli address-ka" 
+                                       class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none">
+                            </div>
+                            
+                            <div class="flex gap-4">
+                                <button onclick="confirmDeposit()" 
+                                        class="flex-1 gradient-success text-white py-4 rounded-xl font-semibold btn-modern">
+                                    <i class="fas fa-check mr-2"></i>Confirm
+                                </button>
+                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" 
+                                        class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-4 rounded-xl font-semibold">
+                                    <i class="fas fa-times mr-2"></i>Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', depositHtml);
+            
+            // Add event listener for method selection
+            document.getElementById('depositMethod').addEventListener('change', function() {
+                const method = this.value;
+                const detailsDiv = document.getElementById('depositDetails');
+                const label = document.getElementById('depositLabel');
+                const input = document.getElementById('depositAddress');
+                const imageDiv = document.getElementById('depositMethodImage');
+                const img = document.getElementById('depositImg');
+                
+                if (method) {
+                    detailsDiv.classList.remove('hidden');
+                    imageDiv.classList.remove('hidden');
+                    
+                    if (method === 'evc') {
+                        label.innerHTML = '<i class="fas fa-phone mr-2 text-blue-500"></i>EVC Plus Number:';
+                        input.placeholder = 'Geli EVC Plus number-ka';
+                        img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s';
+                        img.alt = 'EVC Plus';
+                    } else if (method === 'crypto') {
+                        label.innerHTML = '<i class="fas fa-link mr-2 text-orange-500"></i>Crypto Address:';
+                        input.placeholder = 'Geli crypto address-ka';
+                        img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s';
+                        img.alt = 'Crypto';
+                    }
+                } else {
+                    detailsDiv.classList.add('hidden');
+                    imageDiv.classList.add('hidden');
+                }
+            });
+        }
+
+        function confirmDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const method = document.getElementById('depositMethod').value;
+            const address = document.getElementById('depositAddress').value;
+            
+            if (!amount || amount <= 0) {
+                alert('Fadlan geli lacag sax ah!');
+                return;
+            }
+            
+            if (!method) {
+                alert('Fadlan dooro habka bixinta!');
+                return;
+            }
+            
+            if (!address) {
+                alert('Fadlan geli address-ka!');
+                return;
+            }
+            
+            const methodName = method === 'evc' ? 'EVC Plus' : 'Crypto';
+            
+            if (confirm(`Xaqiiji Deposit:\nLacag: $${amount}\nHab: ${methodName}\nAddress: ${address}`)) {
+                // Initialize transactions if needed
+                initializeUserTransactions(currentUser);
+                
+                // Add balance automatically
+                users[currentUser].balance += amount;
+                
+                // Add to user transaction history
+                users[currentUser].transactions.push({
+                    type: 'deposit',
+                    amount: amount,
+                    method: methodName,
+                    address: address,
+                    date: new Date().toLocaleString(),
+                    status: 'completed',
+                    icon: '💰',
+                    color: 'green'
+                });
+                
+                localStorage.setItem('investmarket_users', JSON.stringify(users));
+                
+                // Update display
+                document.getElementById('userBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                document.getElementById('navUserBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                
+                // Send WhatsApp message with detailed info
+                const message = `🔥 DEPOSIT REQUEST 🔥\n\n💰 Lacagta: $${amount}\n📱 Habka: ${methodName}\n📍 Address: ${address}\n👤 Isticmaale: ${currentUser}\n⏰ Waqtiga: ${new Date().toLocaleString()}\n\n✅ Waxaan kusoo shubtay lacag $${amount} waxaanan kasoo diray ${methodName}: ${address}\n\nFadlan xaqiiji deposit-ka. Mahadsanid! 🙏`;
+                window.open(`https://wa.me/618877686?text=${encodeURIComponent(message)}`, '_blank');
+                
+                // Add to admin data
+                adminData.deposits.push({
+                    user: currentUser,
+                    amount: amount,
+                    method: methodName,
+                    address: address,
+                    date: new Date().toLocaleString()
+                });
+                localStorage.setItem('investmarket_admin', JSON.stringify(adminData));
+                
+                // Close modal
+                document.querySelector('.modal-modern').remove();
+                
+                // Update transaction history display
+                displayTransactionHistory();
+                
+                alert('✅ Deposit waa la qabtay! Balance-kaaga waa la cusbooneysiiyey.');
+            }
+        }
+
+        // Withdraw Page
+        function showWithdrawPage() {
+            closeMobileMenu();
+            const userBalance = users[currentUser].balance;
+            
+            if (userBalance < 5) {
+                alert('❌ Balance-kaagu waa in uu ka badan yahay $5 si aad u withdraw gareyneyso!\nBalance-kaaga hadda: $' + userBalance.toFixed(2));
+                return;
+            }
+            
+            const withdrawHtml = `
+                <div class="modal-modern fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div class="modal-content w-full max-w-md p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800">
+                                <i class="fas fa-minus-circle mr-3 text-blue-500"></i>Withdraw Lacag
+                            </h3>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                    class="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-xl mb-6">
+                            <p class="text-blue-800 font-semibold">
+                                <i class="fas fa-wallet mr-2"></i>Balance-kaaga: $${userBalance.toFixed(2)}
+                            </p>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-3">
+                                    <i class="fas fa-dollar-sign mr-2 text-blue-500"></i>Lacagta Withdraw
+                                </label>
+                                <input type="number" id="withdrawAmount" placeholder="Geli lacagta ($)" max="${userBalance}"
+                                       class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-3">
+                                    <i class="fas fa-credit-card mr-2 text-purple-500"></i>Habka Withdraw
+                                </label>
+                                <select id="withdrawMethod" class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none">
+                                    <option value="">Dooro habka withdraw</option>
+                                    <option value="evc">EVC Plus</option>
+                                    <option value="crypto">Crypto</option>
+                                </select>
+                            </div>
+                            
+                            <div id="withdrawDetails" class="hidden">
+                                <div id="withdrawMethodImage" class="text-center mb-4 hidden">
+                                    <img id="withdrawImg" src="" alt="Payment Method" class="w-32 h-20 object-contain mx-auto rounded-xl shadow-lg border-2 border-gray-200">
+                                </div>
+                                <label class="block text-gray-700 font-semibold mb-3" id="withdrawLabel">Address:</label>
+                                <input type="text" id="withdrawAddress" placeholder="Geli address-ka" 
+                                       class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none">
+                            </div>
+                            
+                            <div class="flex gap-4">
+                                <button onclick="confirmWithdraw()" 
+                                        class="flex-1 gradient-primary text-white py-4 rounded-xl font-semibold btn-modern">
+                                    <i class="fas fa-check mr-2"></i>Confirm
+                                </button>
+                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" 
+                                        class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-4 rounded-xl font-semibold">
+                                    <i class="fas fa-times mr-2"></i>Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', withdrawHtml);
+            
+            // Add event listener for method selection
+            document.getElementById('withdrawMethod').addEventListener('change', function() {
+                const method = this.value;
+                const detailsDiv = document.getElementById('withdrawDetails');
+                const label = document.getElementById('withdrawLabel');
+                const input = document.getElementById('withdrawAddress');
+                const imageDiv = document.getElementById('withdrawMethodImage');
+                const img = document.getElementById('withdrawImg');
+                
+                if (method) {
+                    detailsDiv.classList.remove('hidden');
+                    imageDiv.classList.remove('hidden');
+                    
+                    if (method === 'evc') {
+                        label.innerHTML = '<i class="fas fa-phone mr-2 text-blue-500"></i>EVC Plus Number:';
+                        input.placeholder = 'Geli EVC Plus number-ka';
+                        img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s';
+                        img.alt = 'EVC Plus';
+                    } else if (method === 'crypto') {
+                        label.innerHTML = '<i class="fas fa-link mr-2 text-orange-500"></i>Crypto Address:';
+                        input.placeholder = 'Geli crypto address-ka';
+                        img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s';
+                        img.alt = 'Crypto';
+                    }
+                } else {
+                    detailsDiv.classList.add('hidden');
+                    imageDiv.classList.add('hidden');
+                }
+            });
+        }
+
+        function confirmWithdraw() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const method = document.getElementById('withdrawMethod').value;
+            const address = document.getElementById('withdrawAddress').value;
+            const userBalance = users[currentUser].balance;
+            
+            if (!amount || amount <= 0) {
+                alert('Fadlan geli lacag sax ah!');
+                return;
+            }
+            
+            if (amount > userBalance) {
+                alert('Lacagta aad codsatay way ka badan tahay balance-kaaga!');
+                return;
+            }
+            
+            if (!method) {
+                alert('Fadlan dooro habka withdraw!');
+                return;
+            }
+            
+            if (!address) {
+                alert('Fadlan geli address-ka!');
+                return;
+            }
+            
+            const methodName = method === 'evc' ? 'EVC Plus' : 'Crypto';
+            
+            if (confirm(`Xaqiiji Withdraw:\nLacag: $${amount}\nHab: ${methodName}\nAddress: ${address}`)) {
+                // Initialize transactions if needed
+                initializeUserTransactions(currentUser);
+                
+                // Automatically deduct from balance
+                users[currentUser].balance -= amount;
+                
+                // Add to user transaction history
+                users[currentUser].transactions.push({
+                    type: 'withdraw',
+                    amount: amount,
+                    method: methodName,
+                    address: address,
+                    date: new Date().toLocaleString(),
+                    status: 'completed',
+                    icon: '💸',
+                    color: 'red',
+                    balanceAfter: users[currentUser].balance
+                });
+                
+                localStorage.setItem('investmarket_users', JSON.stringify(users));
+                
+                // Update display immediately
+                document.getElementById('userBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                document.getElementById('navUserBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                
+                // Send WhatsApp message with detailed info
+                const message = `🔥 WITHDRAW REQUEST 🔥\n\n💸 Lacagta: $${amount}\n📱 Habka: ${methodName}\n📍 Address: ${address}\n👤 Isticmaale: ${currentUser}\n⏰ Waqtiga: ${new Date().toLocaleString()}\n💰 Balance ka dib: $${users[currentUser].balance.toFixed(2)}\n\n✅ Waxaan kala baxay lacag $${amount} haligu soo diro ${methodName}: ${address}\n\nFadlan confirm garee withdraw-ka. Mahadsanid! 🙏`;
+                window.open(`https://wa.me/618877686?text=${encodeURIComponent(message)}`, '_blank');
+                
+                // Add to admin data
+                adminData.withdrawals.push({
+                    user: currentUser,
+                    amount: amount,
+                    method: methodName,
+                    address: address,
+                    balanceAfter: users[currentUser].balance,
+                    date: new Date().toLocaleString()
+                });
+                localStorage.setItem('investmarket_admin', JSON.stringify(adminData));
+                
+                // Close modal
+                document.querySelector('.modal-modern').remove();
+                
+                // Update transaction history display
+                displayTransactionHistory();
+                
+                alert('✅ Withdraw waa la qabtay! Lacagta si otomatik ah ayaa looga jaray balance-kaaga.');
+            }
+        }
+
+        // USSD Page
+        function showUSSDPage() {
+            closeMobileMenu();
+            const ussdHtml = `
+                <div class="modal-modern fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div class="modal-content w-full max-w-md p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800">
+                                <i class="fas fa-phone mr-3 text-purple-500"></i>USSD Payment
+                            </h3>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                    class="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-3">
+                                    <i class="fas fa-dollar-sign mr-2 text-purple-500"></i>Lacagta USSD
+                                </label>
+                                <input type="number" id="ussdAmount" placeholder="Geli lacagta ($)" 
+                                       class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none">
+                            </div>
+                            
+                            <div class="bg-purple-50 p-4 rounded-xl">
+                                <p class="text-purple-800 text-sm">
+                                    <i class="fas fa-info-circle mr-2"></i>
+                                    USSD code: *712*618877686*1# ayaa la wici doonaa
+                                </p>
+                            </div>
+                            
+                            <div class="flex gap-4">
+                                <button onclick="sendUSSD()" 
+                                        class="flex-1 gradient-secondary text-white py-4 rounded-xl font-semibold btn-modern">
+                                    <i class="fas fa-phone mr-2"></i>Send USSD
+                                </button>
+                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" 
+                                        class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-4 rounded-xl font-semibold">
+                                    <i class="fas fa-times mr-2"></i>Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', ussdHtml);
+        }
+
+        function sendUSSD() {
+            const amount = parseFloat(document.getElementById('ussdAmount').value);
+            
+            if (!amount || amount <= 0) {
+                alert('Fadlan geli lacag sax ah!');
+                return;
+            }
+            
+            if (confirm(`Xaqiiji USSD Payment:\nLacag: $${amount}`)) {
+                // Close modal first
+                document.querySelector('.modal-modern').remove();
+                
+                // Make actual phone call with USSD code
+                window.location.href = 'tel:*712*618877686*1%23';
+                
+                // Show confirmation message
+                setTimeout(() => {
+                    alert(`📞 USSD waa la diray!\n\nLambarka: *712*618877686*1#\n\nRaac tilmaamaha telefoonka si aad u dhamaystirto lacag bixinta.`);
+                }, 1000);
+            }
+        }
+
+        // Robot Page with modern design
+        function showRobotPage() {
+            closeMobileMenu();
+            const userBalance = users[currentUser].balance;
+            const activeRobots = users[currentUser].robots ? users[currentUser].robots.filter(r => r.active) : [];
+            
+            const robotsHtml = `
+                <div class="modal-modern fixed inset-0 z-50 overflow-y-auto">
+                    <div class="modal-content w-full max-w-6xl mx-auto my-8 p-8">
+                        <div class="flex justify-between items-center mb-8">
+                            <h3 class="text-3xl font-bold text-gray-800">
+                                <i class="fas fa-robot mr-3 text-orange-500"></i>AI Investment Robots
+                            </h3>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                    class="w-12 h-12 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Islamic Compliance Notice -->
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-xl mb-8">
+                            <div class="flex items-start">
+                                <i class="fas fa-exclamation-triangle text-yellow-400 text-xl mr-3 mt-1"></i>
+                                <div>
+                                    <h4 class="text-yellow-800 font-bold mb-2">⚠️ Ogeysiis Muhiim ah</h4>
+                                    <p class="text-yellow-700 text-sm leading-relaxed">
+                                        Robotka shareecada Islaamka ku dhaqmo oo uu ka shaqeeyo ina xalaasha ah. 
+                                        Waxaa dhici kara inuu faa'iido kuu sameeyo iyo inuu qasaaro keeno. 
+                                        Marka hadii aad ku qanacsantahay kireyso.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-6 rounded-xl mb-8">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-blue-800 font-bold text-lg">
+                                        <i class="fas fa-wallet mr-2"></i>Balance-kaaga: $${userBalance.toFixed(2)}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-blue-600">
+                                        <i class="fas fa-robot mr-2"></i>Active Robots: ${activeRobots.length}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${generateRobotCards()}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', robotsHtml);
+        }
+
+        function generateRobotCards() {
+            const robots = [
+                {name: 'Green Energy', price: 1, rate: 0.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN6VSe-GVQNJnAaRtBq3MT1AdQm4_lk_nm8Q&s'},
+                {name: 'Gaming Stocks', price: 2, rate: 0.1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE5lKEPUJKB04S1g_yEJWCnKO3lNfRwvviGQ&s'},
+                {name: 'Media Expert', price: 3, rate: 0.15, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAigmUQKnJXk_u5IpyR3lTSBRUOCCJ5zcQ4g&s'},
+                {name: 'Transport Pro', price: 5, rate: 0.17, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsixzp9V9j0_lBI7wOB6w_DCP15bEUnxYsIg&s'},
+                {name: 'Utility Master', price: 10, rate: 0.2, image: 'https://news.mit.edu/sites/default/files/styles/news_article__image_gallery/public/images/202505/MIT-Differentiable-Interaction-01_0.gif?itok=OtGBTwHK'},
+                {name: 'Telecom Trader', price: 20, rate: 0.25, image: 'https://cdn.sanity.io/images/f8lauh0h/production/6b6e8de8b893da63950e390334a9668d4440e3be-6000x4000.jpg'},
+                {name: 'Insurance Expert', price: 30, rate: 0.35, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnsHUweaPvW6qTrQgew1-667hFAG1dK1-tGw&s'},
+                {name: 'Banking Pro', price: 40, rate: 1.0, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUhHtnFq30Z-nkcY5Pvhq3MWwcQSzcfgrXkg&s'},
+                {name: 'Retail Master', price: 50, rate: 1.05, image: 'https://th.bing.com/th/id/OIF.RGVHqT24AG2CUbAT7CNhHA?w=235&h=183&c=7&r=0&o=5&pid=1.7'},
+                {name: 'Crypto King', price: 350, rate: 7.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s'}
+            ];
+            
+            return robots.map(robot => {
+                const userBalance = users[currentUser].balance;
+                const canAfford = userBalance >= robot.price;
+                const hasActiveRobot = users[currentUser].robots && users[currentUser].robots.some(r => r.active && r.name === robot.name);
+                
+                let buttonHtml;
+                let cardClass = 'card-modern';
+                
+                if (!canAfford) {
+                    buttonHtml = `<button onclick="showInsufficientFunds(${robot.price})" class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold btn-modern">
+                        <i class="fas fa-times mr-2"></i>Lacag Ma Filna
+                    </button>`;
+                    cardClass += ' opacity-60';
+                } else if (hasActiveRobot) {
+                    buttonHtml = `<button class="w-full bg-gray-500 text-white py-3 rounded-xl font-semibold cursor-not-allowed" disabled>
+                        <i class="fas fa-clock mr-2"></i>Shaqada Socda
+                    </button>`;
+                    cardClass += ' pulse-glow';
+                } else {
+                    buttonHtml = `<button onclick="rentRobot('${robot.name}', ${robot.price}, ${robot.rate})" class="w-full gradient-success text-white py-3 rounded-xl font-semibold btn-modern card-hover">
+                        <i class="fas fa-robot mr-2"></i>Kireyso Robot
+                    </button>`;
+                }
+                
+                return `
+                    <div class="${cardClass} p-6 rounded-2xl">
+                        <img src="${robot.image}" class="w-full h-40 object-cover rounded-xl mb-4">
+                        <h4 class="text-xl font-bold text-gray-800 text-center mb-2">${robot.name}</h4>
+                        <div class="text-center mb-4">
+                            <div class="text-2xl font-bold text-green-600 mb-1">$${robot.price}</div>
+                            <div class="text-gray-600 text-sm mb-1">Faa'iido: ${robot.rate}% saacadkii</div>
+                            <div class="text-gray-500 text-xs">Muddo: 24 saacadood</div>
+                        </div>
+                        ${buttonHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showInsufficientFunds(robotPrice) {
+            alert(`❌ Lacag Ma Filna!\n\nSi aad robot u kireysato lacag ku shubo.\nU baahan tahay: $${robotPrice}\nBalance-kaaga: $${users[currentUser].balance.toFixed(2)}\n\nMahadsan!`);
+        }
+
+        function rentRobot(name, price, rate) {
+            const userBalance = users[currentUser].balance;
+            
+            if (userBalance < price) {
+                showInsufficientFunds(price);
+                return;
+            }
+
+            // Check if robot is already active
+            const hasActiveRobot = users[currentUser].robots && users[currentUser].robots.some(r => r.active && r.name === name);
+            if (hasActiveRobot) {
+                alert('❌ Robot-kan horay ayuu u shaqeynayaa! Sugee ilaa uu dhammeeyo.');
+                return;
+            }
+
+            if (confirm(`Xaqiiji robot kireynta:\n\nRobot: ${name}\nQiimo: $${price}\nFaa'iido: ${rate}% saacadkii\nMuddo: 24 saacadood\n\nRobotka shareecada Islaamka ku dhaqmo.`)) {
+                // Initialize transactions if needed
+                initializeUserTransactions(currentUser);
+                
+                // Deduct cost
+                users[currentUser].balance -= price;
+                
+                // Add robot
+                const robot = {
+                    id: Date.now(),
+                    name: name,
+                    price: price,
+                    rate: rate,
+                    startTime: Date.now(),
+                    endTime: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
+                    active: true
+                };
+                
+                if (!users[currentUser].robots) {
+                    users[currentUser].robots = [];
+                }
+                users[currentUser].robots.push(robot);
+                
+                // Add to user transaction history
+                users[currentUser].transactions.push({
+                    type: 'robot_rental',
+                    amount: price,
+                    robotName: name,
+                    rate: rate,
+                    duration: '24 saacadood',
+                    date: new Date().toLocaleString(),
+                    status: 'active',
+                    icon: '🤖',
+                    color: 'purple',
+                    endTime: new Date(robot.endTime).toLocaleString()
+                });
+                
+                localStorage.setItem('investmarket_users', JSON.stringify(users));
+                document.getElementById('userBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                document.getElementById('navUserBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                
+                // Add to admin data
+                adminData.robotRentals.push({
+                    user: currentUser,
+                    robot: name,
+                    price: price,
+                    rate: rate,
+                    date: new Date().toLocaleString()
+                });
+                localStorage.setItem('investmarket_admin', JSON.stringify(adminData));
+                
+                alert('✅ Robot waa la kireystay! 24 saacadood ayuu shaqeyn doonaa.');
+                
+                // Start robot earnings
+                startRobotEarnings(robot);
+                
+                // Close modal and refresh
+                document.querySelector('.modal-modern').remove();
+                displayActiveRobots();
+                displayTransactionHistory();
+            }
+        }
+
+        function startRobotEarnings(robot) {
+            const interval = setInterval(() => {
+                if (Date.now() >= robot.endTime || !robot.active) {
+                    clearInterval(interval);
+                    robot.active = false;
+                    localStorage.setItem('investmarket_users', JSON.stringify(users));
+                    displayActiveRobots();
+                    return;
+                }
+                
+                // Add hourly earnings (every minute for demo)
+                const hourlyEarning = robot.price * (robot.rate / 100);
+                users[currentUser].balance += hourlyEarning;
+                localStorage.setItem('investmarket_users', JSON.stringify(users));
+                
+                // Update display if on dashboard
+                if (document.getElementById('dashboard').classList.contains('show')) {
+                    document.getElementById('userBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                    document.getElementById('navUserBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                    displayActiveRobots();
+                }
+            }, 60000); // Check every minute
+        }
+
+        function displayActiveRobots() {
+            const activeRobotsDiv = document.getElementById('activeRobots');
+            if (!activeRobotsDiv) return;
+            
+            const activeRobots = users[currentUser].robots ? users[currentUser].robots.filter(r => r.active) : [];
+            
+            if (activeRobots.length === 0) {
+                activeRobotsDiv.innerHTML = '';
+                return;
+            }
+            
+            const robotsHtml = `
+                <div class="card-modern p-8 rounded-3xl">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-robot mr-3 text-orange-500"></i>Active Robots
+                    </h3>
+                    <div class="grid gap-6">
+                        ${activeRobots.map(robot => {
+                            const timeLeft = robot.endTime - Date.now();
+                            const hoursLeft = Math.floor(timeLeft / (1000 * 60 * 60));
+                            const minutesLeft = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                            const secondsLeft = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                            
+                            return `
+                                <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-2xl border border-blue-100">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex-1">
+                                            <h4 class="text-xl font-bold text-gray-800 mb-2">${robot.name}</h4>
+                                            <p class="text-gray-600 mb-1">
+                                                <i class="fas fa-percentage mr-2 text-green-500"></i>
+                                                Faa'iido: ${robot.rate}% saacadkii
+                                            </p>
+                                            <p class="text-green-600 font-semibold">
+                                                <i class="fas fa-dollar-sign mr-2"></i>
+                                                Faa'iido ilaa hadda: $${((Date.now() - robot.startTime) / (1000 * 60 * 60) * robot.price * (robot.rate / 100)).toFixed(4)}
+                                            </p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="robot-timer text-green-500 text-3xl font-bold mb-2" id="timer-${robot.id}">
+                                                ${hoursLeft}:${minutesLeft.toString().padStart(2, '0')}:${secondsLeft.toString().padStart(2, '0')}
+                                            </div>
+                                            <div class="text-gray-600 text-sm mb-1">
+                                                <i class="fas fa-clock mr-1"></i>Waqti haray
+                                            </div>
+                                            <div class="text-blue-500 text-xs">
+                                                <i class="fas fa-sync-alt mr-1"></i>Live Timer
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            
+            activeRobotsDiv.innerHTML = robotsHtml;
+        }
+
+        // Exchange function - modern design
+        function showExchange() {
+            closeMobileMenu();
+            const userBalance = users[currentUser].balance;
+            
+            const currencyOptions = generateCurrencyOptions();
+            const cryptoPricesHtml = generateCryptoPrices();
+            
+            const exchangeHtml = `
+                <div class="modal-modern fixed inset-0 z-50 overflow-y-auto">
+                    <div class="modal-content w-full max-w-5xl mx-auto my-8 p-8">
+                        <div class="flex justify-between items-center mb-8">
+                            <h3 class="text-3xl font-bold text-gray-800">
+                                <i class="fas fa-exchange-alt mr-3 text-yellow-500"></i>Currency Exchange
+                            </h3>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                    class="w-12 h-12 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-6 rounded-xl mb-8">
+                            <p class="text-blue-800 font-bold text-lg">
+                                <i class="fas fa-wallet mr-2"></i>Balance-kaaga: $${userBalance.toFixed(2)}
+                            </p>
+                        </div>
+                        
+                        <!-- Exchange Form -->
+                        <div class="grid md:grid-cols-3 gap-8 items-center mb-8">
+                            <div class="card-modern p-6 rounded-2xl">
+                                <label class="block text-gray-700 font-bold mb-4">
+                                    <i class="fas fa-arrow-right mr-2 text-blue-500"></i>Ka Beddel:
+                                </label>
+                                <select id="fromCurrency" onchange="updateExchangeRate()" 
+                                        class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none mb-4">
+                                    <option value="">Dooro currency</option>
+                                    ${currencyOptions}
+                                </select>
+                                <input type="number" id="fromAmount" placeholder="Lacagta geli" onkeyup="calculateExchange()" 
+                                       class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none">
+                            </div>
+                            
+                            <div class="text-center">
+                                <button onclick="swapCurrencies()" 
+                                        class="w-16 h-16 gradient-primary text-white rounded-full flex items-center justify-center mx-auto btn-modern card-hover">
+                                    <i class="fas fa-exchange-alt text-2xl"></i>
+                                </button>
+                                <p class="text-gray-600 text-sm mt-2">Swap</p>
+                            </div>
+                            
+                            <div class="card-modern p-6 rounded-2xl">
+                                <label class="block text-gray-700 font-bold mb-4">
+                                    <i class="fas fa-arrow-left mr-2 text-green-500"></i>U Beddel:
+                                </label>
+                                <select id="toCurrency" onchange="updateExchangeRate()" 
+                                        class="w-full px-4 py-4 rounded-xl input-modern focus:outline-none mb-4">
+                                    <option value="">Dooro currency</option>
+                                    ${currencyOptions}
+                                </select>
+                                <input type="number" id="toAmount" placeholder="Natiijaada" readonly 
+                                       class="w-full px-4 py-4 rounded-xl bg-gray-100 border-2 border-gray-200 focus:outline-none">
+                            </div>
+                        </div>
+                        
+                        <!-- Exchange Rate Display -->
+                        <div class="bg-yellow-50 p-6 rounded-xl mb-8 text-center">
+                            <div class="text-lg font-bold text-yellow-800" id="exchangeRate">
+                                Dooro currencies si aad u aragto exchange rate
+                            </div>
+                        </div>
+                        
+                        <!-- Available Currencies -->
+                        <div class="mb-8">
+                            <h4 class="text-xl font-bold text-gray-800 mb-6">
+                                <i class="fas fa-coins mr-2 text-yellow-500"></i>Available Currencies
+                            </h4>
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="cryptoPricesDisplay">
+                                ${cryptoPricesHtml}
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-6">
+                            <button onclick="executeExchange()" 
+                                    class="flex-1 gradient-success text-white py-4 rounded-xl font-bold text-lg btn-modern">
+                                <i class="fas fa-exchange-alt mr-2"></i>Exchange Samee
+                            </button>
+                            <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" 
+                                    class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-4 rounded-xl font-bold text-lg">
+                                <i class="fas fa-times mr-2"></i>Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', exchangeHtml);
+            updateExchangeRate();
+        }
+
+        function generateCurrencyOptions() {
+            return Object.entries(exchangeCurrencies).map(([key, currency]) => 
+                `<option value="${key}">${currency.name} - Rate: ${currency.rate}</option>`
+            ).join('');
+        }
+
+        function generateCryptoPrices() {
+            return Object.entries(exchangeCurrencies).map(([key, currency]) => `
+                <div class="card-modern p-4 rounded-xl text-center card-hover">
+                    <img src="${currency.image}" class="w-12 h-12 rounded-full mx-auto mb-3">
+                    <div class="font-bold text-blue-600 text-sm mb-1">${currency.name}</div>
+                    <div class="text-gray-600 text-xs mb-1">Rate: ${currency.rate}</div>
+                    <div class="text-red-500 text-xs">Fee: ${(currency.fee * 100).toFixed(1)}%</div>
+                </div>
+            `).join('');
+        }
+
+        function updateExchangeRate() {
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            const rateDisplay = document.getElementById('exchangeRate');
+            
+            if (fromCurrency && toCurrency && fromCurrency !== toCurrency) {
+                const fromRate = exchangeCurrencies[fromCurrency].rate;
+                const toRate = exchangeCurrencies[toCurrency].rate;
+                const exchangeRate = fromRate / toRate;
+                const fee = exchangeCurrencies[toCurrency].fee;
+                
+                rateDisplay.innerHTML = `
+                    <div class="mb-2">1 ${exchangeCurrencies[fromCurrency].name} = ${exchangeRate.toFixed(8)} ${exchangeCurrencies[toCurrency].name}</div>
+                    <div class="text-red-600 text-sm">
+                        <i class="fas fa-exclamation-triangle mr-1"></i>Fee: ${(fee * 100).toFixed(1)}%
+                    </div>
+                `;
+                calculateExchange();
+            } else {
+                rateDisplay.innerHTML = '<i class="fas fa-info-circle mr-2"></i>Dooro currencies si aad u aragto exchange rate';
+            }
+        }
+
+        function calculateExchange() {
+            const fromAmount = parseFloat(document.getElementById('fromAmount').value) || 0;
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            const toAmountInput = document.getElementById('toAmount');
+            
+            if (fromAmount > 0 && fromCurrency && toCurrency && fromCurrency !== toCurrency) {
+                const fromRate = exchangeCurrencies[fromCurrency].rate;
+                const toRate = exchangeCurrencies[toCurrency].rate;
+                const fee = exchangeCurrencies[toCurrency].fee;
+                
+                const exchangeRate = fromRate / toRate;
+                const grossAmount = fromAmount * exchangeRate;
+                const feeAmount = grossAmount * fee;
+                const netAmount = grossAmount - feeAmount;
+                
+                toAmountInput.value = netAmount.toFixed(8);
+            } else {
+                toAmountInput.value = '';
+            }
+        }
+
+        function swapCurrencies() {
+            const fromSelect = document.getElementById('fromCurrency');
+            const toSelect = document.getElementById('toCurrency');
+            const fromAmount = document.getElementById('fromAmount');
+            const toAmount = document.getElementById('toAmount');
+            
+            // Swap currencies
+            const tempCurrency = fromSelect.value;
+            fromSelect.value = toSelect.value;
+            toSelect.value = tempCurrency;
+            
+            // Swap amounts
+            const tempAmount = fromAmount.value;
+            fromAmount.value = toAmount.value;
+            toAmount.value = tempAmount;
+            
+            updateExchangeRate();
+        }
+
+        function executeExchange() {
+            const fromAmount = parseFloat(document.getElementById('fromAmount').value);
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            const toAmount = parseFloat(document.getElementById('toAmount').value);
+            const userBalance = users[currentUser].balance;
+            
+            if (!fromAmount || fromAmount <= 0) {
+                alert('Fadlan geli lacag sax ah!');
+                return;
+            }
+            
+            if (!fromCurrency || !toCurrency || fromCurrency === toCurrency) {
+                alert('Fadlan dooro currencies kala duwan!');
+                return;
+            }
+            
+            // Calculate required USD (assuming user balance is in USD equivalent)
+            const fromRate = exchangeCurrencies[fromCurrency].rate;
+            const requiredUSD = fromAmount / fromRate;
+            
+            if (requiredUSD > userBalance) {
+                alert(`❌ Balance ma filna!\nU baahan tahay: $${requiredUSD.toFixed(2)} USD equivalent\nBalance-kaaga: $${userBalance.toFixed(2)}`);
+                return;
+            }
+            
+            const fee = exchangeCurrencies[toCurrency].fee;
+            const feeAmount = toAmount * fee;
+            
+            if (confirm(`Xaqiiji Exchange:\n\nKa beddel: ${fromAmount} ${exchangeCurrencies[fromCurrency].name}\nU beddel: ${toAmount.toFixed(8)} ${exchangeCurrencies[toCurrency].name}\nFee: ${feeAmount.toFixed(8)} ${exchangeCurrencies[toCurrency].name}\n\nMa hubtaa?`)) {
+                // Deduct from user balance
+                users[currentUser].balance -= requiredUSD;
+                localStorage.setItem('investmarket_users', JSON.stringify(users));
+                document.getElementById('userBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                document.getElementById('navUserBalance').textContent = '$' + users[currentUser].balance.toFixed(2);
+                
+                // Send WhatsApp message for admin
+                const message = `Exchange Request:\nFrom: ${fromAmount} ${exchangeCurrencies[fromCurrency].name}\nTo: ${toAmount.toFixed(8)} ${exchangeCurrencies[toCurrency].name}\nFee: ${(fee * 100).toFixed(1)}%\nUser: ${currentUser}\nBalance after: $${users[currentUser].balance.toFixed(2)}`;
+                window.open(`https://wa.me/618877686?text=${encodeURIComponent(message)}`, '_blank');
+                
+                alert('✅ Exchange request waa la diray admin-ka!\nLacagta waa laga jaray balance-kaaga.');
+                
+                // Close modal
+                document.querySelector('.modal-modern').remove();
+            }
+        }
+
+        // Market with modern design
+        function showMarket() {
+            closeMobileMenu();
+            const marketHtml = `
+                <div class="modal-modern fixed inset-0 z-50 overflow-y-auto">
+                    <div class="modal-content w-full max-w-6xl mx-auto my-8 p-8">
+                        <div class="flex justify-between items-center mb-8">
+                            <h3 class="text-3xl font-bold text-gray-800">
+                                <i class="fas fa-shopping-cart mr-3 text-indigo-500"></i>Online Market
+                            </h3>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                    class="w-12 h-12 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            ${generateMarketItems()}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', marketHtml);
+        }
+
+        function generateMarketItems() {
+            const defaultItems = [
+                // Clothing
+                {name: 'Dhar Ragga', price: '$15-50', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8xEutZEF86rFg0gsROTmoe3A-l7fxjSqrA&s', category: 'clothing'},
+                {name: 'Dhar Dumarka', price: '$20-80', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKd3dAFaCYjAX3xYF9eLbSd-FHHUMHETjCQw&s', category: 'clothing'},
+                {name: 'Kabaha Buudka', price: '$6.25', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM2ZjMp8O6Quu2i-PZGv6wibTWhOnoAxrUeA&s', category: 'shoes'},
+                {name: 'Kabaha Isport', price: '$3.65', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz9CUieYt5uQrKoChj3firWTeK2KBaIYe50A&s', category: 'shoes'},
+                {name: 'Kabaha Dumarka', price: '$8.00', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZZFT7rd2a9iVvJpXQmY7gYUTGHphk363WQ&s', category: 'shoes'},
+                
+                // Cosmetics
+                {name: 'Rooseetada', price: '$12.00', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0kZGpb-swedBdyAW7aJgbGtCHJC6K0lNaYA&s', category: 'cosmetics'},
+                {name: 'Kareenka Wajiga', price: '$4.00', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWNr0OOSwfHGh5MWDwDVHrgUJp8Qj5IuQEpA&s', category: 'cosmetics'},
+                {name: 'Barfuunada', price: '$9.50', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKuKZYpGWaAZHYqvBryVbCvJsnXZLEhjhWxQ&s', category: 'cosmetics'},
+                
+                // Phones
+                {name: 'iPhone', price: '$200-1200', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnA30VdCSdoftah-h1-C4BDVEUM4mRKbRkcw&s', category: 'phones'},
+                {name: 'Samsung', price: '$150-800', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4T_5syqabNK9_wYxbqRD0VREg6rCFUSxZdA&s', category: 'phones'},
+                {name: 'Xiaomi/Redmi', price: '$100-400', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ10PC_PGGyY3CC54iJrwoWuaVDu7_pviX9KQ&s', category: 'phones'},
+                {name: 'Infinix/Tecno', price: '$80-300', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgzCtC9jf604AFOsnzVS_bHJS6-0RlEkLmOg&s', category: 'phones'},
+                {name: 'Oppo/Vivo', price: '$120-500', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRWBFMfd0QXsRSalpO4HVu2Ac6tWE0Fpl7wg&s', category: 'phones'},
+                {name: 'Huawei', price: '$100-600', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCc_TUVYqoAWFxidlvhYBCqr6vu8W6iB3gBQ&s', category: 'phones'},
+                {name: 'Nokia', price: '$50-200', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDOpuzntPqIBJvnjSYziUv1AQZogouWiK_3A&s', category: 'phones'},
+                {name: 'Itel', price: '$40-120', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7TDoDjj_YMNxoLHTtYlgIIqiLuNnW9_r1JA&s', category: 'phones'}
+            ];
+            
+            // Combine default items with AI generated items
+            const allItems = [...defaultItems, ...marketItems];
+            
+            return allItems.map(item => {
+                const isAIGenerated = item.category === 'ai_generated';
+                const badge = isAIGenerated ? 
+                    '<div class="absolute top-3 left-3 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-bold"><i class="fas fa-robot mr-1"></i>AI</div>' : '';
+                
+                return `
+                    <div class="card-modern p-6 rounded-2xl card-hover relative">
+                        ${badge}
+                        <img src="${item.image}" class="w-full h-48 object-cover rounded-xl mb-4">
+                        <h4 class="font-bold text-gray-800 text-center mb-2">${item.name}</h4>
+                        <p class="text-gray-600 text-center mb-3 text-lg font-semibold">${item.price}</p>
+                        ${isAIGenerated ? `<p class="text-purple-600 text-center text-xs mb-3"><i class="fas fa-user mr-1"></i>Ku daray: ${item.addedBy}</p>` : ''}
+                        <button onclick="contactWhatsApp('${item.name}')" 
+                                class="w-full gradient-success text-white py-3 rounded-xl font-semibold btn-modern">
+                            <i class="fas fa-shopping-cart mr-2"></i>Iibso
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function contactWhatsApp(product) {
+            const message = `Salaam! Waxaan doonayaa in aan iibsado: ${product}\nMagacayga: ${currentUser}`;
+            window.open(`https://wa.me/618877686?text=${encodeURIComponent(message)}`, '_blank');
+            
+            // Add to admin purchases
+            adminData.purchases.push({
+                user: currentUser,
+                product: product,
+                date: new Date().toLocaleString()
+            });
+            localStorage.setItem('investmarket_admin', JSON.stringify(adminData));
+        }
+
+        // AI Bot with modern design
+        function showAIBot() {
+            closeMobileMenu();
+            const aiBotHtml = `
+                <div class="modal-modern fixed inset-0 z-50 overflow-y-auto">
+                    <div class="modal-content w-full max-w-4xl mx-auto my-8 p-8">
+                        <div class="flex justify-between items-center mb-8">
+                            <h3 class="text-3xl font-bold text-gray-800">
+                                <i class="fas fa-magic mr-3 text-purple-500"></i>AI Bot - Sawir Sameeye
+                            </h3>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                    class="w-12 h-12 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="card-modern p-6 rounded-2xl mb-6 max-h-96 overflow-y-auto" id="aiBotChat">
+                            <div class="mb-6 p-4 bg-purple-50 rounded-xl">
+                                <div class="flex items-start">
+                                    <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-robot text-white"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <strong class="text-purple-800">AI Bot:</strong>
+                                        <p class="text-gray-700 mt-2">Salaan! Waxaan kuu sameyn karaa sawirro qurux badan. Ii sheeg waxa aad rabto:</p>
+                                        <div class="mt-4 p-3 bg-white rounded-lg">
+                                            <strong class="text-gray-800">Xayawaanka la heli karo:</strong>
+                                            <p class="text-sm text-gray-600 mt-1">geel, daanyeer, dameer, bakeyle, biyo, baabuul, kaluun, waraabe, shabeel, dofaar, jeer, shimbiir, gorgor, qorof, dibi, riyo, faraska, bisad, eyga, jiir, dhuuso, abeeso, dugaag, dhurwaa, libaaxa, yey, dawaco, luuq, libaax, eey, daauska, maroodi, lo, mas, ari</p>
+                                        </div>
+                                        <p class="text-purple-600 text-sm mt-2"><em>Tusaale: "ii sameey sawir geel" ama "daanyeer"</em></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <input type="text" id="aiBotInput" 
+                                   placeholder="Geli magaca xayawaanka: mas, geel, libaax, daanyeer..." 
+                                   class="flex-1 px-4 py-4 rounded-xl input-modern focus:outline-none">
+                            <button onclick="generateImage()" 
+                                    class="gradient-secondary text-white px-8 py-4 rounded-xl font-semibold btn-modern">
+                                <i class="fas fa-magic mr-2"></i>Samee
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', aiBotHtml);
+        }
+
+        function generateImage() {
+            const input = document.getElementById('aiBotInput');
+            const question = input.value.trim().toLowerCase();
+            
+            if (!question) return;
+            
+            const chatDiv = document.getElementById('aiBotChat');
+            
+            // Add user message
+            chatDiv.innerHTML += `
+                <div class="mb-4 flex justify-end">
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-4 rounded-2xl max-w-xs shadow-lg">
+                        <strong>🙋‍♂️ Adiga:</strong> ${question}
+                    </div>
+                </div>
+            `;
+            
+            // Enhanced AI animal recognition
+            let foundAnimal = null;
+            let animalImage = null;
+            let confidence = 0;
+            
+            // Clean the input
+            const cleanQuestion = question.replace(/[^\u0600-\u06FF\u0750-\u077Fa-zA-Z\s]/g, '').trim();
+            
+            // Check for exact matches first (highest confidence)
+            for (const animal of Object.keys(animalImages)) {
+                if (cleanQuestion === animal) {
+                    foundAnimal = animal;
+                    animalImage = animalImages[animal];
+                    confidence = 100;
+                    break;
+                }
+            }
+            
+            // If no exact match, check for partial matches
+            if (!foundAnimal) {
+                for (const animal of Object.keys(animalImages)) {
+                    if (cleanQuestion.includes(animal) || animal.includes(cleanQuestion)) {
+                        foundAnimal = animal;
+                        animalImage = animalImages[animal];
+                        confidence = 85;
+                        break;
+                    }
+                }
+            }
+            
+            // If still no match, check for similar sounding words
+            if (!foundAnimal) {
+                const similarWords = {
+                    'libax': 'libaax',
+                    'libah': 'libaax', 
+                    'ey': 'eey',
+                    'danyeer': 'daanyeer',
+                    'damear': 'dameer',
+                    'damear': 'dameer',
+                    'bakeyl': 'bakeyle',
+                    'maroodi': 'maroodi',
+                    'geela': 'geel',
+                    'geelo': 'geel'
+                };
+                
+                for (const [similar, correct] of Object.entries(similarWords)) {
+                    if (cleanQuestion.includes(similar)) {
+                        foundAnimal = correct;
+                        animalImage = animalImages[correct];
+                        confidence = 75;
+                        break;
+                    }
+                }
+            }
+            
+            if (foundAnimal && animalImage) {
+                const imageId = 'generated-image-' + Date.now();
+                const confidenceColor = confidence >= 90 ? 'text-green-600' : confidence >= 75 ? 'text-yellow-600' : 'text-orange-600';
+                const confidenceIcon = confidence >= 90 ? 'fas fa-check-circle' : confidence >= 75 ? 'fas fa-exclamation-circle' : 'fas fa-question-circle';
+                
+                const response = `
+                    <div class="mb-6 flex animate-pulse">
+                        <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-4 shadow-lg">
+                            <i class="fas fa-robot text-white text-lg"></i>
+                        </div>
+                        <div class="flex-1 bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl border-l-4 border-purple-500 shadow-lg">
+                            <strong class="text-purple-800 text-lg">🤖 AI Bot:</strong>
+                            <p class="text-gray-700 mb-4 text-lg">✅ Waa kan sawirka quruxda badan ee <span class="font-bold text-purple-600">"${foundAnimal}"</span>:</p>
+                            <div class="mb-6 text-center">
+                                <img id="${imageId}" src="${animalImage}" class="max-w-sm rounded-2xl shadow-2xl mx-auto border-4 border-white" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop'">
+                            </div>
+                            <div class="flex gap-4 justify-center mb-4">
+                                <button onclick="downloadImage('${imageId}', '${foundAnimal}')" 
+                                        class="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-6 py-3 rounded-xl font-bold text-sm btn-modern shadow-lg transform hover:scale-105 transition-all">
+                                    <i class="fas fa-download mr-2"></i>📥 Soo Deji JPG
+                                </button>
+                                <button onclick="addToMarket('${foundAnimal}', '${animalImage}')" 
+                                        class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-6 py-3 rounded-xl font-bold text-sm btn-modern shadow-lg transform hover:scale-105 transition-all">
+                                    <i class="fas fa-store mr-2"></i>🛒 Ku Dar Suuqa
+                                </button>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl shadow-inner">
+                                <p class="${confidenceColor} text-sm font-bold flex items-center justify-center">
+                                    <i class="${confidenceIcon} mr-2"></i>🎯 AI Confidence: ${confidence}% - Aqoonsaday: "${foundAnimal}"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                chatDiv.innerHTML += response;
+            } else {
+                const response = `
+                    <div class="mb-6 flex">
+                        <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center mr-4 shadow-lg">
+                            <i class="fas fa-robot text-white text-lg"></i>
+                        </div>
+                        <div class="flex-1 bg-gradient-to-r from-red-50 to-orange-50 p-6 rounded-2xl border-l-4 border-red-500 shadow-lg">
+                            <strong class="text-red-800 text-lg">🤖 AI Bot:</strong>
+                            <p class="text-gray-700 mb-4">🤔 Waan ka xunahay, ma fahmin magaca xayawaanka "${question}". Fadlan mid ka mid ah kuwan geli:</p>
+                            <div class="bg-white p-4 rounded-xl shadow-inner mb-4">
+                                <strong class="text-gray-800 block mb-2">🦁 Xayawaanka la heli karo:</strong>
+                                <div class="grid grid-cols-3 gap-2 text-sm">
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">🐪 geel</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded">🦁 libaax</span>
+                                    <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded">🐵 daanyeer</span>
+                                    <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">🫏 dameer</span>
+                                    <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded">🐆 bakeyle</span>
+                                    <span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded">🐘 maroodi</span>
+                                    <span class="bg-red-100 text-red-800 px-2 py-1 rounded">🐄 lo</span>
+                                    <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded">🐍 mas</span>
+                                    <span class="bg-teal-100 text-teal-800 px-2 py-1 rounded">🐐 ari</span>
+                                </div>
+                            </div>
+                            <p class="text-purple-600 text-sm font-semibold">💡 <em>Tusaale: "libaax", "geel", "daanyeer"</em></p>
+                        </div>
+                    </div>
+                `;
+                chatDiv.innerHTML += response;
+            }
+            
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+            input.value = '';
+        }
+
+        function downloadImage(imageId, animalName) {
+            const img = document.getElementById(imageId);
+            if (!img) return;
+            
+            // Create canvas to convert image to JPG
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Create a new image element to ensure it's loaded
+            const downloadImg = new Image();
+            downloadImg.crossOrigin = 'anonymous';
+            
+            downloadImg.onload = function() {
+                canvas.width = this.naturalWidth;
+                canvas.height = this.naturalHeight;
+                
+                // Fill white background for JPG
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw the image
+                ctx.drawImage(this, 0, 0);
+                
+                // Convert to JPG and download
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${animalName}_${Date.now()}.jpg`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 'image/jpeg', 0.9);
+            };
+            
+            downloadImg.src = img.src;
+        }
+
+        function addToMarket(animalName, imageUrl) {
+            // Generate random price for the animal image
+            const price = (Math.random() * 50 + 10).toFixed(2); // $10-60 range
+            
+            const newItem = {
+                id: Date.now(),
+                name: `Sawir ${animalName}`,
+                price: `$${price}`,
+                image: imageUrl,
+                category: 'ai_generated',
+                addedBy: currentUser,
+                dateAdded: new Date().toLocaleString()
+            };
+            
+            // Add to market items
+            marketItems.push(newItem);
+            localStorage.setItem('investmarket_market_items', JSON.stringify(marketItems));
+            
+            alert(`✅ Sawirka "${animalName}" waa lagu daray suuqa qiimaha $${price}!\n\nHadda dadka kale ayaa ka iibsan kara suuqa.`);
+        }
+
+        function openWhatsApp() {
+            closeMobileMenu();
+            const message = `Salaam maamule! Waxaan rabaa in aad i caawiso.\nMagacayga: ${currentUser}\n\nMahadsan!`;
+            window.open(`https://wa.me/618877686?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // Initialize any active robots on page load
+        if (currentUser && users[currentUser] && users[currentUser].robots) {
+            users[currentUser].robots.forEach(robot => {
+                if (robot.active && Date.now() < robot.endTime) {
+                    startRobotEarnings(robot);
+                }
+            });
+        }
+
+        // Handle window resize for responsive behavior
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            if (window.innerWidth > 768) {
+                // Desktop view
+                sidebar.classList.remove('mobile-open');
+                sidebar.classList.remove('hidden');
+                sidebar.classList.add('md:block');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+                
+                // Ensure sidebar is visible on desktop
+                sidebar.style.transform = '';
+                sidebar.style.position = '';
+                sidebar.style.zIndex = '';
+            } else {
+                // Mobile view
+                if (!sidebar.classList.contains('mobile-open')) {
+                    sidebar.classList.add('hidden');
+                    sidebar.classList.remove('md:block');
+                }
+            }
+            
+            // Re-initialize touch support for dynamically added elements
+            setTimeout(() => {
+                addTouchSupport();
+            }, 100);
+        });
+
+        // Update robot timers every second with live countdown
+        setInterval(() => {
+            if (document.getElementById('dashboard').classList.contains('show')) {
+                const activeRobots = users[currentUser].robots ? users[currentUser].robots.filter(r => r.active) : [];
+                
+                activeRobots.forEach(robot => {
+                    const timerElement = document.getElementById(`timer-${robot.id}`);
+                    if (timerElement) {
+                        const timeLeft = robot.endTime - Date.now();
+                        
+                        if (timeLeft <= 0) {
+                            robot.active = false;
+                            localStorage.setItem('investmarket_users', JSON.stringify(users));
+                            displayActiveRobots();
+                            return;
+                        }
+                        
+                        const hoursLeft = Math.floor(timeLeft / (1000 * 60 * 60));
+                        const minutesLeft = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const secondsLeft = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                        
+                        timerElement.textContent = `${hoursLeft}:${minutesLeft.toString().padStart(2, '0')}:${secondsLeft.toString().padStart(2, '0')}`;
+                        
+                        // Add pulsing effect for last minute
+                        if (timeLeft < 60000) {
+                            timerElement.classList.add('pulse-glow');
+                            timerElement.style.color = '#ef4444';
+                        }
+                    }
+                });
+            }
+        }, 1000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96f99bb452f7e1d5',t:'MTc1NTI3MDUxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
