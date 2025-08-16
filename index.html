@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestMarket - Maalgashi iyo Suuq</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+        
+        .card-shadow {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-shadow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        
+        .robot-active {
+            animation: pulse 2s infinite, glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
+            to { box-shadow: 0 0 30px rgba(34, 197, 94, 0.8); }
+        }
+        
+        .balance-card {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 50%, #06d6a0 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .hidden { display: none; }
+        
+        .market-item {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .market-item:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 1);
+        }
+        
+        .activity-item {
+            border-left: 4px solid;
+            border-image: linear-gradient(135deg, #667eea, #764ba2) 1;
+            padding-left: 16px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .seller-badge {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
+            animation: shimmer 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes shimmer {
+            from { opacity: 0.8; }
+            to { opacity: 1; }
+        }
+        
+        .crypto-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .crypto-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .crypto-card:hover {
+            transform: translateY(-5px) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.3);
+        }
+        
+        .crypto-card:hover::before {
+            left: 100%;
+        }
+        
+        .price-up {
+            color: #10b981;
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+        
+        .price-down {
+            color: #ef4444;
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, var(--btn-color-1), var(--btn-color-2));
+            border: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .action-btn:hover::before {
+            left: 100%;
+        }
+        
+        .input-field {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            background: rgba(255, 255, 255, 1);
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .page-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            min-height: 100vh;
+        }
+        
+        .header-gradient {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .status-indicator {
+            animation: pulse 2s infinite, statusGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes statusGlow {
+            from { box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
+            to { box-shadow: 0 0 20px rgba(34, 197, 94, 0.8); }
+        }
+        
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Home Page -->
+    <div id="homePage" class="min-h-screen gradient-bg flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl card-shadow p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">InvestMarket</h1>
+                <p class="text-gray-600">Maalgashi iyo Suuq Platform</p>
+            </div>
+            
+            <div class="space-y-4">
+                <button onclick="showRegister()" class="w-full btn-primary text-white py-3 px-6 rounded-lg font-semibold">
+                    Diiwaan Gal
+                </button>
+                <button onclick="showLogin()" class="w-full border-2 border-purple-600 text-purple-600 py-3 px-6 rounded-lg font-semibold hover:bg-purple-50">
+                    Soo Gal
+                </button>
+                
+                <!-- Referral Section -->
+                <div class="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <h3 class="font-semibold text-green-800 mb-2">Referral Link</h3>
+                    <div class="flex space-x-2">
+                        <input type="text" id="referralLink" value="https://investmarket.com/ref/12345" readonly class="flex-1 px-3 py-2 border border-green-300 rounded-lg bg-white text-sm">
+                        <button onclick="copyReferralLink()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                            Copy
+                        </button>
+                    </div>
+                    <p class="text-xs text-green-600 mt-2">Qof walba oo link-kan isticmaala $0.10 ayaad heli doontaa!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div id="registerPage" class="hidden min-h-screen gradient-bg flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl card-shadow p-8 w-full max-w-md">
+            <h2 class="text-2xl font-bold text-center mb-6">Diiwaan Gal</h2>
+            
+            <form onsubmit="register(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">📱 Lambarka Telefoonka</label>
+                    <input type="tel" id="regNumber" required class="input-field w-full px-6 py-4 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="618877686">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">🔒 Password</label>
+                    <input type="password" id="regPassword" required class="input-field w-full px-6 py-4 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">✅ Xaqiiji Password</label>
+                    <input type="password" id="regConfirmPassword" required class="input-field w-full px-6 py-4 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">🎁 Referral Code (Optional)</label>
+                    <input type="text" id="referralCode" class="input-field w-full px-6 py-4 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="12345">
+                </div>
+                
+                <button type="submit" class="w-full btn-primary text-white py-3 px-6 rounded-lg font-semibold">
+                    Diiwaan Gal
+                </button>
+                
+                <button type="button" onclick="showHome()" class="w-full text-gray-600 py-2">
+                    Dib u noqo
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="hidden min-h-screen gradient-bg flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl card-shadow p-8 w-full max-w-md">
+            <h2 class="text-2xl font-bold text-center mb-6">Soo Gal</h2>
+            
+            <form onsubmit="login(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Lambarka Telefoonka</label>
+                    <input type="tel" id="loginNumber" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                
+                <button type="submit" class="w-full btn-primary text-white py-3 px-6 rounded-lg font-semibold">
+                    Soo Gal
+                </button>
+                
+                <button type="button" onclick="showHome()" class="w-full text-gray-600 py-2">
+                    Dib u noqo
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden page-container slide-in">
+        <!-- Header -->
+        <header class="header-gradient shadow-lg p-6">
+            <div class="flex justify-between items-center max-w-6xl mx-auto">
+                <div class="floating-element">
+                    <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">✨ Dashboard</h1>
+                    <div class="flex items-center space-x-3 mt-2">
+                        <div class="w-3 h-3 bg-green-500 rounded-full status-indicator"></div>
+                        <span class="text-sm text-green-700 font-semibold">🔒 Xogta waa la keydiyey</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span id="userPhone" class="text-lg font-semibold text-gray-700"></span>
+                    <p class="text-sm text-gray-500">💎 Premium User</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-6 max-w-6xl mx-auto">
+            <!-- Balance Card -->
+            <div class="balance-card rounded-3xl p-8 text-white mb-8 relative overflow-hidden shadow-2xl">
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold opacity-90">💰 Lacagtaada</h2>
+                        <div class="text-sm opacity-75">🏦 InvestMarket</div>
+                    </div>
+                    <div class="text-5xl font-bold mb-2 floating-element" id="userBalance">$0.00</div>
+                    <div class="text-sm opacity-80">💎 Available Balance</div>
+                </div>
+                <div class="absolute top-4 right-4 text-6xl opacity-20">💎</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                <button onclick="showDeposit()" class="action-btn p-6 rounded-2xl font-bold text-lg shadow-xl" style="--btn-color-1: #10b981; --btn-color-2: #059669;">
+                    <div class="text-3xl mb-2">💰</div>
+                    <div>Deposit</div>
+                </button>
+                <button onclick="showWithdraw()" class="action-btn p-6 rounded-2xl font-bold text-lg shadow-xl" style="--btn-color-1: #ef4444; --btn-color-2: #dc2626;">
+                    <div class="text-3xl mb-2">💸</div>
+                    <div>Withdraw</div>
+                </button>
+                <button onclick="showUSSD()" class="action-btn p-6 rounded-2xl font-bold text-lg shadow-xl" style="--btn-color-1: #3b82f6; --btn-color-2: #2563eb;">
+                    <div class="text-3xl mb-2">📱</div>
+                    <div>USSD</div>
+                </button>
+                <button onclick="showRobots()" class="action-btn p-6 rounded-2xl font-bold text-lg shadow-xl" style="--btn-color-1: #8b5cf6; --btn-color-2: #7c3aed;">
+                    <div class="text-3xl mb-2">🤖</div>
+                    <div>Robot</div>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+                <button onclick="showMarket()" class="action-btn p-6 rounded-2xl font-bold text-lg shadow-xl" style="--btn-color-1: #f97316; --btn-color-2: #ea580c;">
+                    <div class="text-3xl mb-2">🛒</div>
+                    <div>Market</div>
+                </button>
+                <button onclick="showExchange()" class="action-btn p-6 rounded-2xl font-bold text-lg shadow-xl" style="--btn-color-1: #eab308; --btn-color-2: #ca8a04;">
+                    <div class="text-3xl mb-2">💱</div>
+                    <div>Exchange</div>
+                </button>
+                <button onclick="openWhatsApp()" class="action-btn p-6 rounded-2xl font-bold text-lg shadow-xl" style="--btn-color-1: #059669; --btn-color-2: #047857;">
+                    <div class="text-3xl mb-2">💬</div>
+                    <div>WhatsApp</div>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+                <button onclick="showSellProduct()" class="action-btn p-6 rounded-2xl font-bold text-lg shadow-xl" style="--btn-color-1: #6366f1; --btn-color-2: #4f46e5;">
+                    <div class="text-3xl mb-2">🏪</div>
+                    <div>Sell Product</div>
+                </button>
+                <button onclick="showActivity()" class="action-btn p-6 rounded-2xl font-bold text-lg shadow-xl" style="--btn-color-1: #14b8a6; --btn-color-2: #0d9488;">
+                    <div class="text-3xl mb-2">📊</div>
+                    <div>Activity</div>
+                </button>
+                <button onclick="logout()" class="action-btn p-6 rounded-2xl font-bold text-lg shadow-xl" style="--btn-color-1: #6b7280; --btn-color-2: #4b5563;">
+                    <div class="text-3xl mb-2">🚪</div>
+                    <div>Logout</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Page -->
+    <div id="activityPage" class="hidden min-h-screen bg-gray-50 p-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h2 class="text-2xl font-bold mb-6">Platform Activity</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800">Total Users</h3>
+                        <p class="text-2xl font-bold text-blue-600" id="totalUsers">0</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800">Total Deposits</h3>
+                        <p class="text-2xl font-bold text-green-600" id="totalDeposits">$0</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-red-800">Total Withdrawals</h3>
+                        <p class="text-2xl font-bold text-red-600" id="totalWithdrawals">$0</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-purple-800">Total Sales</h3>
+                        <p class="text-2xl font-bold text-purple-600" id="totalSales">$0</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-4 max-h-96 overflow-y-auto">
+                    <h3 class="font-semibold mb-4">Recent Activity</h3>
+                    <div id="activityList">
+                        <!-- Activity items will be added here -->
+                    </div>
+                </div>
+                
+                <button onclick="showDashboard()" class="mt-6 w-full bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">
+                    Back
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sell Product Page -->
+    <div id="sellProductPage" class="hidden min-h-screen bg-gray-50 p-4">
+        <div class="max-w-md mx-auto">
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h2 class="text-2xl font-bold mb-6">Alaab Iibso</h2>
+                
+                <form onsubmit="addProduct(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Magaca Alaabta</label>
+                        <input type="text" id="productName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Qiimaha ($)</label>
+                        <input type="number" id="productPrice" step="0.01" min="0.01" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Faahfaahin</label>
+                        <textarea id="productDescription" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Sawirka Alaabta</label>
+                        <input type="file" id="productImage" accept="image/*,video/mp4,video/mpeg" onchange="previewMedia()" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <p class="text-xs text-gray-500 mt-1">Waxaad soo gelin kartaa sawir ama video</p>
+                        
+                        <!-- Media Preview -->
+                        <div id="mediaPreview" class="hidden mt-4 text-center">
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                                <div id="previewContainer"></div>
+                                <p class="text-sm text-gray-500 mt-2">Preview sawirka/video-ga</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">WhatsApp Number</label>
+                        <input type="tel" id="sellerWhatsApp" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" placeholder="618877686">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg font-semibold">
+                        Ku Dar Suuqa
+                    </button>
+                    
+                    <button type="button" onclick="showDashboard()" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">
+                        Back
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Page -->
+    <div id="depositPage" class="hidden min-h-screen bg-gray-50 p-4">
+        <div class="max-w-md mx-auto">
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h2 class="text-2xl font-bold mb-6">Lacag Shubo</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Qadarka Lacagta</label>
+                        <input type="number" id="depositAmount" step="0.01" min="0.25" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Habka Bixinta</label>
+                        <select id="depositMethod" onchange="updateDepositImage()" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <option value="evcplus">EVC Plus</option>
+                            <option value="crypto">Crypto Address</option>
+                        </select>
+                    </div>
+                    
+                    <div id="paymentImageContainer" class="text-center">
+                        <img id="paymentImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s" alt="Payment Method" class="mx-auto rounded-lg" style="width: 100px; height: 100px;">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Lambarka/Address</label>
+                        <input type="text" id="depositAddress" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button onclick="confirmDeposit()" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold">
+                            Confirm
+                        </button>
+                        <button onclick="showDashboard()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">
+                            Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Page -->
+    <div id="withdrawPage" class="hidden min-h-screen bg-gray-50 p-4">
+        <div class="max-w-md mx-auto">
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h2 class="text-2xl font-bold mb-6">Lacag Bax</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Qadarka Lacagta</label>
+                        <input type="number" id="withdrawAmount" step="0.01" min="0.25" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Habka Bixinta</label>
+                        <select id="withdrawMethod" onchange="updateWithdrawImage()" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500">
+                            <option value="evcplus">EVC Plus</option>
+                            <option value="crypto">Crypto Address</option>
+                        </select>
+                    </div>
+                    
+                    <div id="withdrawImageContainer" class="text-center">
+                        <img id="withdrawImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s" alt="Payment Method" class="mx-auto rounded-lg" style="width: 100px; height: 100px;">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Lambarka/Address</label>
+                        <input type="text" id="withdrawAddress" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500">
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button onclick="confirmWithdraw()" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-semibold">
+                            Confirm
+                        </button>
+                        <button onclick="showDashboard()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">
+                            Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- USSD Page -->
+    <div id="ussdPage" class="hidden min-h-screen bg-gray-50 p-4">
+        <div class="max-w-md mx-auto">
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h2 class="text-2xl font-bold mb-6">USSD Lacag Shubo</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Qadarka Lacagta</label>
+                        <input type="number" id="ussdAmount" step="0.01" min="0.25" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <button onclick="sendUSSD()" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-semibold">
+                        Send
+                    </button>
+                    
+                    <div id="ussdOptions" class="hidden space-y-3">
+                        <p class="text-sm text-gray-700 font-semibold text-center">Dooro USSD Option:</p>
+                        
+                        <button onclick="selectUSSD(1)" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold flex items-center justify-between">
+                            <span>📱 EVC Plus - Primary</span>
+                            <span class="text-xs">*712*618877686*1#</span>
+                        </button>
+                        
+                        <button onclick="selectUSSD(2)" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold flex items-center justify-between">
+                            <span>📱 Sahal - Alternative</span>
+                            <span class="text-xs">*812*688877686*1#</span>
+                        </button>
+                        
+                        <button onclick="selectUSSD(3)" class="w-full bg-purple-500 hover:bg-purple-600 text-white py-3 rounded-lg font-semibold flex items-center justify-between">
+                            <span>📱 Hormuud - Backup</span>
+                            <span class="text-xs">*712*628877686*1#</span>
+                        </button>
+                    </div>
+                    
+                    <div id="ussdCode" class="hidden bg-blue-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-700 mb-2">Ku dar koodhkan mobilkaaga:</p>
+                        <p class="font-mono text-lg font-bold text-blue-600" id="ussdCodeText"></p>
+                        <p class="text-sm text-green-600 font-semibold" id="ussdCodeDescription"></p>
+                        <p class="text-xs text-gray-500 mt-2">Balance-kaagu wuxuu noqon doonaa $0 ilaa lacagta la soo shubayo</p>
+                    </div>
+                    
+                    <button onclick="showDashboard()" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">
+                        Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Robots Page -->
+    <div id="robotsPage" class="hidden min-h-screen bg-gray-50 p-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h2 class="text-2xl font-bold mb-6">AI Trading Robots</h2>
+                
+                <div id="activeRobot" class="hidden mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-semibold text-green-800">Robot Shaqaynaya</h3>
+                            <p class="text-sm text-green-600" id="robotTimer">Waqti haray: 24:00:00</p>
+                        </div>
+                        <div class="w-4 h-4 bg-green-500 rounded-full robot-active"></div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="robotsList">
+                    <!-- Robots will be generated here -->
+                </div>
+                
+                <button onclick="showDashboard()" class="mt-6 w-full bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">
+                    Back
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exchange Page -->
+    <div id="exchangePage" class="hidden min-h-screen bg-gray-50 p-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h2 class="text-2xl font-bold mb-6">Currency Exchange</h2>
+                
+                <!-- Live Crypto Prices Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6" id="cryptoPricesGrid">
+                    <!-- Crypto price cards will be generated here -->
+                </div>
+                
+                <!-- Exchange Form -->
+                <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold mb-4">Lacag Iska Badal</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- From -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ka</label>
+                            <div class="flex items-center space-x-3 mb-3">
+                                <img id="fromCurrencyImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s" alt="Currency" class="w-12 h-12 rounded-full border-2 border-gray-300">
+                                <select id="fromCurrency" onchange="updateExchangeRate(); updateCurrencyImages()" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500">
+                                    <option value="evc">EVC Plus</option>
+                                    <option value="bitcoin">Bitcoin (BTC)</option>
+                                    <option value="ethereum">Ethereum (ETH)</option>
+                                    <option value="trx">Tron (TRX)</option>
+                                    <option value="doge">Dogecoin (DOGE)</option>
+                                    <option value="cardano">Cardano (ADA)</option>
+                                    <option value="xrp">XRP</option>
+                                    <option value="ton">Toncoin (TON)</option>
+                                    <option value="hamster">Hamster Kombat (HMSTR)</option>
+                                    <option value="memefi">MemeFi (MEMEFI)</option>
+                                </select>
+                            </div>
+                            <input type="number" id="fromAmount" oninput="calculateExchange()" step="0.01" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" placeholder="0.00">
+                        </div>
+                        
+                        <!-- To -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ilaa</label>
+                            <div class="flex items-center space-x-3 mb-3">
+                                <img id="toCurrencyImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s" alt="Currency" class="w-12 h-12 rounded-full border-2 border-gray-300">
+                                <select id="toCurrency" onchange="updateExchangeRate(); updateCurrencyImages()" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500">
+                                    <option value="bitcoin">Bitcoin (BTC)</option>
+                                    <option value="ethereum">Ethereum (ETH)</option>
+                                    <option value="trx">Tron (TRX)</option>
+                                    <option value="doge">Dogecoin (DOGE)</option>
+                                    <option value="cardano">Cardano (ADA)</option>
+                                    <option value="xrp">XRP</option>
+                                    <option value="ton">Toncoin (TON)</option>
+                                    <option value="hamster">Hamster Kombat (HMSTR)</option>
+                                    <option value="memefi">MemeFi (MEMEFI)</option>
+                                    <option value="evc">EVC Plus</option>
+                                </select>
+                            </div>
+                            <input type="number" id="toAmount" readonly class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" placeholder="0.00">
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-sm text-gray-600 mb-4">Exchange Rate: <span id="exchangeRate">1 EVC = 0.000025 BTC (Fee: 13.0%)</span></p>
+                        <button onclick="performExchange()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-3 rounded-lg font-semibold">
+                            Iska Badal
+                        </button>
+                    </div>
+                </div>
+                
+                <button onclick="showDashboard()" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">
+                    Back
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Page -->
+    <div id="aiPage" class="hidden min-h-screen bg-gray-50 p-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h2 class="text-2xl font-bold mb-6">🤖 AI Assistant</h2>
+                
+                <div class="bg-gradient-to-r from-pink-400 to-purple-600 text-white p-4 rounded-lg mb-6">
+                    <h3 class="font-semibold mb-2">Waxaan kaa caawin karaa:</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>• Su'aalaha ku saabsan website-kan</li>
+                        <li>• Sawirada sameeynta (geel, libaax, iwm)</li>
+                        <li>• Macluumaad ku saabsan maalgashiga</li>
+                        <li>• Talo ku saabsan suuqa</li>
+                    </ul>
+                </div>
+                
+                <!-- Chat Area -->
+                <div id="chatArea" class="bg-gray-50 rounded-lg p-4 h-96 overflow-y-auto mb-4">
+                    <div class="text-center text-gray-500 mt-20">
+                        <p>Soo dhawoow AI Assistant! Su'aal kasta oo weydii...</p>
+                    </div>
+                </div>
+                
+                <!-- Input Area -->
+                <div class="flex space-x-4">
+                    <input type="text" id="aiInput" placeholder="Su'aashaada halkan ku qor..." class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500" onkeypress="if(event.key==='Enter') sendMessage()">
+                    <button onclick="sendMessage()" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold">
+                        Dir
+                    </button>
+                </div>
+                
+                <button onclick="showDashboard()" class="mt-6 w-full bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">
+                    Back
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Market Page -->
+    <div id="marketPage" class="hidden min-h-screen bg-gray-50 p-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <div class="bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 text-white p-4 rounded-lg mb-6">
+                    <h2 class="text-2xl font-bold mb-2 text-center">🌍 GLOBAL MARKETPLACE 🌍</h2>
+                    <p class="text-center text-sm">Suuqa Aduunka - Dadka aduunka oo dhan ayaa arki kara alaabta!</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="marketItems">
+                    <!-- Market items will be generated here -->
+                </div>
+                
+                <button onclick="showDashboard()" class="mt-6 w-full bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">
+                    Back
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('investmarket_users') || '{}');
+        let userBalances = JSON.parse(localStorage.getItem('investmarket_balances') || '{}');
+        let activeRobots = JSON.parse(localStorage.getItem('investmarket_robots') || '{}');
+        let userProducts = JSON.parse(localStorage.getItem('investmarket_products') || '[]');
+        let platformActivity = JSON.parse(localStorage.getItem('investmarket_activity') || '[]');
+        let platformStats = JSON.parse(localStorage.getItem('investmarket_stats') || '{"totalDeposits": 0, "totalWithdrawals": 0, "totalSales": 0}');
+
+        // Crypto data with rates, fees, and images
+        const cryptoData = {
+            evc: { 
+                name: 'EVC Plus', 
+                symbol: 'EVC', 
+                rate: 1.00, 
+                fee: 0.05, 
+                price: 1.00, 
+                change: 0, 
+                stable: true,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s'
+            },
+            bitcoin: { 
+                name: 'Bitcoin', 
+                symbol: 'BTC', 
+                rate: 0.000025, 
+                fee: 0.08, 
+                price: 43250, 
+                change: 0,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s'
+            },
+            ethereum: { 
+                name: 'Ethereum', 
+                symbol: 'ETH', 
+                rate: 0.0004, 
+                fee: 0.09, 
+                price: 2650, 
+                change: 0,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_q9ddg2N_bK1-5cpK7_BbOq3rHkSwrrKT9w&s'
+            },
+            trx: { 
+                name: 'Tron', 
+                symbol: 'TRX', 
+                rate: 8.5, 
+                fee: 0.06, 
+                price: 0.085, 
+                change: 0,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyl2gUu50dRfhM-4MEqpjI_g8Ez_RY8dCt_A&s'
+            },
+            doge: { 
+                name: 'Dogecoin', 
+                symbol: 'DOGE', 
+                rate: 3.2, 
+                fee: 0.07, 
+                price: 0.078, 
+                change: 0,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVKDkE9oAzbwr1Xx4Ntf8xRlmCSSo2Rjwrkg&s'
+            },
+            cardano: { 
+                name: 'Cardano', 
+                symbol: 'ADA', 
+                rate: 2.1, 
+                fee: 0.06, 
+                price: 0.45, 
+                change: 0,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh7E8TWRuSN2dLP7-p31_xAuO7PyVfa4LUOQ&s'
+            },
+            xrp: { 
+                name: 'XRP', 
+                symbol: 'XRP', 
+                rate: 1.8, 
+                fee: 0.07, 
+                price: 0.52, 
+                change: 0,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdoAJ0ng9MuiTEGDOOAqdRG-tk9c-MXecDnA&s'
+            },
+            ton: { 
+                name: 'Toncoin', 
+                symbol: 'TON', 
+                rate: 0.45, 
+                fee: 0.08, 
+                price: 2.25, 
+                change: 0,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8SO0rgVxiWnoXrkvqaJ1Q055G6hpcAG_ReA&s'
+            },
+            hamster: { 
+                name: 'Hamster Kombat', 
+                symbol: 'HMSTR', 
+                rate: 1000, 
+                fee: 0.10, 
+                price: 0.003, 
+                change: 0,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWBs5Jp5QkDcAilfUYZN7X38kGJIkiERKHyw&s'
+            },
+            memefi: { 
+                name: 'MemeFi', 
+                symbol: 'MEMEFI', 
+                rate: 850, 
+                fee: 0.10, 
+                price: 0.004, 
+                change: 0,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk-fBbOXw62dgsAK2sK2MEUrDkgIicveobKQ&s'
+            }
+        };
+
+        let priceUpdateInterval;
+
+        // Message functions
+        function showMessage(message, type = 'success') {
+            const color = type === 'success' ? 'green' : type === 'error' ? 'red' : 'yellow';
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️';
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `fixed top-4 right-4 bg-${color}-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-sm`;
+            messageDiv.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <div class="text-2xl">${icon}</div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">${message}</p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => messageDiv.remove(), 4000);
+        }
+
+        // Activity tracking
+        function addActivity(type, user, amount = null, details = null) {
+            const activity = {
+                id: Date.now(),
+                type: type,
+                user: user,
+                amount: amount,
+                details: details,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            platformActivity.unshift(activity);
+            if (platformActivity.length > 100) {
+                platformActivity = platformActivity.slice(0, 100);
+            }
+            
+            localStorage.setItem('investmarket_activity', JSON.stringify(platformActivity));
+        }
+
+        // Navigation functions
+        function showHome() {
+            hideAllPages();
+            document.getElementById('homePage').classList.remove('hidden');
+        }
+
+        function showRegister() {
+            hideAllPages();
+            document.getElementById('registerPage').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            hideAllPages();
+            document.getElementById('loginPage').classList.remove('hidden');
+        }
+
+        function showDashboard() {
+            hideAllPages();
+            document.getElementById('dashboard').classList.remove('hidden');
+            updateDashboard();
+        }
+
+        function showDeposit() {
+            hideAllPages();
+            document.getElementById('depositPage').classList.remove('hidden');
+        }
+
+        function showWithdraw() {
+            hideAllPages();
+            document.getElementById('withdrawPage').classList.remove('hidden');
+        }
+
+        function showUSSD() {
+            hideAllPages();
+            document.getElementById('ussdPage').classList.remove('hidden');
+        }
+
+        function showRobots() {
+            hideAllPages();
+            document.getElementById('robotsPage').classList.remove('hidden');
+            generateRobots();
+            updateRobotTimer();
+        }
+
+        function showMarket() {
+            hideAllPages();
+            document.getElementById('marketPage').classList.remove('hidden');
+            generateMarketItems();
+        }
+
+        function showExchange() {
+            hideAllPages();
+            document.getElementById('exchangePage').classList.remove('hidden');
+            generateCryptoPricesGrid();
+            updateCurrencyImages();
+            startPriceUpdates();
+        }
+
+        function showAI() {
+            hideAllPages();
+            document.getElementById('aiPage').classList.remove('hidden');
+        }
+
+        function showSellProduct() {
+            hideAllPages();
+            document.getElementById('sellProductPage').classList.remove('hidden');
+        }
+
+        function showActivity() {
+            hideAllPages();
+            document.getElementById('activityPage').classList.remove('hidden');
+            updateActivityPage();
+        }
+
+        function hideAllPages() {
+            const pages = ['homePage', 'registerPage', 'loginPage', 'dashboard', 'depositPage', 'withdrawPage', 'ussdPage', 'robotsPage', 'marketPage', 'exchangePage', 'aiPage', 'sellProductPage', 'activityPage'];
+            pages.forEach(page => {
+                const element = document.getElementById(page);
+                if (element) element.classList.add('hidden');
+            });
+            
+            if (priceUpdateInterval) {
+                clearInterval(priceUpdateInterval);
+                priceUpdateInterval = null;
+            }
+        }
+
+        // Referral system
+        function copyReferralLink() {
+            const referralLink = document.getElementById('referralLink');
+            referralLink.select();
+            document.execCommand('copy');
+            showMessage('📋 Referral link waa la copy garay!');
+        }
+
+        function processReferral(referralCode) {
+            if (referralCode && users[referralCode]) {
+                userBalances[referralCode] = (userBalances[referralCode] || 0) + 0.10;
+                localStorage.setItem('investmarket_balances', JSON.stringify(userBalances));
+                addActivity('referral', referralCode, 0.10, 'Referral bonus received');
+            }
+        }
+
+        // Authentication functions
+        function register(event) {
+            event.preventDefault();
+            
+            const number = document.getElementById('regNumber').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const referralCode = document.getElementById('referralCode').value;
+            
+            if (password !== confirmPassword) {
+                showMessage('Password-yada ma isku mid aha!', 'error');
+                return;
+            }
+            
+            if (users[number]) {
+                showMessage('Lambarkaan horay ayaa loo diiwaan galiyey!', 'warning');
+                return;
+            }
+            
+            users[number] = { password: password };
+            userBalances[number] = 0;
+            localStorage.setItem('investmarket_users', JSON.stringify(users));
+            localStorage.setItem('investmarket_balances', JSON.stringify(userBalances));
+            
+            processReferral(referralCode);
+            addActivity('register', number, null, 'New user registered');
+            
+            showMessage('Si guul leh ayaa loogu diiwaan galiyey! Soo dhawoow InvestMarket!');
+            showLogin();
+        }
+
+        function login(event) {
+            event.preventDefault();
+            
+            const number = document.getElementById('loginNumber').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!users[number] || users[number].password !== password) {
+                showMessage('Lambarka ama password-ku qalad ayuu yahay!', 'error');
+                return;
+            }
+            
+            currentUser = number;
+            showDashboard();
+        }
+
+        function logout() {
+            // Save all data before logout - data will persist
+            saveAllData();
+            
+            // Clear current session but keep all data
+            currentUser = null;
+            localStorage.setItem('investmarket_currentuser', '');
+            
+            showMessage('Si guul leh ayaa looga baxay! Xogta oo dhan waa la keydiyey.');
+            showHome();
+            
+            console.log('🚪 User logged out, data preserved');
+        }
+
+        // Dashboard functions
+        function updateDashboard() {
+            if (!currentUser) return;
+            
+            document.getElementById('userPhone').textContent = currentUser;
+            document.getElementById('userBalance').textContent = `$${(userBalances[currentUser] || 0).toFixed(2)}`;
+        }
+
+        // Media preview function
+        function previewMedia() {
+            const fileInput = document.getElementById('productImage');
+            const previewDiv = document.getElementById('mediaPreview');
+            const previewContainer = document.getElementById('previewContainer');
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewContainer.innerHTML = '';
+                    
+                    if (file.type.startsWith('video/')) {
+                        const video = document.createElement('video');
+                        video.src = e.target.result;
+                        video.controls = true;
+                        video.className = 'mx-auto rounded-lg border-2 border-gray-300 bg-gray-100';
+                        video.style.width = '100%';
+                        video.style.maxWidth = '300px';
+                        video.style.height = '200px';
+                        video.style.objectFit = 'contain';
+                        previewContainer.appendChild(video);
+                    } else {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'mx-auto rounded-lg border-2 border-gray-300 bg-gray-100';
+                        img.style.width = '100%';
+                        img.style.maxWidth = '300px';
+                        img.style.height = 'auto';
+                        img.style.maxHeight = '300px';
+                        img.style.objectFit = 'contain';
+                        previewContainer.appendChild(img);
+                    }
+                    
+                    previewDiv.classList.remove('hidden');
+                };
+                
+                reader.readAsDataURL(file);
+            } else {
+                previewDiv.classList.add('hidden');
+            }
+        }
+
+        // Product management
+        function addProduct(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('productName').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const description = document.getElementById('productDescription').value;
+            const whatsapp = document.getElementById('sellerWhatsApp').value;
+            const imageFile = document.getElementById('productImage').files[0];
+            
+            if (!name || !price || !whatsapp) {
+                showMessage('Fadlan buuxi dhammaan goobaha muhiimka ah!', 'warning');
+                return;
+            }
+            
+            let imageUrl = 'https://via.placeholder.com/140x140/6B7280/FFFFFF?text=📦';
+            
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const product = {
+                        id: Date.now(),
+                        name: name,
+                        price: price,
+                        description: description,
+                        image: e.target.result,
+                        seller: currentUser,
+                        whatsapp: whatsapp,
+                        timestamp: new Date().toLocaleString()
+                    };
+                    
+                    userProducts.push(product);
+                    localStorage.setItem('investmarket_products', JSON.stringify(userProducts));
+                    
+                    addActivity('product_added', currentUser, null, `Added product: ${name}`);
+                    showMessage('Alaabta si guul leh ayaa loogu daray suuqa!');
+                    
+                    // Clear form
+                    document.getElementById('productName').value = '';
+                    document.getElementById('productPrice').value = '';
+                    document.getElementById('productDescription').value = '';
+                    document.getElementById('sellerWhatsApp').value = '';
+                    document.getElementById('productImage').value = '';
+                    document.getElementById('mediaPreview').classList.add('hidden');
+                    
+                    showDashboard();
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                const product = {
+                    id: Date.now(),
+                    name: name,
+                    price: price,
+                    description: description,
+                    image: imageUrl,
+                    seller: currentUser,
+                    whatsapp: whatsapp,
+                    timestamp: new Date().toLocaleString()
+                };
+                
+                userProducts.push(product);
+                localStorage.setItem('investmarket_products', JSON.stringify(userProducts));
+                
+                addActivity('product_added', currentUser, null, `Added product: ${name}`);
+                showMessage('Alaabta si guul leh ayaa loogu daray suuqa!');
+                
+                // Clear form
+                document.getElementById('productName').value = '';
+                document.getElementById('productPrice').value = '';
+                document.getElementById('productDescription').value = '';
+                document.getElementById('sellerWhatsApp').value = '';
+                document.getElementById('productImage').value = '';
+                document.getElementById('mediaPreview').classList.add('hidden');
+                
+                showDashboard();
+            }
+        }
+
+        // Activity page
+        function updateActivityPage() {
+            document.getElementById('totalUsers').textContent = Object.keys(users).length;
+            document.getElementById('totalDeposits').textContent = `$${platformStats.totalDeposits.toFixed(2)}`;
+            document.getElementById('totalWithdrawals').textContent = `$${platformStats.totalWithdrawals.toFixed(2)}`;
+            document.getElementById('totalSales').textContent = `$${platformStats.totalSales.toFixed(2)}`;
+            
+            const activityList = document.getElementById('activityList');
+            activityList.innerHTML = '';
+            
+            platformActivity.slice(0, 20).forEach(activity => {
+                const activityItem = document.createElement('div');
+                activityItem.className = 'activity-item mb-3 pb-3 border-b border-gray-200';
+                
+                let icon = '📊';
+                let color = 'text-gray-600';
+                
+                switch(activity.type) {
+                    case 'register': icon = '👤'; color = 'text-blue-600'; break;
+                    case 'deposit': icon = '💰'; color = 'text-green-600'; break;
+                    case 'withdraw': icon = '💸'; color = 'text-red-600'; break;
+                    case 'purchase': icon = '🛒'; color = 'text-purple-600'; break;
+                    case 'product_added': icon = '🏪'; color = 'text-indigo-600'; break;
+                    case 'referral': icon = '🎁'; color = 'text-pink-600'; break;
+                }
+                
+                activityItem.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl">${icon}</span>
+                            <div>
+                                <p class="font-medium ${color}">${activity.details || activity.type}</p>
+                                <p class="text-sm text-gray-500">User: ${activity.user}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            ${activity.amount ? `<p class="font-semibold ${color}">$${activity.amount.toFixed(2)}</p>` : ''}
+                            <p class="text-xs text-gray-400">${activity.timestamp}</p>
+                        </div>
+                    </div>
+                `;
+                
+                activityList.appendChild(activityItem);
+            });
+        }
+
+        // Deposit functions
+        function confirmDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const method = document.getElementById('depositMethod').value;
+            const address = document.getElementById('depositAddress').value;
+            
+            if (!amount || amount < 0.25 || !address) {
+                showMessage('Fadlan buuxi dhammaan goobaha!', 'warning');
+                return;
+            }
+            
+            userBalances[currentUser] = (userBalances[currentUser] || 0) + amount;
+            localStorage.setItem('investmarket_balances', JSON.stringify(userBalances));
+            
+            platformStats.totalDeposits += amount;
+            localStorage.setItem('investmarket_stats', JSON.stringify(platformStats));
+            
+            addActivity('deposit', currentUser, amount, `Deposited via ${method}`);
+            
+            const message = `Waxaan kusoo shubanayaa lacag si aan wax ugu iibsado ama aan wax umaalgashado $${amount.toFixed(2)} waxaana kasoodiray ${currentUser}`;
+            const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            showMessage('Lacagta si guul leh ayaa loogu daray balance-kaaga!');
+            showDashboard();
+        }
+
+        // Withdraw functions
+        function confirmWithdraw() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const method = document.getElementById('withdrawMethod').value;
+            const address = document.getElementById('withdrawAddress').value;
+            
+            if (!amount || amount < 0.25 || !address) {
+                showMessage('Fadlan buuxi dhammaan goobaha!', 'warning');
+                return;
+            }
+            
+            if ((userBalances[currentUser] || 0) < amount) {
+                showMessage('Lacag kuma filna!', 'error');
+                return;
+            }
+            
+            userBalances[currentUser] = (userBalances[currentUser] || 0) - amount;
+            localStorage.setItem('investmarket_balances', JSON.stringify(userBalances));
+            
+            platformStats.totalWithdrawals += amount;
+            localStorage.setItem('investmarket_stats', JSON.stringify(platformStats));
+            
+            addActivity('withdraw', currentUser, amount, `Withdrew via ${method}`);
+            
+            const message = `Waxaan rabaa inaan lacagta labaxo waxaana hada labaxay $${amount.toFixed(2)}`;
+            const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            showMessage('Codsiga bixinta waa la diray! Waxaad heli doontaa lacagta 24 saac gudahood!');
+            showDashboard();
+        }
+
+        // USSD functions
+        function sendUSSD() {
+            const amount = parseFloat(document.getElementById('ussdAmount').value);
+            
+            if (!amount || amount < 0.25) {
+                showMessage('Fadlan geli qadarka saxda ah!', 'warning');
+                return;
+            }
+            
+            // Show USSD options
+            document.getElementById('ussdOptions').classList.remove('hidden');
+            document.getElementById('ussdCode').classList.add('hidden');
+        }
+
+        function selectUSSD(option) {
+            let ussdCode;
+            let description;
+            let providerImage;
+            
+            switch(option) {
+                case 1:
+                    ussdCode = '*712*618877686*1#';
+                    description = 'EVC Plus - Primary';
+                    providerImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX9mbp8JaeXYoJ9XYPegHe5i6yQ4sy8oZirg&s';
+                    break;
+                case 2:
+                    ussdCode = '*812*688877686*1#';
+                    description = 'Sahal - Alternative';
+                    providerImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-_hEfqpdBQlsITDwWKh6Q39ovpDUtgs5wwQ&s';
+                    break;
+                case 3:
+                    ussdCode = '*712*628877686*1#';
+                    description = 'Hormuud - Backup';
+                    providerImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRK4ohhEdyOBUuW5zmvaQqW_DJu8V6KPC9x5A&s';
+                    break;
+            }
+            
+            const telUrl = `tel:${encodeURIComponent(ussdCode)}`;
+            window.location.href = telUrl;
+            
+            showMessage(`${description} USSD code waa la furay! Riix call button-ka mobilkaaga!`);
+            
+            document.getElementById('ussdCodeText').textContent = ussdCode;
+            document.getElementById('ussdCodeDescription').textContent = description;
+            
+            // Show provider image
+            const ussdCodeDiv = document.getElementById('ussdCode');
+            ussdCodeDiv.innerHTML = `
+                <div class="text-center mb-4">
+                    <img src="${providerImage}" alt="${description}" class="mx-auto rounded-lg border-2 border-blue-300" style="width: 120px; height: 80px; object-fit: contain;">
+                </div>
+                <p class="text-sm text-gray-700 mb-2">Ku dar koodhkan mobilkaaga:</p>
+                <p class="font-mono text-lg font-bold text-blue-600">${ussdCode}</p>
+                <p class="text-sm text-green-600 font-semibold">${description}</p>
+                <p class="text-xs text-gray-500 mt-2">Balance-kaagu wuxuu noqon doonaa $0 ilaa lacagta la soo shubayo</p>
+            `;
+            
+            ussdCodeDiv.classList.remove('hidden');
+            document.getElementById('ussdOptions').classList.add('hidden');
+        }
+
+        // Robot functions
+        function generateRobots() {
+            const robotsList = document.getElementById('robotsList');
+            robotsList.innerHTML = '';
+            
+            const robotData = [
+                { name: 'Bitcoin Full', price: 400, profit: 8.0, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s' },
+                { name: 'Crypto King', price: 350, profit: 7.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s' },
+                { name: 'Stock Genius', price: 320, profit: 7.2, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ0-BwMD4kc4FXCAi2ljaaWCdVbUeUUppKRg&s' },
+                { name: 'Gold Trader', price: 290, profit: 5.8, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDyjzYgo27sMA6i4J0kEcAm0qJhCWTn28t-A&s' },
+                { name: 'Oil Expert', price: 260, profit: 4.6, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGmAB-AIF3rWBs3AM9q-dbcjoQ7EdLD6OnRQ&s' },
+                { name: 'Bond Master', price: 230, profit: 4.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNhgwy2XsjnGR7pUNy9T7tV_jsAlrSkYap2Q&s' },
+                { name: 'Commodity Pro', price: 210, profit: 4.1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2qq8-vcrChw9tpU5sq79QOmK80jpv3Xx02w&s' },
+                { name: 'Index Hunter', price: 190, profit: 2.9, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP4pWPhGZc29S5WkC-Ba3ZlzbGB0HTwHAFeQ&s' },
+                { name: 'Currency Wizard', price: 160, profit: 2.6, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuxhV4QMeANzxwiMMEIkZp_c_3eajY8aoKg&s' },
+                { name: 'Metal Trader', price: 140, profit: 2.4, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyrMp_qbaJzcqtvBha1TLmSfEHwT0YAErmdA&s' },
+                { name: 'Energy Expert', price: 130, profit: 2.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXiHJ7uIcb2IlHaSHioslYh2GEV8Kpm_xCCg&s' },
+                { name: 'Tech Stocks', price: 120, profit: 2.2, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaXp37ZLvnjE8Lcd-PyBPvmSCpEsi5_fdZSA&s' },
+                { name: 'Real Estate', price: 110, profit: 2.1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjXLa-oJLaL8tEspanl5oV5PD4IbtwkpL-Xw&s' },
+                { name: 'Pharma Trader', price: 105, profit: 2.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStN5JDIuRaULTeEXtvtXUJrfbnWGHAErEkUA&s' },
+                { name: 'Auto Industry', price: 70, profit: 1.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnQJFcuf1QeGS-NmYqXgI-CRrawwfYP40U5g&s' },
+                { name: 'Food & Beverage', price: 60, profit: 1.15, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_bj-ltuzt62o9CxP91qNSVc9iheGY4nMfCg&s' },
+                { name: 'Retail Master', price: 50, profit: 1.05, image: 'https://th.bing.com/th/id/OIF.RGVHqT24AG2CUbAT7CNhHA?w=235&h=183&c=7&r=0&o=5&pid=1.7' },
+                { name: 'Banking Pro', price: 40, profit: 1.00, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUhHtnFq30Z-nkcY5Pvhq3MWwcQSzcfgrXkg&s' },
+                { name: 'Insurance Expert', price: 30, profit: 0.35, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnsHUweaPvW6qTrQgew1-667hFAG1dK1-tGw&s' },
+                { name: 'Telecom Trader', price: 20, profit: 0.25, image: 'https://cdn.sanity.io/images/f8lauh0h/production/6b6e8de8b893da63950e390334a9668d4440e3be-6000x4000.jpg' },
+                { name: 'Utility Master', price: 10, profit: 0.2, image: 'https://news.mit.edu/sites/default/files/styles/news_article__image_gallery/public/images/202505/MIT-Differentiable-Interaction-01_0.gif?itok=OtGBTwHK' },
+                { name: 'Transport Pro', price: 5, profit: 0.17, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsixzp9V9j0_lBI7wOB6w_DCP15bEUnxYsIg&s' },
+                { name: 'Media Expert', price: 3, profit: 0.15, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAigmUQKnJXk_u5IpyR3lTSBRUOCCJ5zcQ4g&s' },
+                { name: 'Gaming Stocks', price: 2, profit: 0.1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE5lKEPUJKB04S1g_yEJWCnKO3lNfRwvviGQ&s' },
+                { name: 'Green Energy', price: 1, profit: 0.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN6VSe-GVQNJnAaRtBq3MT1AdQm4_lk_nm8Q&s' }
+            ];
+            
+            robotData.forEach((robot, index) => {
+                const randomHours = Math.floor(Math.random() * 23) + 1;
+                const randomMinutes = Math.floor(Math.random() * 60);
+                const randomSeconds = Math.floor(Math.random() * 60);
+                
+                const robotCard = document.createElement('div');
+                robotCard.className = 'bg-white border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow';
+                robotCard.innerHTML = `
+                    <div class="mb-3 text-center">
+                        <img src="${robot.image}" alt="${robot.name}" class="mx-auto rounded-full object-cover border-2 border-purple-200" style="width: 70px; height: 70px;">
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2 text-center">${robot.name}</h3>
+                    <p class="text-sm text-gray-600 mb-1 text-center">Qiimo: $${robot.price}</p>
+                    <p class="text-sm text-green-600 mb-2 text-center">Faa'iido: ${robot.profit}%</p>
+                    <div class="bg-blue-50 rounded-lg p-2 mb-3">
+                        <p class="text-xs text-blue-600 text-center mb-1">⏰ Waqti haray:</p>
+                        <p class="text-sm font-bold text-blue-800 text-center" id="timer-${index}">
+                            ${randomHours.toString().padStart(2, '0')}:${randomMinutes.toString().padStart(2, '0')}:${randomSeconds.toString().padStart(2, '0')}
+                        </p>
+                    </div>
+                    <button onclick="rentRobot('${robot.name}', ${robot.price}, ${robot.profit / 100})" 
+                            class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-lg font-semibold">
+                        Kireyso
+                    </button>
+                `;
+                robotsList.appendChild(robotCard);
+                
+                startRobotCountdown(index, randomHours, randomMinutes, randomSeconds);
+            });
+        }
+
+        function rentRobot(name, price, profit) {
+            if (activeRobots[currentUser]) {
+                showMessage('Robot kale ayaa hadda shaqaynaya. Sug ilaa uu dhammaan doono.', 'warning');
+                return;
+            }
+            
+            if ((userBalances[currentUser] || 0) < price) {
+                showMessage('Lacag kuma filna!', 'error');
+                return;
+            }
+            
+            const confirmed = confirm(`Waad ikireysatay robotkan. Waxaan kushaqeeya shareecada islaamka, faaidana waan kuu soo saari karaa, qasaarana way dhici kartaa. Aqbal amase iska daa?`);
+            
+            if (!confirmed) return;
+            
+            userBalances[currentUser] -= price;
+            
+            const startTime = Date.now();
+            const endTime = startTime + (24 * 60 * 60 * 1000);
+            
+            activeRobots[currentUser] = {
+                name: name,
+                price: price,
+                profit: profit,
+                startTime: startTime,
+                endTime: endTime
+            };
+            
+            localStorage.setItem('investmarket_balances', JSON.stringify(userBalances));
+            localStorage.setItem('investmarket_robots', JSON.stringify(activeRobots));
+            
+            addActivity('robot_rented', currentUser, price, `Rented robot: ${name}`);
+            
+            showMessage(`${name} robot si guul leh ayaa loo kireystay! Waqtiga kaliya ayaa muujinaya!`);
+            updateDashboard();
+            showRobots();
+        }
+
+        function updateRobotTimer() {
+            if (!activeRobots[currentUser]) {
+                document.getElementById('activeRobot').classList.add('hidden');
+                return;
+            }
+            
+            const robot = activeRobots[currentUser];
+            const now = Date.now();
+            
+            if (now >= robot.endTime) {
+                const originalCost = robot.price;
+                const profitAmount = robot.price * robot.profit;
+                const totalReturn = originalCost + profitAmount;
+                
+                userBalances[currentUser] = (userBalances[currentUser] || 0) + totalReturn;
+                
+                delete activeRobots[currentUser];
+                localStorage.setItem('investmarket_balances', JSON.stringify(userBalances));
+                localStorage.setItem('investmarket_robots', JSON.stringify(activeRobots));
+                
+                addActivity('robot_completed', currentUser, totalReturn, `Robot ${robot.name} completed with profit`);
+                
+                showMessage(`${robot.name} robot shaqadiisii wuu dhammaystyay! Lacagtii aad bixisay: $${originalCost.toFixed(2)} Faa'iidada: $${profitAmount.toFixed(2)} Wadarta guud: $${totalReturn.toFixed(2)} Lacagta oo dhan waa lagu daray balance-kaaga!`);
+                updateDashboard();
+                showRobots();
+                return;
+            }
+            
+            document.getElementById('activeRobot').classList.remove('hidden');
+            
+            const timeLeft = robot.endTime - now;
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            document.getElementById('robotTimer').textContent = 
+                `Waqti haray: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            setTimeout(updateRobotTimer, 1000);
+        }
+
+        // Market functions
+        function generateMarketItems() {
+            const marketItems = document.getElementById('marketItems');
+            marketItems.innerHTML = '';
+            
+            const defaultItems = {
+                clothing: [
+                    { name: 'suudka raga', category: 'Dhar', price: 60, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdAYp3T-e1TGx4NIlm23OSyetl8e5OHYf_qA&s', whatsapp: '618877686' },
+                    { name: 'Shaati Rag', category: 'Dhar', price: 5.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqssWuMuoHCbEM5_e3VbTEpWIvx3nia_W3oA&s', whatsapp: '618877687' },
+                    { name: 'Surwaal Rag', category: 'Dhar', price: 9, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3o6mbKZQei-2Wliwcrn49gmdaimHao0pqKg&s', whatsapp: '618877688' },
+                    { name: 'Dirac Dumar', category: 'Dhar', price: 21, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo-_mBXAufmSYuUAh6TPEn1lcrm_Axv-wiyA&s', whatsapp: '618877689' },
+                    { name: 'Jaakad', category: 'Dhar', price: 7.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfkwGuR6jBigQrPHKzaly8_L4wX9whKYKIOQ&s', whatsapp: '618877690' }
+                ],
+                shoes: [
+                    { name: 'kabaha buudka', category: 'Kabo', price: 6.25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM2ZjMp8O6Quu2i-PZGv6wibTWhOnoAxrUeA&s', whatsapp: '618877686' },           
+                    { name: 'kabaha isport', category: 'Kabo', price: 3.65, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz9CUieYt5uQrKoChj3firWTeK2KBaIYe50A&s', whatsapp: '618877687' },
+                    { name: 'kabaha dumarka', category: 'Kabo', price: 8, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZZFT7rd2a9iVvJpXQQmY7gYUTGHphk363WQ&s', whatsapp: '618877691' },
+                    { name: 'kabaha labiska dumarka', category: 'Kabo', price: 12.3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYTuNB_gEEqYnzV1zZr6P0jTuN-zVQNWOImQ&s', whatsapp: '618877692' },
+                    { name: 'kabaha labiska raga', category: 'Kabo', price: 18.9, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1xa2BF4o5TynoRJPeyUwxCcU8ICpIlN1XrQ&s', whatsapp: '618877693' }
+                ],
+                cosmetics: [
+                    { name: 'rooseetada', category: 'Qurxin', price: 12, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0kZGpb-swedBdyAW7aJgbGtCHJC6K0lNaYA&s', whatsapp: '618877691' },
+                    { name: 'kareenka wajiga', category: 'Qurxin', price: 4, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWNr0OOSwfHGh5MWDwDVHrgUJp8Qj5IuQEpA&s', whatsapp: '618877692' },
+                    { name: 'saliida timaha bixisa', category: 'Qurxin', price: 12, image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgbobbER89X_v46O7iH0rtLkBXgq42r_WzKA&s', whatsapp: '618877694' },
+                    { name: 'barfuunada kala duwan', category: 'Qurxin', price: 9.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKuKZYpGWaAZHYqvBryVbCvJsnXZLEhjhWxQ&s', whatsapp: '618877695' },
+                    { name: 'qurxinta cidiyaha', category: 'Qurxin', price: 5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4Fb7XMvYa4PR2StRGrfMr6v479bQTgLMXNA&s', whatsapp: '618877696' }
+                ],
+                phones: [
+                    { name: 'iPhone 15', category: 'Telefoon', price: 1389, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXJtSHEU295H48LTgCjNJ3Oa0a6ybvd-nuuA&s', whatsapp: '618877686' },
+                    { name: 'Samsung Galaxy', category: 'Telefoon', price: 880, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz6O3cAr6A13ZitURScnkAZEr-H2__st96Qw&s', whatsapp: '618877687' },
+                    { name: 'Redmi Note', category: 'Telefoon', price: 310, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWPwHdrWnP5hdtN64jwabmn9z28WgHMzM12w&s', whatsapp: '618877688' },
+                    { name: 'Infinix Hot', category: 'Telefoon', price: 60, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXMtyW4RorxAE3l6puGNj03_rJmQ7bw0_g3g&s', whatsapp: '618877689' },
+                    { name: 'Vivo V30', category: 'Telefoon', price: 600, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6xDXrCJuI_SFPu98csraHMGMIzTXRgDVDSw&s', whatsapp: '618877690' },
+                    { name: 'Oppo Reno', category: 'Telefoon', price: 225, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7NvWbajDTx_jQU63SiZPmj1zVUeputa6vUA&s', whatsapp: '618877691' },
+                    { name: 'Tecno Spark', category: 'Telefoon', price: 155, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIiTnXjLQDQU29qr3ivUSoR6NWLdlGK0W_tg&s', whatsapp: '618877692' },
+                    { name: 'Itel A58', category: 'Telefoon', price: 85, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQidnmfUGBSY0nOt45LxC-RF3Avg-hba5-KNg&s', whatsapp: '618877693' },
+                    { name: 'Huawei P60', category: 'Telefoon', price: 1449, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVG_soebgs4ggci_q1FKeuc9cSmpKROoN6dA&s', whatsapp: '618877694' },
+                    { name: 'Nokia 3310', category: 'Telefoon', price: 35, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ51ITKS6bgz0G-CV1Haxq1Inf6d55cYGxSPQ&s', whatsapp: '618877695' }
+                ],
+                medicine: [
+                    { name: 'Paracetamol', category: 'Dawo', price: 3, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpM3CKVvurltT3VhHc_hxP_9ugypk80mwSvA&s', whatsapp: '618877686' },
+                    { name: 'Vitamin C', category: 'Dawo', price: 1.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZAnkLAATWoWEfcy0fl2iPxe89kHMgNbw5dg&s', whatsapp: '618877687' },
+                    { name: 'Antibiotics', category: 'Dawo', price: 1.42, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSahx1fPXtRuFxEFSx7AVBN8XOcq9ZfU6-_4Q&s', whatsapp: '618877688' },
+                    { name: 'Pain Relief', category: 'Dawo', price: 1, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbBFyXxzFGmYmeraVYzEljeawvf6EMt_xc0Q&s', whatsapp: '618877689' },
+                    { name: 'Aspirin', category: 'Dawo', price: 8, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdP89jl6EKahib7EeWQWg03Zs9vhDyhAAqtQ&s', whatsapp: '618877690' },
+                    { name: 'Cough Syrup', category: 'Dawo', price: 15, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIl7rZ74qJ2vqUgMbedptlZscNrst_0Zew7Q&s', whatsapp: '618877691' },
+                    { name: 'Bandages', category: 'Dawo', price: 0.25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiU4B2eJLOZt5c4EQd5isrAi_Pi5TMzNx2IQ&s', whatsapp: '618877692' }
+                ],
+                electronics: [
+                    { name: 'Laptop', category: 'Elektaroonik', price: 510, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNy1Nk240JKpHCJX8QUOqBQ31sayD8_GUOCg&s', whatsapp: '618877686' },
+                    { name: 'Gaming Headset', category: 'Elektaroonik', price: 7.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkrOJpbAw85f3XUlvkY15mNPmTbNTi5KFnqQ&s', whatsapp: '618877687' },
+                    { name: 'Designer Watch', category: 'Elektaroonik', price: 45, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwAt8lQ523_gpL8lNO5Jowa9iSZ2ZDFA95sw&s', whatsapp: '618877688' },
+                    { name: 'Luxury Handbag', category: 'Elektaroonik', price: 6, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-suDqgE-bce5CV01_RM6SzEzigZPMvbb52w&s', whatsapp: '618877689' },
+                    { name: 'Wireless Speaker', category: 'Elektaroonik', price: 11.5, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr8M9dyvAXx4TibvSmuZZqveejA5tadqjoUg&s', whatsapp: '618877690' },
+                    { name: 'Smart Watch', category: 'Elektaroonik', price: 40, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMraeWvEijmG6ChhSMEWQDA5toBbT9FlRGSg&s', whatsapp: '618877691' },
+                    { name: 'Bluetooth Earbuds', category: 'Elektaroonik', price: 8, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXpjRXJpfdsDtAtQOTZ3O07QPXZ0tp0gDANA&s', whatsapp: '618877692' }
+                ]
+            };
+            
+            // Flatten all categories into one array
+            const allDefaultItems = [
+                ...defaultItems.clothing,
+                ...defaultItems.shoes,
+                ...defaultItems.cosmetics,
+                ...defaultItems.phones,
+                ...defaultItems.medicine,
+                ...defaultItems.electronics
+            ];
+            
+            const globalProducts = JSON.parse(localStorage.getItem('investmarket_products') || '[]');
+            const allItems = [...allDefaultItems, ...globalProducts];
+            
+            allItems.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'bg-white border border-gray-200 rounded-lg p-4 market-item hover:shadow-lg transition-all';
+                
+                const isUserProduct = globalProducts.includes(item);
+                const sellerBadge = isUserProduct ? 
+                    `<div class="seller-badge text-white text-xs px-2 py-1 rounded-full mb-2 text-center">🏪 Seller: ${item.seller}</div>` : 
+                    `<div class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full mb-2 text-center">🏬 Store Item</div>`;
+                
+                const isVideo = item.image && item.image.includes('video');
+                
+                let mediaElement;
+                if (isVideo) {
+                    mediaElement = `<video src="${item.image}" class="w-full h-36 object-contain bg-gray-100 rounded-lg" controls></video>`;
+                } else {
+                    mediaElement = `<img src="${item.image}" alt="${item.name}" class="w-full h-36 object-contain bg-gray-100 rounded-lg">`;
+                }
+                
+                itemCard.innerHTML = `
+                    ${sellerBadge}
+                    <div class="mb-3 bg-gray-50 p-2 rounded-lg">
+                        ${mediaElement}
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-1">${item.name}</h3>
+                    <p class="text-sm text-gray-600 mb-1">${item.category || 'General'}</p>
+                    ${item.description ? `<p class="text-xs text-gray-500 mb-2">${item.description}</p>` : ''}
+                    <p class="text-xs text-gray-500 mb-2">📱 WhatsApp: ${item.whatsapp || '618877686'}</p>
+                    <p class="text-lg font-bold text-green-600 mb-3">$${item.price}</p>
+                    <button onclick="buyItem('${item.name}', ${item.price}, '${item.whatsapp || '618877686'}')" 
+                            class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-semibold">
+                        💰 Iibso
+                    </button>
+                `;
+                marketItems.appendChild(itemCard);
+            });
+        }
+
+        function buyItem(name, price, whatsapp) {
+            const message = `Waxaan rabaa inaan iibsado ${name} ee meeqaa ayaad iga dhimeysaa ila hishii wll`;
+            const whatsappUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            showMessage(`WhatsApp waa la furay si aad ula hadashid iibiyaha!`);
+        }
+
+        // Payment image update functions
+        function updateDepositImage() {
+            const method = document.getElementById('depositMethod').value;
+            const image = document.getElementById('paymentImage');
+            
+            if (method === 'evcplus') {
+                image.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s';
+            } else if (method === 'crypto') {
+                image.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s';
+            }
+        }
+
+        function updateWithdrawImage() {
+            const method = document.getElementById('withdrawMethod').value;
+            const image = document.getElementById('withdrawImage');
+            
+            if (method === 'evcplus') {
+                image.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMlTJJzvvDjhmN7GF2x4TSwXeU5m_DL5vlNA&s';
+            } else if (method === 'crypto') {
+                image.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHRStqZADVd-i8pvQIhZcc6kzrpVt3wYX3zA&s';
+            }
+        }
+
+        // WhatsApp function
+        function openWhatsApp() {
+            const message = '💬 Waan kusaalamay maamuule waxaan rabaa inaad icaawiso adigoo mahatsan';
+            const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Exchange functions
+        function generateCryptoPricesGrid() {
+            const grid = document.getElementById('cryptoPricesGrid');
+            grid.innerHTML = '';
+            
+            Object.keys(cryptoData).forEach(key => {
+                const crypto = cryptoData[key];
+                const card = document.createElement('div');
+                card.className = 'crypto-card bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg p-4 text-center shadow-md text-white relative overflow-hidden';
+                
+                let priceDisplay = crypto.price >= 1000 ? `$${crypto.price.toLocaleString()}` : 
+                                  crypto.price >= 1 ? `$${crypto.price.toFixed(2)}` : 
+                                  `$${crypto.price.toFixed(6)}`;
+                
+                card.innerHTML = `
+                    <div class="flex items-center justify-center mb-2">
+                        <img src="${crypto.image}" alt="${crypto.name}" class="w-8 h-8 rounded-full mr-2 bg-white p-1">
+                        <h3 class="font-semibold text-sm text-white">${crypto.name}</h3>
+                    </div>
+                    <p class="text-xs text-white opacity-80 mb-1">${crypto.symbol}</p>
+                    <p class="font-bold text-lg text-white" id="price-${key}">${priceDisplay}</p>
+                    <p class="text-xs text-white opacity-90 mb-1" id="change-${key}">${crypto.stable ? 'Stable' : '0.0%'}</p>
+                    <div class="text-xs text-white opacity-75">
+                        <p>Rate: ${crypto.rate}</p>
+                        <p>Fee: ${(crypto.fee * 100).toFixed(1)}%</p>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function startPriceUpdates() {
+            updateCryptoPrices();
+            priceUpdateInterval = setInterval(updateCryptoPrices, 2000);
+        }
+
+        function updateCryptoPrices() {
+            Object.keys(cryptoData).forEach(key => {
+                const crypto = cryptoData[key];
+                
+                if (!crypto.stable) {
+                    // More realistic Binance-like price movements
+                    const volatility = key === 'bitcoin' ? 0.015 : 
+                                     key === 'ethereum' ? 0.02 : 
+                                     key === 'hamster' || key === 'memefi' ? 0.08 : 
+                                     0.03;
+                    
+                    // Random price change with trend bias
+                    const trendBias = Math.sin(Date.now() / 100000) * 0.3; // Slow trend
+                    const randomChange = (Math.random() - 0.5) * volatility;
+                    const change = randomChange + (trendBias * 0.1);
+                    
+                    const newPrice = crypto.price * (1 + change);
+                    
+                    // Set realistic price bounds
+                    const minPrice = crypto.price * 0.7;
+                    const maxPrice = crypto.price * 1.4;
+                    crypto.price = Math.max(minPrice, Math.min(maxPrice, newPrice));
+                    
+                    crypto.change = change * 100;
+                    
+                    const priceElement = document.getElementById(`price-${key}`);
+                    const changeElement = document.getElementById(`change-${key}`);
+                    
+                    if (priceElement && changeElement) {
+                        let priceDisplay = crypto.price >= 1000 ? `$${crypto.price.toLocaleString()}` : 
+                                          crypto.price >= 1 ? `$${crypto.price.toFixed(2)}` : 
+                                          crypto.price >= 0.01 ? `$${crypto.price.toFixed(4)}` :
+                                          `$${crypto.price.toFixed(6)}`;
+                        
+                        priceElement.textContent = priceDisplay;
+                        
+                        const changeText = crypto.change > 0 ? 
+                            `+${crypto.change.toFixed(2)}% 📈` : 
+                            `${crypto.change.toFixed(2)}% 📉`;
+                        
+                        changeElement.textContent = changeText;
+                        changeElement.className = crypto.change > 0 ? 'text-xs price-up' : 'text-xs price-down';
+                        
+                        // Add flash effect for significant changes
+                        if (Math.abs(crypto.change) > 2) {
+                            const card = priceElement.closest('.crypto-card');
+                            if (card) {
+                                card.style.animation = 'none';
+                                setTimeout(() => {
+                                    card.style.animation = 'pulse 0.5s ease-in-out';
+                                }, 10);
+                            }
+                        }
+                    }
+                }
+            });
+            
+            updateExchangeRate();
+        }
+
+        function updateCurrencyImages() {
+            const fromSelect = document.getElementById('fromCurrency');
+            const toSelect = document.getElementById('toCurrency');
+            const fromImage = document.getElementById('fromCurrencyImage');
+            const toImage = document.getElementById('toCurrencyImage');
+            
+            if (fromSelect && fromImage) {
+                const fromCurrency = fromSelect.value;
+                fromImage.src = cryptoData[fromCurrency].image;
+            }
+            
+            if (toSelect && toImage) {
+                const toCurrency = toSelect.value;
+                toImage.src = cryptoData[toCurrency].image;
+            }
+        }
+
+        function updateExchangeRate() {
+            const fromSelect = document.getElementById('fromCurrency');
+            const toSelect = document.getElementById('toCurrency');
+            
+            if (!fromSelect || !toSelect) return;
+            
+            const from = fromSelect.value;
+            const to = toSelect.value;
+            
+            if (from === to) return;
+            
+            const fromRate = cryptoData[from].rate;
+            const toRate = cryptoData[to].rate;
+            const fromFee = cryptoData[from].fee;
+            const toFee = cryptoData[to].fee;
+            const totalFee = fromFee + toFee;
+            
+            // Calculate exchange rate with fees
+            const rate = (fromRate / toRate) * (1 - totalFee);
+            
+            const rateElement = document.getElementById('exchangeRate');
+            if (rateElement) {
+                let rateDisplay = rate >= 1000 ? rate.toLocaleString() : 
+                                 rate >= 1 ? rate.toFixed(4) : 
+                                 rate.toFixed(8);
+                
+                rateElement.textContent = `1 ${cryptoData[from].symbol} = ${rateDisplay} ${cryptoData[to].symbol} (Fee: ${(totalFee * 100).toFixed(1)}%)`;
+            }
+            
+            calculateExchange();
+        }
+
+        function calculateExchange() {
+            const fromAmountInput = document.getElementById('fromAmount');
+            const toAmountInput = document.getElementById('toAmount');
+            const fromSelect = document.getElementById('fromCurrency');
+            const toSelect = document.getElementById('toCurrency');
+            
+            if (!fromAmountInput || !toAmountInput || !fromSelect || !toSelect) return;
+            
+            const fromAmount = parseFloat(fromAmountInput.value) || 0;
+            const from = fromSelect.value;
+            const to = toSelect.value;
+            
+            if (from === to) {
+                toAmountInput.value = fromAmount.toFixed(8);
+                return;
+            }
+            
+            const fromRate = cryptoData[from].rate;
+            const toRate = cryptoData[to].rate;
+            const fromFee = cryptoData[from].fee;
+            const toFee = cryptoData[to].fee;
+            const totalFee = fromFee + toFee;
+            
+            // Calculate with fees deducted
+            const toAmount = (fromAmount * fromRate / toRate) * (1 - totalFee);
+            
+            toAmountInput.value = Math.max(0, toAmount).toFixed(8);
+        }
+
+        function performExchange() {
+            const fromAmount = parseFloat(document.getElementById('fromAmount').value);
+            const from = document.getElementById('fromCurrency').value;
+            const to = document.getElementById('toCurrency').value;
+            
+            if (!fromAmount || fromAmount <= 0) {
+                showMessage('Fadlan geli qadarka saxda ah!', 'warning');
+                return;
+            }
+            
+            if (from === to) {
+                showMessage('Ma kala badali kartid lacag isku mid ah!', 'error');
+                return;
+            }
+            
+            const toAmount = document.getElementById('toAmount').value;
+            const fromSymbol = cryptoData[from].symbol;
+            const toSymbol = cryptoData[to].symbol;
+            
+            // Create WhatsApp message with exchange details
+            const message = `💱 EXCHANGE REQUEST 💱
+
+Waxaan rabaa inaad ii soo boobsiiso mudane:
+
+📤 Waxaan bixinayaa: ${fromAmount} ${fromSymbol}
+📥 Waxaan rabaa: ${toAmount} ${toSymbol}
+
+💰 Exchange Rate: ${document.getElementById('exchangeRate').textContent}
+
+👤 User: ${currentUser}
+⏰ Waqti: ${new Date().toLocaleString()}
+
+Fadlan ii soo boobsii lacagahan! Mahadsanid! 🙏`;
+            
+            // Open WhatsApp with the message
+            const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            showMessage(`Exchange request waa la diray WhatsApp! 📱💱`);
+            
+            // Clear form after sending
+            document.getElementById('fromAmount').value = '';
+            document.getElementById('toAmount').value = '';
+        }
+
+        // AI Assistant functions
+        const animalImages = {
+            'geel': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8xEutZEF86rFg0gsROTmoe3A-l7fxjSqrA&s',
+            'libaax': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnA30VdCSdoftah-h1-C4BDVEUM4mRKbRkcw&s',
+            'eey': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4T_5syqabNK9_wYxbqRD0VREg6rCFUSxZdA&s',
+            'daanyeer': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgzCtC9jf604AFOsnzVS_bHJS6-0RlEkLmOg&s'
+        };
+
+        function sendMessage() {
+            const input = document.getElementById('aiInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addMessage(message, 'user');
+            
+            setTimeout(() => {
+                const response = generateAIResponse(message);
+                addMessage(response.text, 'ai', response.image);
+            }, 1000);
+            
+            input.value = '';
+        }
+
+        function addMessage(text, sender, image = null) {
+            const chatArea = document.getElementById('chatArea');
+            
+            if (chatArea.children.length === 1 && chatArea.children[0].classList.contains('text-center')) {
+                chatArea.innerHTML = '';
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `mb-4 ${sender === 'user' ? 'text-right' : 'text-left'}`;
+            
+            const bubble = document.createElement('div');
+            bubble.className = `inline-block max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                sender === 'user' 
+                ? 'bg-pink-500 text-white' 
+                : 'bg-gray-200 text-gray-800'
+            }`;
+            
+            bubble.textContent = text;
+            messageDiv.appendChild(bubble);
+            
+            if (image) {
+                const imgDiv = document.createElement('div');
+                imgDiv.className = 'mt-2';
+                const img = document.createElement('img');
+                img.src = image;
+                img.className = 'rounded-lg max-w-xs';
+                img.style.width = '200px';
+                img.style.height = '200px';
+                img.style.objectFit = 'cover';
+                imgDiv.appendChild(img);
+                messageDiv.appendChild(imgDiv);
+            }
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function generateAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            for (const animal in animalImages) {
+                if (lowerMessage.includes(animal)) {
+                    return {
+                        text: `Waa kan sawirka ${animal}:`,
+                        image: animalImages[animal]
+                    };
+                }
+            }
+            
+            if (lowerMessage.includes('website') || lowerMessage.includes('platform')) {
+                return {
+                    text: '🌟 INVESTMARKET PLATFORM GUIDE:\n\n💰 DEPOSIT: Lacag kushubo EVC/Crypto/USSD\n💸 WITHDRAW: Lacag kabax 24 saac gudahood\n🤖 ROBOTS: AI Trading bots - faa\'iido 0.05%-15%\n🛒 MARKET: Iibso/Iibi alaab\n💱 EXCHANGE: Badal EVC↔Bitcoin↔Ethereum↔TRX↔DOGE\n📱 USSD: *712*number*1#\n📊 ACTIVITY: Fiiri dhammaan waxaad samaysay\n🤖 AI: Weydiiso wax walba + sawir samee\n💬 WhatsApp: La xiriir maamulka\n🎁 REFERRAL: $0.10 qof walba oo kusoo biira',
+                    image: null
+                };
+            }
+            
+            const responses = [
+                'Waan ku fahmay! Maxaad kale rabaa inaad ogaato?',
+                'Su\'aal fiican! Wax kale ma jiraan oo aan kaa caawin karo?',
+                'Mahadsanid su\'aashaada! Waxaan halkan u joogaa si aan kaa caawiyo.',
+                'Haa, waan ku fahmay. Su\'aal kale ma haysaa?'
+            ];
+            
+            return {
+                text: responses[Math.floor(Math.random() * responses.length)],
+                image: null
+            };
+        }
+
+        // Robot countdown function
+        function startRobotCountdown(robotIndex, hours, minutes, seconds) {
+            let totalSeconds = hours * 3600 + minutes * 60 + seconds;
+            
+            const countdown = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    const newHours = Math.floor(Math.random() * 23) + 1;
+                    const newMinutes = Math.floor(Math.random() * 60);
+                    const newSeconds = Math.floor(Math.random() * 60);
+                    totalSeconds = newHours * 3600 + newMinutes * 60 + newSeconds;
+                }
+                
+                const displayHours = Math.floor(totalSeconds / 3600);
+                const displayMinutes = Math.floor((totalSeconds % 3600) / 60);
+                const displaySeconds = totalSeconds % 60;
+                
+                const timerElement = document.getElementById(`timer-${robotIndex}`);
+                if (timerElement) {
+                    timerElement.textContent = 
+                        `${displayHours.toString().padStart(2, '0')}:${displayMinutes.toString().padStart(2, '0')}:${displaySeconds.toString().padStart(2, '0')}`;
+                } else {
+                    clearInterval(countdown);
+                    return;
+                }
+                
+                totalSeconds--;
+            }, 1000);
+        }
+
+        // Auto-check for completed robots
+        setInterval(() => {
+            if (currentUser && activeRobots[currentUser]) {
+                updateRobotTimer();
+            }
+        }, 60000);
+
+        // Enhanced Auto-save function with backup
+        function saveAllData() {
+            try {
+                const dataToSave = {
+                    users: users,
+                    balances: userBalances,
+                    robots: activeRobots,
+                    products: userProducts,
+                    activity: platformActivity,
+                    stats: platformStats,
+                    currentUser: currentUser,
+                    timestamp: Date.now()
+                };
+                
+                // Save individual items
+                localStorage.setItem('investmarket_users', JSON.stringify(users));
+                localStorage.setItem('investmarket_balances', JSON.stringify(userBalances));
+                localStorage.setItem('investmarket_robots', JSON.stringify(activeRobots));
+                localStorage.setItem('investmarket_products', JSON.stringify(userProducts));
+                localStorage.setItem('investmarket_activity', JSON.stringify(platformActivity));
+                localStorage.setItem('investmarket_stats', JSON.stringify(platformStats));
+                localStorage.setItem('investmarket_currentuser', currentUser || '');
+                
+                // Save complete backup
+                localStorage.setItem('investmarket_backup', JSON.stringify(dataToSave));
+                
+                console.log('✅ Data saved successfully at:', new Date().toLocaleString());
+            } catch (error) {
+                console.error('❌ Save error:', error);
+            }
+        }
+
+        // Enhanced data loading with recovery
+        function loadAllData() {
+            try {
+                // Try to load individual items first
+                users = JSON.parse(localStorage.getItem('investmarket_users') || '{}');
+                userBalances = JSON.parse(localStorage.getItem('investmarket_balances') || '{}');
+                activeRobots = JSON.parse(localStorage.getItem('investmarket_robots') || '{}');
+                userProducts = JSON.parse(localStorage.getItem('investmarket_products') || '[]');
+                platformActivity = JSON.parse(localStorage.getItem('investmarket_activity') || '[]');
+                platformStats = JSON.parse(localStorage.getItem('investmarket_stats') || '{"totalDeposits": 0, "totalWithdrawals": 0, "totalSales": 0}');
+                currentUser = localStorage.getItem('investmarket_currentuser') || null;
+                
+                // If no data found, try backup
+                if (Object.keys(users).length === 0) {
+                    const backup = localStorage.getItem('investmarket_backup');
+                    if (backup) {
+                        const backupData = JSON.parse(backup);
+                        users = backupData.users || {};
+                        userBalances = backupData.balances || {};
+                        activeRobots = backupData.robots || {};
+                        userProducts = backupData.products || [];
+                        platformActivity = backupData.activity || [];
+                        platformStats = backupData.stats || {"totalDeposits": 0, "totalWithdrawals": 0, "totalSales": 0};
+                        currentUser = backupData.currentUser || null;
+                        console.log('🔄 Data restored from backup');
+                    }
+                }
+                
+                console.log('✅ Data loaded successfully');
+                return true;
+            } catch (error) {
+                console.error('❌ Load error:', error);
+                return false;
+            }
+        }
+
+        // Initialize app with enhanced persistence
+        function initializeApp() {
+            console.log('🚀 Initializing InvestMarket...');
+            
+            const loadSuccess = loadAllData();
+            
+            if (!loadSuccess) {
+                console.log('⚠️ Using default data');
+                users = {};
+                userBalances = {};
+                activeRobots = {};
+                userProducts = [];
+                platformActivity = [];
+                platformStats = {"totalDeposits": 0, "totalWithdrawals": 0, "totalSales": 0};
+                currentUser = null;
+            }
+            
+            // If user was logged in, restore session
+            if (currentUser && users[currentUser]) {
+                console.log('🔐 Restoring user session:', currentUser);
+                showDashboard();
+            } else {
+                currentUser = null;
+                showHome();
+            }
+            
+            // Check for active robots
+            if (currentUser && activeRobots[currentUser]) {
+                updateRobotTimer();
+            }
+            
+            // Auto-save every 10 seconds (more frequent)
+            setInterval(saveAllData, 10000);
+            
+            console.log('✅ InvestMarket initialized successfully');
+        }
+
+        // Save data on all critical events
+        window.addEventListener('beforeunload', function(e) {
+            saveAllData();
+            console.log('💾 Data saved before page unload');
+        });
+
+        // Save data when page becomes hidden
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'hidden') {
+                saveAllData();
+                console.log('💾 Data saved on visibility change');
+            }
+        });
+
+        // Save data when user switches tabs or apps
+        window.addEventListener('blur', function() {
+            saveAllData();
+            console.log('💾 Data saved on window blur');
+        });
+
+        // Save data when page gains focus (in case of crashes)
+        window.addEventListener('focus', function() {
+            loadAllData();
+            if (currentUser) {
+                updateDashboard();
+            }
+            console.log('🔄 Data refreshed on window focus');
+        });
+
+        // Start the app
+        initializeApp();
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        }
+        
+        window.addEventListener('load', initializeApp);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9703321ea4da2120',t:'MTc1NTM3MTA0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
