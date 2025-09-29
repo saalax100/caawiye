@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRSD.COIN - Digital Currency Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .success-message {
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .coin-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Success Messages -->
+    <div id="successMessage" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
+        <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg success-message flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span id="successText"></span>
+        </div>
+    </div>
+
+    <!-- Registration Page -->
+    <div id="registerPage" class="container mx-auto px-4 py-8 max-w-md">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 fade-in">
+            <div class="text-center mb-8">
+                <div class="coin-animation inline-block">
+                    <div class="w-16 h-16 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                        H₵
+                    </div>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">HRSD.COIN</h1>
+                <p class="text-gray-600">Ku biir platform-ka lacagta digital-ka</p>
+            </div>
+
+            <form id="registerForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gmail</label>
+                    <input type="email" id="regEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="example@gmail.com">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="regPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Password-kaaga gali">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Xaqiiji Password</label>
+                    <input type="password" id="confirmPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Password-ka mar kale gali">
+                </div>
+                
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition duration-300 transform hover:scale-105">
+                    Diiwaan Gal
+                </button>
+            </form>
+            
+            <p class="text-center mt-6 text-gray-600">
+                Akoon ma leedahay? 
+                <button onclick="showLogin()" class="text-blue-600 hover:text-blue-800 font-semibold">Login samee</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="hidden container mx-auto px-4 py-8 max-w-md">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 fade-in">
+            <div class="text-center mb-8">
+                <div class="coin-animation inline-block">
+                    <div class="w-16 h-16 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                        H₵
+                    </div>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">HRSD.COIN</h1>
+                <p class="text-gray-600">Akoonkaaga ku soo gal</p>
+            </div>
+
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gmail</label>
+                    <input type="email" id="loginEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="example@gmail.com">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-2 text-gray-700 mb-2">Password</label>
+                    <input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Password-kaaga gali">
+                </div>
+                
+                <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 transition duration-300 transform hover:scale-105">
+                    Login
+                </button>
+            </form>
+            
+            <p class="text-center mt-6 text-gray-600">
+                Akoon ma leedahay? 
+                <button onclick="showRegister()" class="text-blue-600 hover:text-blue-800 font-semibold">Diiwaan gal</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden container mx-auto px-4 py-8">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 fade-in">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8 border-b pb-6">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                        H₵
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">HRSD.COIN Dashboard</h1>
+                        <p class="text-gray-600" id="userEmail"></p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300">
+                    Logout
+                </button>
+            </div>
+
+            <!-- Balance Display -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold">USD Balance</h3>
+                        <img src="https://i.postimg.cc/zVM6Xx88/usd.png" alt="USD" class="w-12 h-12 rounded-lg shadow-md" onerror="this.style.display='none';">
+                    </div>
+                    <p class="text-3xl font-bold" id="usdBalance">$0.00</p>
+                </div>
+                <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl p-6 text-white">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold">HRSD Balance</h3>
+                        <img src="https://i.postimg.cc/ppY5P6DM/hrsd.png" alt="HRSD" class="w-12 h-12 rounded-lg shadow-md" onerror="this.style.display='none';">
+                    </div>
+                    <p class="text-3xl font-bold" id="hrsdBalance">0.00 HRSD</p>
+                </div>
+                <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold">Bitcoin Balance</h3>
+                        <img src="https://i.postimg.cc/N95RMkgv/bitcoin.png" alt="Bitcoin" class="w-12 h-12 rounded-lg shadow-md" onerror="this.style.display='none';">
+                    </div>
+                    <p class="text-3xl font-bold" id="bitcoinBalance">0.00000 BTC</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <button onclick="showDeposit()" class="bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-xl font-semibold transition duration-300 transform hover:scale-105">
+                    💰 Deposit
+                </button>
+                <button onclick="showWithdraw()" class="bg-orange-500 hover:bg-orange-600 text-white py-4 px-6 rounded-xl font-semibold transition duration-300 transform hover:scale-105">
+                    💸 Withdraw
+                </button>
+                <button onclick="showUSSD()" class="bg-green-500 hover:bg-green-600 text-white py-4 px-6 rounded-xl font-semibold transition duration-300 transform hover:scale-105">
+                    📱 USSD
+                </button>
+                <button onclick="showTrade()" class="bg-purple-500 hover:bg-purple-600 text-white py-4 px-6 rounded-xl font-semibold transition duration-300 transform hover:scale-105">
+                    📈 Trade
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <button onclick="showSwap()" class="bg-indigo-500 hover:bg-indigo-600 text-white py-4 px-6 rounded-xl font-semibold transition duration-300 transform hover:scale-105">
+                    🔄 Swap
+                </button>
+                <button onclick="openWhatsApp()" class="bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-xl font-semibold transition duration-300 transform hover:scale-105">
+                    💬 WhatsApp
+                </button>
+                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white py-4 px-6 rounded-xl font-semibold transition duration-300 transform hover:scale-105">
+                    🚪 Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold mb-6 text-center">💰 Deposit Lacag</h2>
+            <form id="depositForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Deposit Type</label>
+                    <select id="depositType" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" onchange="updateDepositFields()">
+                        <option value="evcplus">EVCPlus</option>
+                    </select>
+                </div>
+                
+                <!-- EVCPlus Fields -->
+                <div id="evcplusDepositFields" class="mb-4">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://i.postimg.cc/k4698h5k/download-2-removebg-preview.png" alt="EVCPlus" class="w-20 h-20 rounded-lg shadow-md" onerror="this.style.display='none';">
+                    </div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">EVCPlus Amount</label>
+                    <input type="number" id="depositEvcAmount" step="0.01" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Lambarka Telefoonka</label>
+                    <input type="tel" id="depositNumber" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="618877686">
+                </div>
+                <div class="flex gap-4">
+                    <button type="submit" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold">Send</button>
+                    <button type="button" onclick="closeModal('depositModal')" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="withdrawModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold mb-6 text-center">💸 Withdraw Lacag</h2>
+            <form id="withdrawForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Withdraw Type</label>
+                    <select id="withdrawType" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" onchange="updateWithdrawFields()">
+                        <option value="evcplus">EVCPlus</option>
+                        <option value="bitcoin">Bitcoin</option>
+                    </select>
+                </div>
+                
+                <!-- EVCPlus Fields -->
+                <div id="evcplusFields" class="mb-4">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://i.postimg.cc/k4698h5k/download-2-removebg-preview.png" alt="EVCPlus" class="w-20 h-20 rounded-lg shadow-md" onerror="this.style.display='none';">
+                    </div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+                    <input type="number" id="withdrawHrsdAmount" step="0.01" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <label class="block text-sm font-medium text-gray-700 mb-2 mt-4">Lambarka Telefoonka</label>
+                    <input type="tel" id="evcplusNumber" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="618877686">
+                </div>
+                
+                <!-- Bitcoin Fields -->
+                <div id="bitcoinFields" class="hidden mb-4">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://i.postimg.cc/N95RMkgv/bitcoin.png" alt="Bitcoin" class="w-20 h-20 rounded-lg shadow-md" onerror="this.style.display='none';">
+                    </div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Bitcoin Amount</label>
+                    <input type="number" id="withdrawBitcoinAmount" step="0.00001" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <label class="block text-sm font-medium text-gray-700 mb-2 mt-4">Bitcoin Address</label>
+                    <input type="text" id="withdrawBitcoinAddress" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh">
+                </div>
+                
+
+                <div class="flex gap-4">
+                    <button type="submit" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold">Send</button>
+                    <button type="button" onclick="closeModal('withdrawModal')" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Swap Modal -->
+    <div id="swapModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold mb-6 text-center">🔄 Swap Lacagaha</h2>
+            <form id="swapForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Ka beddel (From)</label>
+                    <div class="relative">
+                        <select id="swapFrom" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" onchange="updateSwapDisplay()">
+                            <option value="usd">USD</option>
+                            <option value="hrsd">HRSD</option>
+                            <option value="bitcoin">Bitcoin</option>
+                        </select>
+                        <div class="mt-3 flex justify-center">
+                            <img id="fromCurrencyImage" src="https://i.postimg.cc/zVM6Xx88/usd.png" alt="USD" class="w-16 h-16 rounded-lg shadow-md" onerror="this.style.display='none';">
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">Balance: <span id="fromBalance" class="font-semibold">$0.00</span></p>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">U beddel (To)</label>
+                    <div class="relative">
+                        <select id="swapTo" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" onchange="updateSwapDisplay()">
+                            <option value="hrsd">HRSD</option>
+                            <option value="usd">USD</option>
+                            <option value="bitcoin">Bitcoin</option>
+                        </select>
+                        <div class="mt-3 flex justify-center">
+                            <img id="toCurrencyImage" src="https://i.postimg.cc/ppY5P6DM/hrsd.png" alt="HRSD" class="w-16 h-16 rounded-lg shadow-md" onerror="this.style.display='none';">
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">Balance: <span id="toBalance" class="font-semibold">0.00 HRSD</span></p>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Lacagta gali</label>
+                    <input type="number" id="swapAmount" step="0.01" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="0.00" oninput="calculateSwap()">
+                </div>
+                
+                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-600">Waxaad heli doontaa:</span>
+                        <span id="swapResult" class="font-bold text-lg text-green-600">0.00</span>
+                    </div>
+                    <div class="text-xs text-gray-500">
+                        Exchange Rate: <span id="exchangeRate">1:1</span>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button type="submit" class="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg font-semibold">Swap</button>
+                    <button type="button" onclick="closeModal('swapModal')" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Trade Modal -->
+    <div id="tradeModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">📈 HRSD.COIN Live Trading</h2>
+            
+            <!-- Current Price Display -->
+            <div class="bg-gray-900 rounded-xl p-6 mb-6 text-white">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center">
+                        <img src="https://i.postimg.cc/ppY5P6DM/hrsd.png" alt="HRSD" class="w-12 h-12 rounded-lg shadow-md mr-4" onerror="this.style.display='none';">
+                        <div>
+                            <h3 class="text-xl font-bold">HRSD/USD</h3>
+                            <p class="text-gray-400">Horumarka Real-time</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="flex items-center justify-end mb-2">
+                            <p class="text-3xl font-bold mr-2" id="currentPrice">$0.1000</p>
+                            <div id="trendArrow" class="text-2xl">📈</div>
+                        </div>
+                        <p class="text-sm" id="priceChange">+0.00%</p>
+                    </div>
+                </div>
+                
+                <!-- Live Chart -->
+                <div class="bg-gray-800 rounded-lg p-4 h-32 flex items-end justify-between" id="liveChart">
+                    <!-- Chart bars will be generated here -->
+                </div>
+            </div>
+            
+            <!-- Trading Interface -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <!-- Buy Section -->
+                <div class="bg-green-50 rounded-xl p-6 border-2 border-green-200">
+                    <h3 class="text-xl font-bold text-green-700 mb-4 flex items-center">
+                        📈 BUY HRSD
+                    </h3>
+                    <form id="buyForm">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">USD Amount</label>
+                            <input type="number" id="buyAmount" step="0.01" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="0.00" oninput="calculateBuy()">
+                            <p class="text-sm text-gray-500 mt-1">Balance: <span id="buyUsdBalance" class="font-semibold">$0.00</span></p>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Waxaad heli doontaa</label>
+                            <div class="bg-white p-3 rounded-lg border">
+                                <span id="buyResult" class="text-lg font-bold text-green-600">0.00 HRSD</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition duration-300">
+                            🛒 Buy HRSD
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Sell Section -->
+                <div class="bg-red-50 rounded-xl p-6 border-2 border-red-200">
+                    <h3 class="text-xl font-bold text-red-700 mb-4 flex items-center">
+                        📉 SELL HRSD
+                    </h3>
+                    <form id="sellForm">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">HRSD Amount</label>
+                            <input type="number" id="sellAmount" step="0.01" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="0.00" oninput="calculateSell()">
+                            <p class="text-sm text-gray-500 mt-1">Balance: <span id="sellHrsdBalance" class="font-semibold">0.00 HRSD</span></p>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Waxaad heli doontaa</label>
+                            <div class="bg-white p-3 rounded-lg border">
+                                <span id="sellResult" class="text-lg font-bold text-red-600">$0.00</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-semibold transition duration-300">
+                            💰 Sell HRSD
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Market Stats -->
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="bg-blue-50 rounded-lg p-4 text-center">
+                    <p class="text-sm text-gray-600">24h High</p>
+                    <p class="text-lg font-bold text-blue-600" id="high24h">$0.1200</p>
+                </div>
+                <div class="bg-orange-50 rounded-lg p-4 text-center">
+                    <p class="text-sm text-gray-600">24h Low</p>
+                    <p class="text-lg font-bold text-orange-600" id="low24h">$0.0950</p>
+                </div>
+                <div class="bg-purple-50 rounded-lg p-4 text-center">
+                    <p class="text-sm text-gray-600">Volume</p>
+                    <p class="text-lg font-bold text-purple-600" id="volume24h">1,250 HRSD</p>
+                </div>
+            </div>
+            
+            <!-- Live Trading Activity -->
+            <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                    📊 Live Trading Activity
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Recent Buyers -->
+                    <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+                        <h4 class="font-semibold text-green-700 mb-3 flex items-center">
+                            🟢 Dadka Iibsanaya (Buyers)
+                        </h4>
+                        <div id="recentBuyers" class="space-y-2 text-sm">
+                            <!-- Buyers will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Sellers -->
+                    <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-500">
+                        <h4 class="font-semibold text-red-700 mb-3 flex items-center">
+                            🔴 Dadka Iibinaya (Sellers)
+                        </h4>
+                        <div id="recentSellers" class="space-y-2 text-sm">
+                            <!-- Sellers will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex gap-4">
+                <button type="button" onclick="closeModal('tradeModal')" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- USSD Modal -->
+    <div id="ussdModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold mb-6 text-center">📱 USSD Service</h2>
+            
+            <!-- Step 1: Amount Input -->
+            <div id="ussdStep1">
+                <form id="ussdForm">
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Enter Amount</label>
+                        <input type="number" id="ussdAmount" step="0.01" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Lacagta gali">
+                        <p class="text-sm text-gray-500 mt-1">Balance-kaaga hadda: <span id="currentHrsdBalance" class="font-semibold">0.00 HRSD</span></p>
+                    </div>
+                    <div class="flex gap-4">
+                        <button type="submit" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold">Send</button>
+                        <button type="button" onclick="closeModal('ussdModal')" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Step 2: Loading and Timer -->
+            <div id="ussdStep2" class="hidden text-center">
+                <div class="mb-6">
+                    <div id="loadingSpinner" class="inline-block w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <p class="text-lg font-semibold text-gray-800 mb-2">Ku dir lacagta lambarka ku muuqda</p>
+                    <p class="text-xl font-bold text-blue-600 mb-4" id="ussdCode">*712*618877686*1#</p>
+                    <p class="text-sm text-gray-600 mb-4">Sug ilaa 30 sikin si loo xaqiijiyo lacagtaada</p>
+                    <div class="bg-gray-200 rounded-full h-3 mb-2">
+                        <div id="progressBar" class="bg-red-500 h-3 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                    <p class="text-sm text-gray-600">Waqti haray: <span id="timeRemaining" class="font-bold text-red-600">00:30</span></p>
+                </div>
+            </div>
+            
+            <!-- Step 3: Success -->
+            <div id="ussdStep3" class="hidden text-center">
+                <div class="mb-6">
+                    <div class="inline-block w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <p class="text-xl font-bold text-green-600 mb-4">Waa la ansixiyey!</p>
+                    <p class="text-gray-600 mb-6">Fadlan deposit tak oo soo xaqiiji marka deposit la sameeyo oo kaliya balance ayaa loo beddeli doonaa</p>
+                    <button onclick="closeModal('ussdModal')" class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-lg font-semibold">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        // Local Storage for user data (supports up to 8 million users)
+        let users = JSON.parse(localStorage.getItem('hrsdUsers') || '{}');
+        let currentUser = localStorage.getItem('currentUser');
+        let userBalances = JSON.parse(localStorage.getItem('userBalances') || '{}');
+
+        // Initialize user balance if not exists
+        function initUserBalance(email) {
+            if (!userBalances[email]) {
+                userBalances[email] = { usd: 0, hrsd: 0, bitcoin: 0 };
+                localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            }
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            document.getElementById('successText').textContent = message;
+            document.getElementById('successMessage').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('successMessage').classList.add('hidden');
+            }, 3000);
+        }
+
+        // Registration
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Password-yadu ma isku mid aha!');
+                return;
+            }
+            
+            if (users[email]) {
+                alert('Gmail-kan horay ayaa loo isticmaalay!');
+                return;
+            }
+            
+            users[email] = { password: password };
+            localStorage.setItem('hrsdUsers', JSON.stringify(users));
+            initUserBalance(email);
+            
+            showSuccess('✅ Waad is diiwaan galisay!');
+            
+            setTimeout(() => {
+                showLogin();
+            }, 1500);
+        });
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!users[email] || users[email].password !== password) {
+                alert('Gmail ama password qalad ah!');
+                return;
+            }
+            
+            currentUser = email;
+            localStorage.setItem('currentUser', currentUser);
+            initUserBalance(email);
+            
+            showSuccess('✅ Waxaad soo gashay akoonkaaga!');
+            
+            setTimeout(() => {
+                showDashboard();
+            }, 1500);
+        });
+
+        // Show different pages
+        function showRegister() {
+            document.getElementById('registerPage').classList.remove('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            
+            document.getElementById('userEmail').textContent = currentUser;
+            updateBalanceDisplay();
+        }
+
+        // Update balance display
+        function updateBalanceDisplay() {
+            if (currentUser && userBalances[currentUser]) {
+                document.getElementById('usdBalance').textContent = `$${userBalances[currentUser].usd.toFixed(2)}`;
+                document.getElementById('hrsdBalance').textContent = `${userBalances[currentUser].hrsd.toFixed(2)} HRSD`;
+                document.getElementById('bitcoinBalance').textContent = `${userBalances[currentUser].bitcoin.toFixed(5)} BTC`;
+            }
+        }
+
+        // Modal functions
+        function showDeposit() {
+            document.getElementById('depositModal').classList.remove('hidden');
+        }
+
+        function showWithdraw() {
+            document.getElementById('withdrawModal').classList.remove('hidden');
+        }
+
+        function showUSSD() {
+            document.getElementById('ussdModal').classList.remove('hidden');
+            // Update current balance display
+            if (currentUser && userBalances[currentUser]) {
+                document.getElementById('currentHrsdBalance').textContent = `${userBalances[currentUser].hrsd.toFixed(2)} HRSD`;
+            }
+        }
+
+        function showTrade() {
+            document.getElementById('tradeModal').classList.remove('hidden');
+            startLiveTrading();
+        }
+
+        function showSwap() {
+            document.getElementById('swapModal').classList.remove('hidden');
+            updateSwapDisplay();
+        }
+
+
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Update withdraw fields based on type
+        function updateWithdrawFields() {
+            const type = document.getElementById('withdrawType').value;
+            
+            document.getElementById('evcplusFields').classList.add('hidden');
+            document.getElementById('bitcoinFields').classList.add('hidden');
+            
+            if (type === 'evcplus') {
+                document.getElementById('evcplusFields').classList.remove('hidden');
+            } else if (type === 'bitcoin') {
+                document.getElementById('bitcoinFields').classList.remove('hidden');
+            }
+        }
+
+        // Update deposit fields based on type
+        function updateDepositFields() {
+            // EVCPlus is the only option, so always show it
+            document.getElementById('evcplusDepositFields').classList.remove('hidden');
+        }
+
+
+
+        // Deposit functionality
+        document.getElementById('depositForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('depositEvcAmount').value);
+            const number = document.getElementById('depositNumber').value;
+            
+            userBalances[currentUser].hrsd += amount;
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            closeModal('depositModal');
+            updateBalanceDisplay();
+            
+            // Open WhatsApp with confirmation
+            const message = `Waxaan kushubtay ${amount} HRSD EVCPlus-ka waxaana lacahta kasoo diray tusaale lanbarkan ${number}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+            
+            showSuccess(`✅ ${amount} HRSD ayaa lagu daray balance-kaaga!`);
+        });
+
+        // Withdraw functionality
+        document.getElementById('withdrawForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const type = document.getElementById('withdrawType').value;
+            let amount, message;
+            
+            if (type === 'evcplus') {
+                amount = parseFloat(document.getElementById('withdrawHrsdAmount').value);
+                const number = document.getElementById('evcplusNumber').value;
+                
+                if (userBalances[currentUser].hrsd < amount) {
+                    alert('HRSD balance ma ku filna!');
+                    return;
+                }
+                userBalances[currentUser].hrsd -= amount;
+                message = `Waxaan labaxay ${amount} HRSD EVCPlus-ka iigu soo dir lambarka: ${number}`;
+            } else if (type === 'bitcoin') {
+                amount = parseFloat(document.getElementById('withdrawBitcoinAmount').value);
+                const address = document.getElementById('withdrawBitcoinAddress').value;
+                
+                if (userBalances[currentUser].bitcoin < amount) {
+                    alert('Bitcoin balance ma ku filna!');
+                    return;
+                }
+                userBalances[currentUser].bitcoin -= amount;
+                message = `Waxaan labaxay ${amount} Bitcoin iigu soo dir address: ${address}`;
+            }
+            
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            closeModal('withdrawModal');
+            updateBalanceDisplay();
+            
+            // Open WhatsApp with confirmation
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+            
+            showSuccess(`✅ ${amount} ${type.toUpperCase()} ayaa laga jaray balance-kaaga!`);
+        });
+
+        // USSD functionality
+        let ussdTimer;
+        let ussdTimeLeft = 30; // 30 seconds
+        
+        document.getElementById('ussdForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('ussdAmount').value);
+            
+            // Allow any amount to be entered without balance check
+            
+            // Hide step 1, show step 2
+            document.getElementById('ussdStep1').classList.add('hidden');
+            document.getElementById('ussdStep2').classList.remove('hidden');
+            
+            // Start the 30-second timer
+            startUSSDTimer(amount);
+        });
+        
+        function startUSSDTimer(amount) {
+            ussdTimeLeft = 30; // Reset to 30 seconds
+            
+            ussdTimer = setInterval(() => {
+                ussdTimeLeft--;
+                
+                // Update progress bar
+                const progress = ((30 - ussdTimeLeft) / 30) * 100;
+                document.getElementById('progressBar').style.width = progress + '%';
+                
+                // Update time display
+                document.getElementById('timeRemaining').textContent = 
+                    `00:${ussdTimeLeft.toString().padStart(2, '0')}`;
+                
+                // When timer reaches 0
+                if (ussdTimeLeft <= 0) {
+                    clearInterval(ussdTimer);
+                    completeUSSDTransaction(amount);
+                }
+            }, 1000);
+        }
+        
+        function completeUSSDTransaction(amount) {
+            // Hide step 2, show step 3
+            document.getElementById('ussdStep2').classList.add('hidden');
+            document.getElementById('ussdStep3').classList.remove('hidden');
+            
+            // No balance changes - just show success message
+            // Balance remains 0 as requested
+        }
+        
+        // Swap functionality
+        const exchangeRates = {
+            'usd-hrsd': 10,      // $1 = 10 HRSD (since 1 HRSD = $0.1)
+            'hrsd-usd': 0.1,     // 1 HRSD = $0.1
+            'usd-bitcoin': 0.000025,
+            'bitcoin-usd': 40000,
+            'hrsd-bitcoin': 0.0000025,  // 1 HRSD = 0.0000025 BTC (since 1 HRSD = $0.1)
+            'bitcoin-hrsd': 400000      // 1 BTC = 400,000 HRSD
+        };
+
+        function updateSwapDisplay() {
+            const fromCurrency = document.getElementById('swapFrom').value;
+            const toCurrency = document.getElementById('swapTo').value;
+            
+            // Update currency images
+            const currencyImages = {
+                'usd': 'https://i.postimg.cc/zVM6Xx88/usd.png',
+                'bitcoin': 'https://i.postimg.cc/N95RMkgv/bitcoin.png',
+                'hrsd': 'https://i.postimg.cc/ppY5P6DM/hrsd.png'
+            };
+            
+            document.getElementById('fromCurrencyImage').src = currencyImages[fromCurrency];
+            document.getElementById('fromCurrencyImage').alt = fromCurrency.toUpperCase();
+            
+            document.getElementById('toCurrencyImage').src = currencyImages[toCurrency];
+            document.getElementById('toCurrencyImage').alt = toCurrency.toUpperCase();
+            
+            if (currentUser && userBalances[currentUser]) {
+                const balances = userBalances[currentUser];
+                
+                // Update from balance
+                let fromBalanceText = '';
+                if (fromCurrency === 'usd') fromBalanceText = `$${balances.usd.toFixed(2)}`;
+                else if (fromCurrency === 'hrsd') fromBalanceText = `${balances.hrsd.toFixed(2)} HRSD`;
+                else if (fromCurrency === 'bitcoin') fromBalanceText = `${balances.bitcoin.toFixed(5)} BTC`;
+                
+                // Update to balance
+                let toBalanceText = '';
+                if (toCurrency === 'usd') toBalanceText = `$${balances.usd.toFixed(2)}`;
+                else if (toCurrency === 'hrsd') toBalanceText = `${balances.hrsd.toFixed(2)} HRSD`;
+                else if (toCurrency === 'bitcoin') toBalanceText = `${balances.bitcoin.toFixed(5)} BTC`;
+                
+                document.getElementById('fromBalance').textContent = fromBalanceText;
+                document.getElementById('toBalance').textContent = toBalanceText;
+            }
+            
+            // Update exchange rate display
+            const rateKey = `${fromCurrency}-${toCurrency}`;
+            const rate = exchangeRates[rateKey] || 1;
+            document.getElementById('exchangeRate').textContent = `1 ${fromCurrency.toUpperCase()} = ${rate} ${toCurrency.toUpperCase()}`;
+            
+            // Recalculate if amount is entered
+            calculateSwap();
+        }
+
+        function calculateSwap() {
+            const fromCurrency = document.getElementById('swapFrom').value;
+            const toCurrency = document.getElementById('swapTo').value;
+            const amount = parseFloat(document.getElementById('swapAmount').value) || 0;
+            
+            const rateKey = `${fromCurrency}-${toCurrency}`;
+            const rate = exchangeRates[rateKey] || 1;
+            const result = amount * rate;
+            
+            let resultText = '';
+            if (toCurrency === 'usd') resultText = `$${result.toFixed(2)}`;
+            else if (toCurrency === 'hrsd') resultText = `${result.toFixed(2)} HRSD`;
+            else if (toCurrency === 'bitcoin') resultText = `${result.toFixed(8)} BTC`;
+            
+            document.getElementById('swapResult').textContent = resultText;
+        }
+
+        // Swap form submission
+        document.getElementById('swapForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fromCurrency = document.getElementById('swapFrom').value;
+            const toCurrency = document.getElementById('swapTo').value;
+            const amount = parseFloat(document.getElementById('swapAmount').value);
+            
+            if (fromCurrency === toCurrency) {
+                alert('Ma karo inaad isku mid u beddesho!');
+                return;
+            }
+            
+            // Check if user has enough balance
+            const balances = userBalances[currentUser];
+            let hasEnoughBalance = false;
+            
+            if (fromCurrency === 'usd' && balances.usd >= amount) hasEnoughBalance = true;
+            else if (fromCurrency === 'hrsd' && balances.hrsd >= amount) hasEnoughBalance = true;
+            else if (fromCurrency === 'bitcoin' && balances.bitcoin >= amount) hasEnoughBalance = true;
+            
+            if (!hasEnoughBalance) {
+                alert(`${fromCurrency.toUpperCase()} balance ma ku filna!`);
+                return;
+            }
+            
+            // Calculate conversion
+            const rateKey = `${fromCurrency}-${toCurrency}`;
+            const rate = exchangeRates[rateKey] || 1;
+            const convertedAmount = amount * rate;
+            
+            // Update balances
+            if (fromCurrency === 'usd') balances.usd -= amount;
+            else if (fromCurrency === 'hrsd') balances.hrsd -= amount;
+            else if (fromCurrency === 'bitcoin') balances.bitcoin -= amount;
+            
+            if (toCurrency === 'usd') balances.usd += convertedAmount;
+            else if (toCurrency === 'hrsd') balances.hrsd += convertedAmount;
+            else if (toCurrency === 'bitcoin') balances.bitcoin += convertedAmount;
+            
+            // Save to localStorage
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            closeModal('swapModal');
+            updateBalanceDisplay();
+            
+            showSuccess(`✅ ${amount} ${fromCurrency.toUpperCase()} ayaa loo beddelay ${convertedAmount.toFixed(8)} ${toCurrency.toUpperCase()}!`);
+        });
+
+        // Reset modals when closed
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            
+            if (modalId === 'ussdModal') {
+                // Reset USSD modal to step 1
+                document.getElementById('ussdStep1').classList.remove('hidden');
+                document.getElementById('ussdStep2').classList.add('hidden');
+                document.getElementById('ussdStep3').classList.add('hidden');
+                
+                // Clear timer if running
+                if (ussdTimer) {
+                    clearInterval(ussdTimer);
+                }
+                
+                // Reset form
+                document.getElementById('ussdForm').reset();
+            } else if (modalId === 'swapModal') {
+                // Reset swap form
+                document.getElementById('swapForm').reset();
+                document.getElementById('swapResult').textContent = '0.00';
+            } else if (modalId === 'tradeModal') {
+                // Stop trading timer
+                if (tradingTimer) {
+                    clearInterval(tradingTimer);
+                    tradingTimer = null;
+                }
+                
+                // Reset forms
+                document.getElementById('buyForm').reset();
+                document.getElementById('sellForm').reset();
+                document.getElementById('buyResult').textContent = '0.00 HRSD';
+                document.getElementById('sellResult').textContent = '$0.00';
+            }
+        }
+
+        // WhatsApp function
+        function openWhatsApp() {
+            const message = "Mudane waan kusalaamay";
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            showLogin();
+            showSuccess('✅ Waad ka baxday akoonkaaga!');
+        }
+
+
+
+        // Trading System Variables
+        let currentHrsdPrice = 0.1000; // Starting price $0.10
+        let priceHistory = [];
+        let tradingTimer;
+        let chartBars = [];
+        let high24h = 0.1200;
+        let low24h = 0.0950;
+        let volume24h = 1250;
+        let recentBuyers = [];
+        let recentSellers = [];
+        
+        // Sample trader names
+        const traderNames = [
+            'Ahmed M.', 'Fatima A.', 'Mohamed H.', 'Khadija S.', 'Omar K.',
+            'Amina D.', 'Hassan Y.', 'Sahra M.', 'Abdi R.', 'Hodan A.',
+            'Yusuf I.', 'Maryan O.', 'Ali J.', 'Fadumo H.', 'Ibrahim L.'
+        ];
+
+        // Start Live Trading System
+        function startLiveTrading() {
+            // Initialize price history if empty
+            if (priceHistory.length === 0) {
+                for (let i = 0; i < 20; i++) {
+                    priceHistory.push(currentHrsdPrice + (Math.random() - 0.5) * 0.01);
+                }
+            }
+            
+            updateTradingDisplay();
+            
+            // Start price updates every 2 seconds
+            tradingTimer = setInterval(() => {
+                updatePrice();
+                updateChart();
+                updateTradingDisplay();
+                generateTradingActivity();
+            }, 2000);
+        }
+
+        // Update HRSD price with realistic fluctuations
+        function updatePrice() {
+            // Generate realistic price movement (-3% to +3%)
+            const change = (Math.random() - 0.5) * 0.006; // 0.6% max change per update
+            const newPrice = currentHrsdPrice * (1 + change);
+            
+            // Keep price within bounds ($0.09 to $0.15)
+            currentHrsdPrice = Math.max(0.09, Math.min(0.15, newPrice));
+            
+            // Update 24h high/low
+            if (currentHrsdPrice > high24h) high24h = currentHrsdPrice;
+            if (currentHrsdPrice < low24h) low24h = currentHrsdPrice;
+            
+            // Add to price history
+            priceHistory.push(currentHrsdPrice);
+            if (priceHistory.length > 20) {
+                priceHistory.shift(); // Keep only last 20 prices
+            }
+            
+            // Update volume
+            volume24h += Math.floor(Math.random() * 50) + 10;
+        }
+
+        // Update live chart
+        function updateChart() {
+            const chartContainer = document.getElementById('liveChart');
+            if (!chartContainer) return;
+            
+            chartContainer.innerHTML = '';
+            
+            const maxPrice = Math.max(...priceHistory);
+            const minPrice = Math.min(...priceHistory);
+            const priceRange = maxPrice - minPrice || 0.001;
+            
+            priceHistory.forEach((price, index) => {
+                const height = ((price - minPrice) / priceRange) * 100 + 10; // 10-110px height
+                const isUp = index > 0 && price > priceHistory[index - 1];
+                const isDown = index > 0 && price < priceHistory[index - 1];
+                
+                const bar = document.createElement('div');
+                bar.className = `w-3 rounded-t transition-all duration-500 ${
+                    isUp ? 'bg-green-400' : isDown ? 'bg-red-400' : 'bg-gray-400'
+                }`;
+                bar.style.height = height + 'px';
+                
+                chartContainer.appendChild(bar);
+            });
+        }
+
+        // Update trading display
+        function updateTradingDisplay() {
+            if (!document.getElementById('currentPrice')) return;
+            
+            const previousPrice = priceHistory.length > 1 ? priceHistory[priceHistory.length - 2] : currentHrsdPrice;
+            const priceChangePercent = ((currentHrsdPrice - previousPrice) / previousPrice * 100);
+            const isUp = currentHrsdPrice > previousPrice;
+            const isDown = currentHrsdPrice < previousPrice;
+            
+            // Update current price
+            document.getElementById('currentPrice').textContent = `$${currentHrsdPrice.toFixed(4)}`;
+            
+            // Update trend arrow
+            const trendArrow = document.getElementById('trendArrow');
+            if (isUp) {
+                trendArrow.textContent = '📈';
+                trendArrow.className = 'text-2xl text-green-500';
+            } else if (isDown) {
+                trendArrow.textContent = '📉';
+                trendArrow.className = 'text-2xl text-red-500';
+            } else {
+                trendArrow.textContent = '➡️';
+                trendArrow.className = 'text-2xl text-gray-500';
+            }
+            
+            // Update price change with color
+            const priceChangeElement = document.getElementById('priceChange');
+            priceChangeElement.textContent = `${priceChangePercent >= 0 ? '+' : ''}${priceChangePercent.toFixed(2)}%`;
+            priceChangeElement.className = `text-sm ${isUp ? 'text-green-400' : isDown ? 'text-red-400' : 'text-gray-400'}`;
+            
+            // Update 24h stats
+            document.getElementById('high24h').textContent = `$${high24h.toFixed(4)}`;
+            document.getElementById('low24h').textContent = `$${low24h.toFixed(4)}`;
+            document.getElementById('volume24h').textContent = `${volume24h.toLocaleString()} HRSD`;
+            
+            // Update balance displays
+            if (currentUser && userBalances[currentUser]) {
+                document.getElementById('buyUsdBalance').textContent = `$${userBalances[currentUser].usd.toFixed(2)}`;
+                document.getElementById('sellHrsdBalance').textContent = `${userBalances[currentUser].hrsd.toFixed(2)} HRSD`;
+            }
+        }
+
+        // Generate fake trading activity
+        function generateTradingActivity() {
+            // Randomly generate buy/sell activity
+            if (Math.random() < 0.7) { // 70% chance of activity
+                const isBuy = Math.random() < 0.5;
+                const traderName = traderNames[Math.floor(Math.random() * traderNames.length)];
+                const amount = (Math.random() * 50 + 5).toFixed(2); // 5-55 HRSD
+                const price = currentHrsdPrice.toFixed(4);
+                const time = new Date().toLocaleTimeString('en-US', { 
+                    hour12: false, 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit' 
+                });
+                
+                const activity = {
+                    name: traderName,
+                    amount: amount,
+                    price: price,
+                    time: time
+                };
+                
+                if (isBuy) {
+                    recentBuyers.unshift(activity);
+                    if (recentBuyers.length > 5) recentBuyers.pop();
+                } else {
+                    recentSellers.unshift(activity);
+                    if (recentSellers.length > 5) recentSellers.pop();
+                }
+                
+                updateTradingActivityDisplay();
+            }
+        }
+
+        // Update trading activity display
+        function updateTradingActivityDisplay() {
+            const buyersContainer = document.getElementById('recentBuyers');
+            const sellersContainer = document.getElementById('recentSellers');
+            
+            if (buyersContainer) {
+                buyersContainer.innerHTML = recentBuyers.map(buyer => `
+                    <div class="flex justify-between items-center bg-white rounded p-2 shadow-sm">
+                        <div>
+                            <span class="font-semibold text-green-700">${buyer.name}</span>
+                            <span class="text-gray-600 ml-2">${buyer.amount} HRSD</span>
+                        </div>
+                        <div class="text-right text-xs text-gray-500">
+                            <div>$${buyer.price}</div>
+                            <div>${buyer.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                if (recentBuyers.length === 0) {
+                    buyersContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Wali cid ma iibsan...</p>';
+                }
+            }
+            
+            if (sellersContainer) {
+                sellersContainer.innerHTML = recentSellers.map(seller => `
+                    <div class="flex justify-between items-center bg-white rounded p-2 shadow-sm">
+                        <div>
+                            <span class="font-semibold text-red-700">${seller.name}</span>
+                            <span class="text-gray-600 ml-2">${seller.amount} HRSD</span>
+                        </div>
+                        <div class="text-right text-xs text-gray-500">
+                            <div>$${seller.price}</div>
+                            <div>${seller.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                if (recentSellers.length === 0) {
+                    sellersContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Wali cid ma iibin...</p>';
+                }
+            }
+        }
+
+        // Calculate buy amount
+        function calculateBuy() {
+            const usdAmount = parseFloat(document.getElementById('buyAmount').value) || 0;
+            const hrsdAmount = usdAmount / currentHrsdPrice;
+            document.getElementById('buyResult').textContent = `${hrsdAmount.toFixed(4)} HRSD`;
+        }
+
+        // Calculate sell amount
+        function calculateSell() {
+            const hrsdAmount = parseFloat(document.getElementById('sellAmount').value) || 0;
+            const usdAmount = hrsdAmount * currentHrsdPrice;
+            document.getElementById('sellResult').textContent = `$${usdAmount.toFixed(4)}`;
+        }
+
+        // Buy HRSD functionality
+        document.getElementById('buyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const usdAmount = parseFloat(document.getElementById('buyAmount').value);
+            
+            if (userBalances[currentUser].usd < usdAmount) {
+                alert('USD balance ma ku filna!');
+                return;
+            }
+            
+            const hrsdAmount = usdAmount / currentHrsdPrice;
+            
+            // Update balances
+            userBalances[currentUser].usd -= usdAmount;
+            userBalances[currentUser].hrsd += hrsdAmount;
+            
+            // Save to localStorage
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            // Update displays
+            updateBalanceDisplay();
+            updateTradingDisplay();
+            
+            // Reset form
+            document.getElementById('buyForm').reset();
+            document.getElementById('buyResult').textContent = '0.00 HRSD';
+            
+            showSuccess(`✅ Waxaad iibsatay ${hrsdAmount.toFixed(4)} HRSD!`);
+        });
+
+        // Sell HRSD functionality
+        document.getElementById('sellForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const hrsdAmount = parseFloat(document.getElementById('sellAmount').value);
+            
+            if (userBalances[currentUser].hrsd < hrsdAmount) {
+                alert('HRSD balance ma ku filna!');
+                return;
+            }
+            
+            const usdAmount = hrsdAmount * currentHrsdPrice;
+            
+            // Update balances
+            userBalances[currentUser].hrsd -= hrsdAmount;
+            userBalances[currentUser].usd += usdAmount;
+            
+            // Save to localStorage
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            // Update displays
+            updateBalanceDisplay();
+            updateTradingDisplay();
+            
+            // Reset form
+            document.getElementById('sellForm').reset();
+            document.getElementById('sellResult').textContent = '$0.00';
+            
+            showSuccess(`✅ Waxaad iibisay ${hrsdAmount.toFixed(4)} HRSD!`);
+        });
+
+        // Initialize app
+        if (currentUser && users[currentUser]) {
+            showDashboard();
+        } else {
+            showRegister();
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98694ea1a31e8c8b',t:'MTc1OTEyNjExOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
