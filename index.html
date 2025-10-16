@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nidaamka Diiwaangelinta - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .success-animation {
+            animation: successPulse 0.6s ease-in-out;
+        }
+        @keyframes successPulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .btn-click {
+            transition: all 0.2s ease;
+        }
+        .btn-click:active {
+            transform: scale(0.95);
+        }
+        .floating-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Responsive Design for All Devices */
+        
+        /* Mobile First - Small phones (320px and up) */
+        @media (max-width: 480px) {
+            .floating-animation {
+                font-size: 3rem;
+            }
+            .card-hover {
+                padding: 1rem;
+            }
+            .card-hover .text-6xl {
+                font-size: 2.5rem;
+            }
+            .card-hover h3 {
+                font-size: 1.25rem;
+            }
+            .card-hover p {
+                font-size: 0.875rem;
+            }
+            #gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            .success-animation {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            .gradient-bg h1 {
+                font-size: 1.25rem;
+            }
+            .btn-click {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+        
+        /* Large phones (481px to 767px) */
+        @media (min-width: 481px) and (max-width: 767px) {
+            .floating-animation {
+                font-size: 4rem;
+            }
+            .card-hover {
+                padding: 1.5rem;
+            }
+            .card-hover .text-6xl {
+                font-size: 3rem;
+            }
+            .card-hover h3 {
+                font-size: 1.5rem;
+            }
+            #gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .gradient-bg h1 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Tablets (768px to 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .floating-animation {
+                font-size: 4.5rem;
+            }
+            .card-hover {
+                padding: 2rem;
+            }
+            .card-hover .text-6xl {
+                font-size: 3.5rem;
+            }
+            .card-hover h3 {
+                font-size: 1.75rem;
+            }
+            #gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.25rem;
+            }
+            .gradient-bg h1 {
+                font-size: 1.75rem;
+            }
+        }
+        
+        /* Small laptops (1024px to 1279px) */
+        @media (min-width: 1024px) and (max-width: 1279px) {
+            .floating-animation {
+                font-size: 5rem;
+            }
+            .card-hover {
+                padding: 2rem;
+            }
+            .card-hover .text-6xl {
+                font-size: 4rem;
+            }
+            .card-hover h3 {
+                font-size: 2rem;
+            }
+            #gallery-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+            }
+        }
+        
+        /* Large laptops and desktops (1280px and up) */
+        @media (min-width: 1280px) {
+            .floating-animation {
+                font-size: 6rem;
+            }
+            .card-hover {
+                padding: 2rem;
+            }
+            .card-hover .text-6xl {
+                font-size: 4rem;
+            }
+            .card-hover h3 {
+                font-size: 2rem;
+            }
+            #gallery-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 1.5rem;
+            }
+        }
+        
+        /* Ultra-wide screens (1920px and up) */
+        @media (min-width: 1920px) {
+            #gallery-grid {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 2rem;
+            }
+            .max-w-7xl {
+                max-width: 90rem;
+            }
+        }
+        
+        /* Landscape orientation adjustments */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .floating-animation {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+            .card-hover {
+                padding: 1rem;
+            }
+            .card-hover .text-6xl {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+            .card-hover h3 {
+                font-size: 1rem;
+                margin-bottom: 0.25rem;
+            }
+            .card-hover p {
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .card-hover:hover {
+                transform: none;
+            }
+            .card-hover:active {
+                transform: scale(0.98);
+                transition: transform 0.1s;
+            }
+            .btn-click {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+        
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .card-hover {
+                box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+            }
+            .card-hover:hover {
+                box-shadow: 0 8px 16px rgba(0,0,0,0.16);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen">
+
+    <!-- Registration Page -->
+    <div id="register-page" class="page min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <div class="floating-animation text-6xl mb-4">👤</div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Isdiiwaangeli</h2>
+                <p class="text-gray-600">Samee akoon cusub si aad u bilowdo</p>
+            </div>
+            
+            <form onsubmit="handleRegister(event)" class="space-y-6">
+                <div>
+                    <label for="reg-email" class="block text-sm font-medium text-gray-700 mb-2">Gmail</label>
+                    <input type="email" id="reg-email" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                           placeholder="example@gmail.com">
+                </div>
+                
+                <div>
+                    <label for="reg-password" class="block text-sm font-medium text-gray-700 mb-2">Erayga Sirta ah</label>
+                    <input type="password" id="reg-password" required minlength="6"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                           placeholder="Ugu yaraan 6 xaraf">
+                </div>
+                
+                <div>
+                    <label for="reg-confirm-password" class="block text-sm font-medium text-gray-700 mb-2">Xaqiiji Erayga Sirta ah</label>
+                    <input type="password" id="reg-confirm-password" required minlength="6"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                           placeholder="Dib u gali erayga sirta ah">
+                </div>
+                
+                <button type="submit" class="btn-click w-full gradient-bg text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-all">
+                    Isdiiwaangeli 🎉
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">
+                    Miyaad haysaa akoon? 
+                    <button onclick="showPage('login')" class="text-purple-600 hover:text-purple-500 font-medium">Halkan ka gal</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page hidden min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <div class="floating-animation text-6xl mb-4">🔐</div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Ku soo gal</h2>
+                <p class="text-gray-600">Gal akoonkaaga si aad u sii waddo</p>
+            </div>
+            
+            <form onsubmit="handleLogin(event)" class="space-y-6">
+                <div>
+                    <label for="login-email" class="block text-sm font-medium text-gray-700 mb-2">Gmail</label>
+                    <input type="email" id="login-email" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                           placeholder="example@gmail.com">
+                </div>
+                
+                <div>
+                    <label for="login-password" class="block text-sm font-medium text-gray-700 mb-2">Erayga Sirta ah</label>
+                    <input type="password" id="login-password" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                           placeholder="Gali erayga sirta ah">
+                </div>
+                
+                <button type="submit" class="btn-click w-full gradient-bg text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-all">
+                    Gal 🚀
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">
+                    Miyaanad haysanin akoon? 
+                    <button onclick="showPage('register')" class="text-purple-600 hover:text-purple-500 font-medium">Halkan ka samee</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="page hidden min-h-screen">
+        <!-- Header -->
+        <header class="gradient-bg text-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+                <div class="flex justify-between items-center h-14 sm:h-16">
+                    <div class="flex items-center">
+                        <h1 class="text-lg sm:text-xl lg:text-2xl font-bold">🏠 Dashboard</h1>
+                    </div>
+                    <div class="flex items-center space-x-2 sm:space-x-4">
+                        <span id="user-email" class="text-xs sm:text-sm truncate max-w-32 sm:max-w-none"></span>
+                        <button onclick="logout()" class="bg-white bg-opacity-20 px-2 py-1 sm:px-4 sm:py-2 rounded-lg hover:bg-opacity-30 transition-all text-xs sm:text-sm">
+                            Ka bax 👋
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Content -->
+        <main class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8 lg:py-12">
+            <div class="slide-in mb-4 sm:mb-6 lg:mb-8 text-center sm:text-left">
+                <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">Ku soo dhawoow Dashboard-kaaga!</h2>
+                <p class="text-sm sm:text-base text-gray-600">Dooro mid ka mid ah adeegyada hoose</p>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 xl:gap-8">
+                <!-- Project Button -->
+                <div class="card-hover bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 text-center cursor-pointer text-white min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]" onclick="playSound(); showProjectGallery()">
+                    <div class="text-3xl sm:text-4xl lg:text-6xl mb-2 sm:mb-3 lg:mb-4">🎨</div>
+                    <h3 class="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2 lg:mb-3">Mashruuca</h3>
+                    <p class="text-xs sm:text-sm lg:text-base text-purple-100">Sawirrada qurux badan</p>
+                </div>
+
+                <!-- USSD Button -->
+                <div class="card-hover bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 text-center cursor-pointer text-white min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]" onclick="playSound(); showUSSDForm()">
+                    <div class="text-3xl sm:text-4xl lg:text-6xl mb-2 sm:mb-3 lg:mb-4">📱</div>
+                    <h3 class="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2 lg:mb-3">USSD</h3>
+                    <p class="text-xs sm:text-sm lg:text-base text-blue-100">Lacagta dir</p>
+                </div>
+
+                <!-- WhatsApp Button -->
+                <div class="card-hover bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 text-center cursor-pointer text-white min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]" onclick="playSound(); showNotification('WhatsApp', '💬')">
+                    <div class="text-3xl sm:text-4xl lg:text-6xl mb-2 sm:mb-3 lg:mb-4">💬</div>
+                    <h3 class="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2 lg:mb-3">WhatsApp</h3>
+                    <p class="text-xs sm:text-sm lg:text-base text-green-100">Xiriirka WhatsApp</p>
+                </div>
+
+                <!-- Settings Button -->
+                <div class="card-hover bg-gradient-to-br from-gray-600 to-gray-800 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 text-center cursor-pointer text-white min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]" onclick="playSound(); showNotification('Dejinta', '⚙️')">
+                    <div class="text-3xl sm:text-4xl lg:text-6xl mb-2 sm:mb-3 lg:mb-4">⚙️</div>
+                    <h3 class="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2 lg:mb-3">Dejinta</h3>
+                    <p class="text-xs sm:text-sm lg:text-base text-gray-200">Dejinta nidaamka</p>
+                </div>
+
+                <!-- Notifications Button -->
+                <div class="card-hover bg-gradient-to-br from-orange-500 to-red-600 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 text-center cursor-pointer text-white min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]" onclick="playSound(); showNotification('Calaamadaynta', '🔔')">
+                    <div class="text-3xl sm:text-4xl lg:text-6xl mb-2 sm:mb-3 lg:mb-4">🔔</div>
+                    <h3 class="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2 lg:mb-3">Calaamadaynta</h3>
+                    <p class="text-xs sm:text-sm lg:text-base text-orange-100">Calaamadaha cusub</p>
+                </div>
+
+                <!-- Analytics Button -->
+                <div class="card-hover bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 text-center cursor-pointer text-white min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]" onclick="playSound(); showNotification('Xisaabinta', '📊')">
+                    <div class="text-3xl sm:text-4xl lg:text-6xl mb-2 sm:mb-3 lg:mb-4">📊</div>
+                    <h3 class="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2 lg:mb-3">Xisaabinta</h3>
+                    <p class="text-xs sm:text-sm lg:text-base text-indigo-100">Tijaabinta natiijooyinka</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success Message Modal -->
+    <div id="success-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="success-animation bg-white rounded-2xl p-8 max-w-md mx-4 text-center">
+            <div class="text-6xl mb-4">✅</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Guul!</h3>
+            <p id="success-text" class="text-gray-600 mb-6"></p>
+            <button onclick="closeSuccessModal()" class="gradient-bg text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-all">
+                Hagaag
+            </button>
+        </div>
+    </div>
+
+    <!-- Project Gallery Modal -->
+    <div id="project-gallery" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+        <div class="bg-white rounded-lg sm:rounded-2xl max-w-7xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center p-3 sm:p-4 lg:p-6 border-b">
+                <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">🎨 Sawirrada Qurux badan</h2>
+                <button onclick="closeProjectGallery()" class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl p-1">✕</button>
+            </div>
+            <div class="p-3 sm:p-4 lg:p-6 overflow-y-auto max-h-[80vh] sm:max-h-[75vh] lg:max-h-[70vh]">
+                <div id="gallery-grid" class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 sm:gap-3 lg:gap-4">
+                    <!-- Gallery items will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- USSD Form Modal -->
+    <div id="ussd-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+        <div class="bg-white rounded-lg sm:rounded-2xl max-w-md w-full p-4 sm:p-6 lg:p-8 mx-2 sm:mx-4">
+            <div class="text-center mb-4 sm:mb-6">
+                <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-2">📱 USSD Lacag Dir</h2>
+                <p class="text-sm sm:text-base text-gray-600">Gali macluumaadka lacagta</p>
+            </div>
+            <form onsubmit="handleUSSD(event)" class="space-y-3 sm:space-y-4">
+                <div>
+                    <label for="ussd-amount" class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Lacagta (Amount)</label>
+                    <input type="number" id="ussd-amount" required min="1" 
+                           class="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                           placeholder="Gali lacagta">
+                </div>
+                <div>
+                    <label for="ussd-number" class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Lambarka (Number)</label>
+                    <input type="tel" id="ussd-number" required 
+                           class="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                           placeholder="Gali lambarka">
+                </div>
+                <div class="space-y-2 sm:space-y-3">
+                    <button type="button" onclick="confirmUSSD('*712*618877686*2*5#')" class="w-full bg-blue-500 text-white py-2 sm:py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all text-xs sm:text-sm">
+                        *712*618877686*2*5# - Xaqiiji
+                    </button>
+                    <button type="button" onclick="confirmUSSD('*812*688877686*2*5#')" class="w-full bg-green-500 text-white py-2 sm:py-3 rounded-lg font-semibold hover:bg-green-600 transition-all text-xs sm:text-sm">
+                        *812*688877686*2*5# - Xaqiiji
+                    </button>
+                    <button type="button" onclick="confirmUSSD('*712*628877686*2*5#')" class="w-full bg-purple-500 text-white py-2 sm:py-3 rounded-lg font-semibold hover:bg-purple-600 transition-all text-xs sm:text-sm">
+                        *712*628877686*2*5# - Xaqiiji
+                    </button>
+                </div>
+                <button type="button" onclick="closeUSSDModal()" class="w-full bg-gray-500 text-white py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-600 transition-all mt-3 sm:mt-4 text-xs sm:text-sm">
+                    Xir
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 text-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-green-500 mx-auto mb-4"></div>
+            <p class="text-gray-600">Waa la xaqiijinayaa...</p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification-toast" class="hidden fixed top-2 right-2 sm:top-4 sm:right-4 bg-white rounded-lg shadow-lg p-3 sm:p-4 z-50 border-l-4 border-green-500 max-w-xs sm:max-w-sm">
+        <div class="flex items-center">
+            <span id="notification-icon" class="text-lg sm:text-2xl mr-2 sm:mr-3"></span>
+            <div>
+                <p id="notification-title" class="font-semibold text-gray-800 text-sm sm:text-base"></p>
+                <p class="text-xs sm:text-sm text-gray-600">Waa la riixay!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize user data
+        let currentUser = null;
+
+        // Gallery data with 150 real images
+        const galleryImages = [
+            // Flowers (30 items)
+            { name: 'Ubax cas', price: '$3' },
+            { name: 'Ubax guduud', price: '$4' },
+            { name: 'Ubax hurdo', price: '$5' },
+            { name: 'Ubax casaan', price: '$3' },
+            { name: 'Ubax bink', price: '$4' },
+            { name: 'Ubax dahab', price: '$6' },
+            { name: 'Ubax yar', price: '$2' },
+            { name: 'Ubax badan', price: '$15' },
+            { name: 'Ubax qallalan', price: '$2' },
+            { name: 'Caleemo cagaar', price: '$3' },
+            { name: 'Nasiib ubax', price: '$7' },
+            { name: 'Sarreen', price: '$4' },
+            { name: 'Ubax yar cusub', price: '$2' },
+            { name: 'Ubax dheri', price: '$8' },
+            { name: 'Ubax lamadegaan', price: '$5' },
+            { name: 'Ubax dheer', price: '$6' },
+            { name: 'Ubax qurux', price: '$7' },
+            { name: 'Geed ubax', price: '$12' },
+            { name: 'Geed weyn ubax', price: '$15' },
+            { name: 'Geed dheer ubax', price: '$18' },
+            { name: 'Ubax buluug', price: '$4' },
+            { name: 'Ubax tropical', price: '$5' },
+            { name: 'Ubax romantic', price: '$6' },
+            { name: 'Ubax qorax', price: '$5' },
+            { name: 'Ubax spring', price: '$4' },
+            { name: 'Ubax cherry', price: '$5' },
+            { name: 'Ubax medal', price: '$8' },
+            { name: 'Ubax daisy', price: '$3' },
+            { name: 'Ubax bouquet', price: '$20' },
+            { name: 'Ubax vintage', price: '$3' },
+
+            // Animals (40 items)
+            { name: 'Eey yar', price: '$25' },
+            { name: 'Bisad yar', price: '$20' },
+            { name: 'Jiir yar', price: '$5' },
+            { name: 'Hamster', price: '$8' },
+            { name: 'Bakayle', price: '$15' },
+            { name: 'Dawaco', price: '$30' },
+            { name: 'Oorso', price: '$50' },
+            { name: 'Panda', price: '$45' },
+            { name: 'Koala', price: '$35' },
+            { name: 'Shabeel', price: '$100' },
+            { name: 'Libaax', price: '$120' },
+            { name: 'Lo', price: '$80' },
+            { name: 'Doofaar', price: '$40' },
+            { name: 'Rah', price: '$10' },
+            { name: 'Daanyeer', price: '$60' },
+            { name: 'Digaag', price: '$12' },
+            { name: 'Penguin', price: '$25' },
+            { name: 'Shimbir', price: '$15' },
+            { name: 'Shimbir yar', price: '$8' },
+            { name: 'Ukun', price: '$5' },
+            { name: 'Bolobolo', price: '$18' },
+            { name: 'Gorgor', price: '$40' },
+            { name: 'Guumays', price: '$30' },
+            { name: 'Fiidmeer', price: '$20' },
+            { name: 'Yeey', price: '$70' },
+            { name: 'Dofaar duurka', price: '$55' },
+            { name: 'Faras', price: '$200' },
+            { name: 'Faras unicorn', price: '$500' },
+            { name: 'Shinni', price: '$3' },
+            { name: 'Dixiri', price: '$2' },
+            { name: 'Balanbaalis', price: '$7' },
+            { name: 'Shabacad', price: '$4' },
+            { name: 'Cayayaan', price: '$3' },
+            { name: 'Qudhaanjad', price: '$1' },
+            { name: 'Ayax', price: '$2' },
+            { name: 'Caaro', price: '$5' },
+            { name: 'Hangaraarac', price: '$15' },
+            { name: 'Diindiin', price: '$25' },
+            { name: 'Mas', price: '$35' },
+            { name: 'Qorqor', price: '$12' },
+
+            // Trees (30 items)
+            { name: 'Geed pine', price: '$25' },
+            { name: 'Geed weyn', price: '$30' },
+            { name: 'Geed coconut', price: '$40' },
+            { name: 'Geed bamboo', price: '$20' },
+            { name: 'Geed qurux', price: '$22' },
+            { name: 'Geed yar', price: '$15' },
+            { name: 'Caleemo', price: '$5' },
+            { name: 'Geed bilow', price: '$8' },
+            { name: 'Geed sarreen', price: '$12' },
+            { name: 'Geed cactus', price: '$18' },
+            { name: 'Geed dheri', price: '$25' },
+            { name: 'Geed evergreen', price: '$28' },
+            { name: 'Geed oak', price: '$35' },
+            { name: 'Geed palm', price: '$45' },
+            { name: 'Geed Japanese', price: '$30' },
+            { name: 'Geed decorative', price: '$25' },
+            { name: 'Geed herb', price: '$10' },
+            { name: 'Geed caleemo', price: '$8' },
+            { name: 'Geed seedling', price: '$6' },
+            { name: 'Geed grain', price: '$15' },
+            { name: 'Geed desert', price: '$20' },
+            { name: 'Geed potted', price: '$22' },
+            { name: 'Geed fir', price: '$32' },
+            { name: 'Geed maple', price: '$38' },
+            { name: 'Geed tropical', price: '$42' },
+            { name: 'Geed zen', price: '$28' },
+            { name: 'Geed festival', price: '$26' },
+            { name: 'Geed mint', price: '$12' },
+            { name: 'Geed fresh', price: '$9' },
+            { name: 'Geed new', price: '$7' },
+
+            // Food items (50 items)
+            { name: 'Tufaax', price: '$2' },
+            { name: 'Moos', price: '$1' },
+            { name: 'Liin', price: '$2' },
+            { name: 'Canab', price: '$4' },
+            { name: 'Strawberry', price: '$5' },
+            { name: 'Kiwi', price: '$3' },
+            { name: 'Cherry', price: '$6' },
+            { name: 'Cherries', price: '$8' },
+            { name: 'Mango', price: '$4' },
+            { name: 'Pineapple', price: '$7' },
+            { name: 'Coconut', price: '$5' },
+            { name: 'Yaanyo', price: '$2' },
+            { name: 'Eggplant', price: '$3' },
+            { name: 'Avocado', price: '$4' },
+            { name: 'Broccoli', price: '$3' },
+            { name: 'Lettuce', price: '$2' },
+            { name: 'Cucumber', price: '$2' },
+            { name: 'Pepper', price: '$3' },
+            { name: 'Galley', price: '$2' },
+            { name: 'Carrot', price: '$2' },
+            { name: 'Garlic', price: '$3' },
+            { name: 'Onion', price: '$2' },
+            { name: 'Potato', price: '$1' },
+            { name: 'Sweet potato', price: '$2' },
+            { name: 'Peanuts', price: '$4' },
+            { name: 'Chestnut', price: '$5' },
+            { name: 'Rooti', price: '$3' },
+            { name: 'Baguette', price: '$4' },
+            { name: 'Pretzel', price: '$3' },
+            { name: 'Bagel', price: '$2' },
+            { name: 'Cheese', price: '$6' },
+            { name: 'Ukun', price: '$1' },
+            { name: 'Ukun la dubay', price: '$4' },
+            { name: 'Bacon', price: '$8' },
+            { name: 'Hilib', price: '$15' },
+            { name: 'Hilib digaag', price: '$12' },
+            { name: 'Hilib bone', price: '$18' },
+            { name: 'Hot dog', price: '$5' },
+            { name: 'Burger', price: '$8' },
+            { name: 'Fries', price: '$4' },
+            { name: 'Pizza', price: '$12' },
+            { name: 'Wrap', price: '$7' },
+            { name: 'Taco', price: '$6' },
+            { name: 'Burrito', price: '$9' },
+            { name: 'Salad', price: '$8' },
+            { name: 'Pasta', price: '$10' },
+            { name: 'Soup', price: '$6' },
+            { name: 'Stew', price: '$12' },
+            { name: 'Bento', price: '$15' }
+        ];
+
+        // Check if user is already logged in on page load
+        window.addEventListener('load', function() {
+            loadCurrentUser();
+            if (currentUser && currentUser.email) {
+                document.getElementById('user-email').textContent = currentUser.email;
+                showPage('dashboard');
+            } else {
+                showPage('register');
+            }
+        });
+
+        function loadCurrentUser() {
+            try {
+                const userData = localStorage.getItem('currentUser');
+                if (userData) {
+                    currentUser = JSON.parse(userData);
+                }
+            } catch (error) {
+                console.log('Error loading user data');
+                currentUser = null;
+            }
+        }
+
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.add('hidden'));
+            document.getElementById(pageId + '-page').classList.remove('hidden');
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            
+            // Validation
+            if (!email || !password || !confirmPassword) {
+                showErrorMessage('Fadlan buuxi dhammaan goobaha!');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showErrorMessage('Erayga sirta ah waa inuu ka badan yahay 6 xaraf!');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showErrorMessage('Erayada sirta ah ma isku mid ahan!');
+                return;
+            }
+            
+            // Check if user already exists
+            const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            if (existingUsers.find(user => user.email === email)) {
+                showErrorMessage('Gmail-kan horay ayaa loo isticmaalay!');
+                return;
+            }
+            
+            // Store user data in localStorage
+            const newUser = { email, password, registeredAt: new Date().toISOString() };
+            existingUsers.push(newUser);
+            localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+            
+            // Set as current user
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Show success message
+            document.getElementById('success-text').textContent = 'Si sax ah ayaad isu diiwaangelisay. Mahadsanid!';
+            document.getElementById('success-modal').classList.remove('hidden');
+            
+            // Reset form
+            event.target.reset();
+            
+            // After success, redirect to dashboard
+            setTimeout(() => {
+                closeSuccessModal();
+                document.getElementById('user-email').textContent = email;
+                showPage('dashboard');
+            }, 2000);
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            // Validation
+            if (!email || !password) {
+                showErrorMessage('Fadlan gali Gmail-ka iyo erayga sirta ah!');
+                return;
+            }
+            
+            // Check against registered users
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const user = registeredUsers.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Set as current user
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // Show success message
+                document.getElementById('success-text').textContent = 'Waxaad si sax ah u gashay akoonkaaga macmiilka!';
+                document.getElementById('success-modal').classList.remove('hidden');
+                
+                // Set user email in dashboard
+                document.getElementById('user-email').textContent = email;
+                
+                // Reset form
+                event.target.reset();
+                
+                // After success, redirect to dashboard
+                setTimeout(() => {
+                    closeSuccessModal();
+                    showPage('dashboard');
+                }, 2000);
+            } else {
+                showErrorMessage('Gmail ama erayga sirta ah waa khalad! Haddii aadan akoon haysan, samee mid cusub.');
+            }
+        }
+
+        function logout() {
+            // Clear user data from localStorage
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            showPage('register');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        function showErrorMessage(message) {
+            // Create temporary error modal
+            const errorModal = document.createElement('div');
+            errorModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            errorModal.innerHTML = `
+                <div class="success-animation bg-white rounded-2xl p-8 max-w-md mx-4 text-center">
+                    <div class="text-6xl mb-4">❌</div>
+                    <h3 class="text-2xl font-bold text-red-600 mb-4">Khalad!</h3>
+                    <p class="text-gray-600 mb-6">${message}</p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600 transition-all">
+                        Hagaag
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(errorModal);
+        }
+
+        function playSound() {
+            // Create a simple beep sound using Web Audio API
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (error) {
+                // Fallback: no sound if Web Audio API is not supported
+                console.log('Sound not supported');
+            }
+        }
+
+        function showNotification(title, icon) {
+            const toast = document.getElementById('notification-toast');
+            const titleElement = document.getElementById('notification-title');
+            const iconElement = document.getElementById('notification-icon');
+            
+            titleElement.textContent = title;
+            iconElement.textContent = icon;
+            
+            toast.classList.remove('hidden');
+            toast.classList.add('success-animation');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('success-animation');
+            }, 3000);
+        }
+
+        function showProjectGallery() {
+            const galleryGrid = document.getElementById('gallery-grid');
+            galleryGrid.innerHTML = '';
+            
+            galleryImages.forEach((item, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'bg-white rounded-lg shadow-md p-2 sm:p-3 lg:p-4 text-center card-hover';
+                galleryItem.innerHTML = `
+                    <div class="relative mb-2 sm:mb-3">
+                        <img src="https://picsum.photos/150/150?random=${index + 1}" alt="${item.name}" 
+                             class="w-25 h-25 object-cover rounded-full mx-auto border-4 border-gradient-to-r from-pink-500 via-red-500 to-yellow-500 shadow-lg"
+                             style="width: 150px; height: 150px;"
+                             onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';"
+                             style="border: 3px solid; border-image: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57) 1;">
+                        <div class="absolute -bottom-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                            ♪
+                        </div>
+                    </div>
+                    <h4 class="font-semibold text-gray-800 mb-1 text-xs sm:text-sm lg:text-base">${item.name}</h4>
+                    <p class="text-green-600 font-bold mb-2 sm:mb-3 text-xs sm:text-sm lg:text-base">${item.price}</p>
+                    <button onclick="orderWhatsApp('${item.name}', '${item.price}')" 
+                            class="bg-gradient-to-r from-pink-500 to-red-500 text-white px-2 py-1 sm:px-3 sm:py-2 lg:px-4 lg:py-2 rounded-full hover:from-pink-600 hover:to-red-600 transition-all text-xs sm:text-sm font-semibold w-full shadow-lg">
+                        📱 Dalbo
+                    </button>
+                `;
+                galleryGrid.appendChild(galleryItem);
+            });
+            
+            document.getElementById('project-gallery').classList.remove('hidden');
+        }
+
+        function closeProjectGallery() {
+            document.getElementById('project-gallery').classList.add('hidden');
+        }
+
+        function orderWhatsApp(itemName, price) {
+            const message = `Salam! Waxaan rabaa inaan dalbo: ${itemName} - ${price}`;
+            const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        function showUSSDForm() {
+            document.getElementById('ussd-modal').classList.remove('hidden');
+        }
+
+        function closeUSSDModal() {
+            document.getElementById('ussd-modal').classList.add('hidden');
+        }
+
+        function confirmUSSD(code) {
+            const amount = document.getElementById('ussd-amount').value;
+            const number = document.getElementById('ussd-number').value;
+            
+            if (!amount || !number) {
+                showErrorMessage('Fadlan gali lacagta iyo lambarka!');
+                return;
+            }
+            
+            // Show loading spinner
+            document.getElementById('loading-spinner').classList.remove('hidden');
+            
+            // Simulate processing time
+            setTimeout(() => {
+                document.getElementById('loading-spinner').classList.add('hidden');
+                
+                // Show success and open dialer
+                showNotification('Xaqiijinta', '✅');
+                
+                // Try to open dialer (works on mobile devices)
+                const dialCode = code.replace('618877686', number).replace('2', amount).replace('5', amount);
+                window.open(`tel:${dialCode}`, '_self');
+                
+                // Close modal
+                closeUSSDModal();
+                
+                // Reset form
+                document.getElementById('ussd-amount').value = '';
+                document.getElementById('ussd-number').value = '';
+            }, 3000);
+        }
+
+
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98f4fa02832f24f0',t:'MTc2MDU5MDY1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
