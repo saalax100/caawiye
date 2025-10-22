@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invest App Multiuser</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right,#001f3f,#001f3f );
+      margin: 0; padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #001f3f;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      color: white;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+      font-weight: bold;
+    }
+    input, select { border: 1px solid #fff; color: black; }
+    button {
+      background: white; color: black;
+      cursor: pointer; transition: 0.3s;
+    }
+    button:hover { background: yellow; color: black; }
+    img {
+      width: 100%; max-height: 100px;
+      object-fit: contain; border-radius: 10px; margin-bottom: 10px;
+    }
+    p { color: #00e600; cursor: pointer; margin-top: 10px; }
+    p:hover { text-decoration: underline; }
+    .robot-active {
+      background:   #00e600; color: black;
+      font-size: 0.9em; padding: 4px; border-radius: 4px;
+      margin-bottom: 10px; display: inline-block;
+    }
+    .robot-info { font-size: 0.9em; margin-bottom: 10px; }
+    .balance-display {
+      display: flex; align-items: center;
+      gap: 10px; margin-bottom: 10px;
+    }
+    .balance-display img {
+      width: 60px; height: auto; margin: 0; border-radius: 5px;
+    }
+  </style>
+</head>
+<body><div style="background-color:#e6f4ea; padding: 15px; margin: 10px auto; border: 2px solid #4caf50; border-radius: 10px; color: #2e7d32; font-weight: bold; font-size: 16px; text-align: center;">
+  ⚖️ Maalgashiga shirkadda Horseed.invesment waa xalaal 100% kiiba <span style="color:green;">100% </span>. Ma jiro riba, qamaarka, ama suuqyo xaaraan ah. Robot-yadu waxay ka shaqeeyaan adeegyo run ah sida suuqgeynta, SEO, xog-ururin, iyo falanqayn dhaqaale. Ma jiro damaanad faa’iido la hubo. Waxaa jira fursado faa’iido iyo khasaaro labadaba. 
+</div>
+</body>
+<div class="container" id="app">
+  <h2 style="text-align:center;">Loading...</h2>
+</div>
+<h2 style="text-align:center;">Riix button kasta si aad u maqasho muusig</h2>
+  
+  <div class="row">
+    <!-- 48 button -->
+    <!-- Si toos ah loo sameeyay si aanan uga tagin midna -->
+    <!-- Waxaad ku arki doontaa 48 xabo -->
+    <!-- Hoos ka arag -->
+<script>
+const robotConfigs = [
+  { price: 400, reward: 8.0 },
+  { price: 350, reward: 7.5 },
+  { price: 320, reward: 7.2 },
+  { price: 290, reward: 5.8 },
+  { price: 260, reward: 4.6 },
+  { price: 230, reward: 4.3 },
+  { price: 210, reward: 4.1 },
+  { price: 190, reward: 2.9 },
+  { price: 160, reward: 2.6 },
+  { price: 140, reward: 2.4 },
+  { price: 130, reward: 2.3 },
+  { price: 120, reward: 2.2 },
+  { price: 110, reward: 2.1 },
+  { price: 105, reward: 2.05 },
+  { price: 70,  reward: 1.3 },
+  { price: 60,  reward: 1.15 },
+  { price: 50,  reward: 1.05 },
+  { price: 40,  reward: 1.00 },
+  { price: 30,  reward: 0.35 },
+  { price: 20,  reward: 0.25 },
+  { price: 10,  reward: 0.2 },
+  { price: 5,   reward: 0.17 },
+  { price: 3,   reward: 0.15 },
+  { price: 2,   reward: 0.1 },
+  { price: 1,   reward: 0.05 }
+];
+
+const robotImages = {
+  400: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s',
+  350: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s',
+  320: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ0-BwMD4kc4FXCAi2ljaaWCdVbUeUUppKRg&s',
+  290: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDyjzYgo27sMA6i4J0kEcAm0qJhCWTn28t-A&s',
+  260: 'data:image/jpeg;base64,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',
+  230: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNhgwy2XsjnGR7pUNy9T7tV_jsAlrSkYap2Q&s',
+  210: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2qq8-vcrChw9tpU5sq79QOmK80jpv3Xx02w&s',
+  190: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP4pWPhGZc29S5WkC-Ba3ZlzbGB0HTwHAFeQ&s',
+  160: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuxhV4QMeANzxwiMMEIkZp_c_3eajY8aoKg&s',
+  140: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyrMp_qbaJzcqtvBha1TLmSfEHwT0YAErmdA&s',
+  130: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXiHJ7uIcb2IlHaSHioslYh2GEV8Kpm_xCCg&s',
+  120: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaXp37ZLvnjE8Lcd-PyBPvmSCpEsi5_fdZSA&s',
+  110: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjXLa-oJLaL8tEspanl5oV5PD4IbtwkpL-Xw&s',
+  105: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStN5JDIuRaULTeEXtvtXUJrfbnWGHAErEkUA&s',
+  100: 'https://qviro.com/blog/wp-content/uploads/2024/05/How-Much-Does-a-Humanoid-Robot-Cost.webp',
+  70:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnQJFcuf1QeGS-NmYqXgI-CRrawwfYP40U5g&s',
+  60:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_bj-ltuzt62o9CxP91qNSVc9iheGY4nMfCg&s',
+  50:  'https://www.therobotreport.com/wp-content/uploads/2024/12/Apptronik-Apollo-3.jpg',
+  40:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUhHtnFq30Z-nkcY5Pvhq3MWwcQSzcfgrXkg&s',
+  30:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnsHUweaPvW6qTrQgew1-667hFAG1dK1-tGw&s',
+  20:  'https://cdn.sanity.io/images/f8lauh0h/production/6b6e8de8b893da63950e390334a9668d4440e3be-6000x4000.jpg',
+  10:  'https://news.mit.edu/sites/default/files/styles/news_article__image_gallery/public/images/202505/MIT-Differentiable-Interaction-01_0.gif?itok=OtGBTwHK',
+  5:   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsixzp9V9j0_lBI7wOB6w_DCP15bEUnxYsIg&s',
+  3:   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAigmUQKnJXk_u5IpyR3lTSBRUOCCJ5zcQ4g&s',
+  2:   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE5lKEPUJKB04S1g_yEJWCnKO3lNfRwvviGQ&s',
+  1:   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN6VSe-GVQNJnAaRtBq3MT1AdQm4_lk_nm8Q&s'
+};
+
+let user = null;
+
+function saveUsers(users) {
+  localStorage.setItem("investUsers", JSON.stringify(users));
+}
+
+function loadUsers() {
+  return JSON.parse(localStorage.getItem("investUsers")) || [];
+}
+
+function saveCurrentUser() {
+  let users = loadUsers();
+  const index = users.findIndex(u => u.number === user.number);
+  if (index > -1) {
+    users[index] = user;
+    saveUsers(users);
+  }
+}
+
+function showLogin() {
+  app.innerHTML = `
+    <h2>Login</h2>
+    <input id="loginNumber" placeholder="Phone Number" />
+    <input id="loginPassword" type="password" placeholder="Password" />
+    <button onclick="doLogin()">Login</button>
+    <p onclick="showRegister()">Don't have an account? <u>Register</u></p>
+  `;
+}
+
+function showRegister() {
+  app.innerHTML = `
+    <h2>Register</h2>
+    <input id="regNumber" placeholder="Phone Number" />
+    <input id="regPassword" type="password" placeholder="Password" />
+    <input id="regConfirm" type="password" placeholder="Confirm Password" />
+    <button onclick="doRegister()">Register</button>
+    <p onclick="showLogin()">Already have an account? <u>Login</u></p>
+  `;
+}
+
+function doRegister() {
+  const number = document.getElementById("regNumber").value.trim();
+  const pass = document.getElementById("regPassword").value;
+  const confirm = document.getElementById("regConfirm").value;
+
+  if (!number || !pass || !confirm) {
+    return Swal.fire("Fadlan buuxi dhammaan foomka", "", "warning");
+  }
+  if (pass !== confirm) {
+    return Swal.fire("Khalad", "Password-ku isma lahan", "error");
+  }
+
+  let users = loadUsers();
+  if (users.some(u => u.number === number)) {
+    return Swal.fire("Error", "Lambarkan hore ayaa loo diiwaan galiyay", "error");
+  }
+
+  user = { number, password: pass, balance: 0, mining: null };
+  users.push(user);
+  saveUsers(users);
+  localStorage.setItem("loggedInUserNumber", number);
+
+  Swal.fire("Success", "Akoon-sax ah ayaad kasameysatay Shirkada Horseed invesment soodhawoow macaamiil !", "success").then(() => {
+    showDashboard();
+    startMining();
+  });
+}
+
+function doLogin() {
+  const number = document.getElementById("loginNumber").value.trim();
+  const pass = document.getElementById("loginPassword").value;
+  const users = loadUsers();
+
+  const found = users.find(u => u.number === number && u.password === pass);
+  if (!found) {
+    return Swal.fire("Fashil", "Number ama Password khaldan", "error");
+  }
+
+  user = found;
+  localStorage.setItem("loggedInUserNumber", number);
+
+  Swal.fire("Sogal", "Login si sax ahayaad u soogashay akoonkaaga aad kuleedahay Shirkada Horseed invesment  !", "success").then(() => {
+    showDashboard();
+    startMining();
+  });
+}
+
+function logout() {
+  localStorage.removeItem("loggedInUserNumber");
+  user = null;
+  Swal.fire("Macsalaama", "Waad kabxday akoonkaaga aad ku leedahay Sirkada Horseed invesment nabadgalyo", "info").then(() => {
+    showLogin();
+  });
+}
+
+function showDashboard() {
+  let html = `
+    <h2>Dashboard</h2>
+    <div class="balance-display">
+      <img src="evcplus.png.jpg" alt="EVC Plus" style="height: 60px; margin-left: 10px;" />
+      <span><strong>Balance:</strong> $${user.balance.toFixed(2)}</span>
+    </div>
+  `;
+
+  robotConfigs.forEach(r => {
+    const isActive = user.mining && user.mining.active && user.mining.price === r.price;
+    const activeLabel = isActive ? '<div class="robot-active">Active</div>' : '';
+    const timeLeftHtml = isActive
+      ? `<div class="robot-info">Started: ${new Date(user.mining.startTime).toLocaleString()}<br>Time Left: <span id="timeLeft">Calculating...</span></div>`
+      : '';
+
+    html += `
+      <img src="${robotImages[r.price] || ''}" alt="Robot $${r.price}" />
+      ${activeLabel}
+      ${timeLeftHtml}
+      <button onclick="buyRobot(${r.price}, ${r.reward})" ${isActive ? 'disabled' : ''}>
+        Buy Robot $${r.price} (Earns $${r.reward}/24hr)
+      </button>
+    `;
+  });
+
+  html += `
+    <button onclick="showDeposit()">Deposit</button>
+    <button onclick="showWithdraw()">Withdraw</button>
+    <button onclick="sendUSSD()">USSD Payment</button>
+    <button onclick="sendWhatsApp()">Contact via WhatsApp</button>
+    <button onclick="logout()">Logout</button>
+  `;
+
+  app.innerHTML = html;
+  if (user.mining && user.mining.active) updateTimeLeft();
+}
+
+function buyRobot(price, reward) {
+  if (user.balance < price) {
+    return Swal.fire("Digniin", "Lacagtaadu kuma filna si aad u kireysato robot-kan.", "warning");
+  }
+  if (user.mining && user.mining.active) {
+    return Swal.fire("Digniin", "Waxaad horey u kireysatay robot kuu shaqeynayey. Sug inta uu shaqada kuu dhameynayo.", "info");
+  }
+
+  Swal.fire({
+    title: "Ma hubtaa?",
+    text: `Waxaad rabtaa inaad kireysto robot $${price}, robotka waxa uu kashaqeynayaa suuqyda kala duwan waxa uuna ku dhisanyahay shaqeecada islaamka oo robotka kama shaqeeyo wax yaabaha qamaarka ah iyo suuqyada xaaraata ah sidaas darteed lama damaanad qaadi karo waxa faaido iyo qasaaro ee uu kuu soo saari karo dalbo hadii aad ogoshahay waan dadaaleynaa insha allah $${reward} 24 saac gudahood.`,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Haa, kireyso!",
+    cancelButtonText: "Maya"
+  }).then(result => {
+    if (result.isConfirmed) {
+      user.balance -= price;
+      user.mining = { price, reward, startTime: Date.now(), active: true };
+      saveCurrentUser();
+      Swal.fire("Guul", "Robot-ka waad  kireysatay mahadsanid!", "success").then(() => {
+        showDashboard();
+        startMining();
+      });
+    }
+  });
+}
+
+function showDeposit() {
+  app.innerHTML = `
+    <h2>Deposit</h2>
+    <select id="depositMethod">
+      <option value="mobile">Mobile Number</option>
+      <option value="crypto">Crypto Address</option>
+    </select>
+    <input id="amount" placeholder="Enter Amount" />
+    <input id="identifier" placeholder="Enter Mobile Number or Crypto Address" />
+    <input type="file" />
+    <button onclick="confirmDeposit()">Confirm</button>
+    <button onclick="showDashboard()">Back</button>
+  `;
+}
+
+function confirmDeposit() {
+  const amount = parseFloat(document.getElementById("amount").value);
+  const method = document.getElementById("depositMethod").value;
+  const identifier = document.getElementById("identifier").value.trim();
+
+  if (!amount || !identifier) {
+    return Swal.fire("Fadlan buuxi foomka deposit-ka", "", "warning");
+  }
+
+  user.balance += amount;
+  saveCurrentUser();
+
+  const msg = `Waxaan ku deposit gareeyay $${amount} adigoo isticmaalaya ${method === 'mobile' ? 'Mobile Number' : 'Crypto Address'}: ${identifier}`;
+  window.open(`https://wa.me/252618877686?text=${encodeURIComponent(msg)}`, "_blank");
+
+  showDashboard();
+}
+
+function showWithdraw() {
+  app.innerHTML = `
+    <h2>Withdraw</h2>
+    <select id="withdrawMethod">
+      <option value="mobile">Mobile Number</option>
+      <option value="crypto">Crypto Address</option>
+    </select>
+    <input id="amount" placeholder="Enter Amount" />
+    <input id="identifier" placeholder="Enter Mobile Number or Crypto Address" />
+    <button onclick="confirmWithdraw()">Confirm</button>
+    <button onclick="showDashboard()">Back</button>
+  `;
+}
+
+function confirmWithdraw() {
+  const amount = parseFloat(document.getElementById("amount").value);
+  const method = document.getElementById("withdrawMethod").value;
+  const identifier = document.getElementById("identifier").value.trim();
+
+  if (!amount || amount > user.balance) {
+    return Swal.fire("Error", "Lacagta kugu ma filna balance-kaaga.", "error");
+  }
+  if (!identifier) {
+    return Swal.fire("Fadlan gali faahfaahinta Mobile Number ama Crypto Address", "", "warning");
+  }
+
+  user.balance -= amount;
+  saveCurrentUser();
+
+  const msg = `Waxaan la baxay $${amount} adigoo isticmaalaya ${method === 'mobile' ? 'Mobile Number' : 'Crypto Address'}: ${identifier}`;
+  window.open(`https://wa.me/252618877686?text=${encodeURIComponent(msg)}`, "_blank");
+
+  showDashboard();
+}
+
+function sendUSSD() {
+  const amount = prompt("Fadlan geli lacagta aad rabto inaad dirto:");
+  if (!amount || isNaN(amount)) return Swal.fire("Fadlan geli lacag sax ah", "", "warning");
+  const code = `*712*618877686*${amount}#`;
+  window.location.href = `tel:${encodeURIComponent(code)}`;
+}
+
+function sendWhatsApp() {
+  const msg = `Salaan, waxaan rabaa caawimaad ku saabsan app-ka Invest. Fadlan iigu soo jawaab.`;
+  window.open(`https://wa.me/252618877686?text=${encodeURIComponent(msg)}`, "_blank");
+}
+
+function startMining() {
+  if (!user.mining || !user.mining.active) return;
+  updateTimeLeft();
+  setTimeout(startMining, 1000);
+}
+
+function updateTimeLeft() {
+  if (!user.mining || !user.mining.active) return;
+
+  const now = Date.now();
+  const elapsed = now - user.mining.startTime;
+  const oneDayMs = 24 * 60 * 60 * 1000;
+  const remaining = oneDayMs - elapsed;
+
+  if (remaining <= 0) {
+    user.balance += user.mining.reward + user.mining.price;
+    user.mining.active = false;
+    saveCurrentUser();
+    Swal.fire("Robot Finished", "Hambalyo Shaqadii robot-ka way dhamaatay fadlan dalbo shaqo kale . Lacagta waa lagu daray.", "info").then(() => {
+      showDashboard();
+    });
+    return;
+  }
+
+  const hours = Math.floor(remaining / (1000 * 60 * 60));
+  const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+
+  const timeLeftElem = document.getElementById("timeLeft");
+  if (timeLeftElem) {
+    timeLeftElem.textContent = `${hours}h ${minutes}m ${seconds}s`;
+  }
+}
+
+setTimeout(() => {
+  const loggedNumber = localStorage.getItem("loggedInUserNumber");
+  const users = loadUsers();
+  if (loggedNumber) {
+    user = users.find(u => u.number === loggedNumber);
+    if (user) {
+      showDashboard();
+      startMining();
+      return;
+    }
+  }
+  showLogin();
+}, 500);
+</script>
+</body>
+</html>
