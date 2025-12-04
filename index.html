@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="so">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HORSEED - Ganacsi App</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    .app-container {
+      min-height: 100%;
+      width: 100%;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      padding: 2rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      margin-bottom: 1rem;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #059669;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      background: #059669;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: #047857;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+    }
+
+    .btn-primary:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .dashboard-btn {
+      background: white;
+      border: none;
+      border-radius: 12px;
+      padding: 1.25rem 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dashboard-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    }
+
+    .dashboard-btn .icon {
+      font-size: 2rem;
+    }
+
+    .dashboard-btn .label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .error-message {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 14px;
+    }
+
+    .success-message {
+      background: #d1fae5;
+      color: #065f46;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 14px;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .link-text {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #6b7280;
+    }
+
+    .link-text a {
+      color: #059669;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .link-text a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .app-container {
+        padding: 0 !important;
+      }
+
+      .card {
+        padding: 1.5rem 1rem;
+        margin: 0.5rem;
+        border-radius: 12px;
+        max-width: 100%;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+
+      .dashboard-btn {
+        padding: 0.75rem 0.5rem;
+      }
+
+      .dashboard-btn .icon {
+        font-size: 1.5rem;
+      }
+
+      .dashboard-btn .label {
+        font-size: 0.75rem;
+      }
+
+      .dashboard-btn img {
+        width: 45px !important;
+        height: 45px !important;
+      }
+
+      h1 {
+        font-size: 1.75rem !important;
+      }
+
+      h2 {
+        font-size: 1.35rem !important;
+      }
+
+      .input-field {
+        padding: 12px 14px;
+        font-size: 15px;
+      }
+
+      .btn-primary {
+        padding: 14px;
+        font-size: 16px;
+      }
+
+      #productGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .app-container > div {
+        padding: 1rem !important;
+      }
+
+      .card {
+        padding: 1rem 0.75rem;
+        margin: 0.25rem;
+      }
+      
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+      }
+
+      .dashboard-btn {
+        padding: 0.65rem 0.4rem;
+      }
+
+      .dashboard-btn img {
+        width: 40px !important;
+        height: 40px !important;
+      }
+
+      .dashboard-btn .icon {
+        font-size: 1.35rem;
+      }
+
+      .dashboard-btn .label {
+        font-size: 0.7rem;
+      }
+
+      h1 {
+        font-size: 1.5rem !important;
+      }
+
+      h2 {
+        font-size: 1.2rem !important;
+      }
+
+      #productGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
+        padding: 0.25rem;
+      }
+
+      #productGrid > div {
+        padding: 0.75rem !important;
+      }
+
+      #productGrid img {
+        height: 80px !important;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .card {
+        padding: 0.75rem 0.5rem;
+      }
+
+      h1 {
+        font-size: 1.35rem !important;
+      }
+
+      .input-field {
+        padding: 10px 12px;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        padding: 12px;
+        font-size: 15px;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-container">
+   <div style="padding: 2rem; min-height: 100%;"><!-- Sign Up Screen -->
+    <div id="signupScreen" class="card">
+     <h1 id="appTitle" style="font-size: 2.5rem; font-weight: 700; color: #059669; text-align: center; margin-bottom: 0.5rem;">HORSEED</h1>
+     <p style="text-align: center; color: #6b7280; margin-bottom: 2rem;">Samee Akoon Cusub</p>
+     <div id="signupError" class="error-message hidden"></div>
+     <div id="signupSuccess" class="success-message hidden"></div>
+     <form id="signupForm"><label for="signupPhone" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="signupPhone" class="input-field" placeholder="252xxxxxxxxx" required> <label for="signupPassword" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Password</label> <input type="password" id="signupPassword" class="input-field" placeholder="Geli password" required> <label for="signupConfirmPassword" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Xaqiiji Password</label> <input type="password" id="signupConfirmPassword" class="input-field" placeholder="Ku celi password" required> <button type="submit" class="btn-primary"> <span id="signupButtonText">Diiwaangeli</span> <span id="signupLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+     <div class="link-text">
+      Akoon ma leedahay? <a id="goToLogin">Login</a>
+     </div>
+    </div><!-- Login Screen -->
+    <div id="loginScreen" class="card hidden">
+     <h1 id="loginAppTitle" style="font-size: 2.5rem; font-weight: 700; color: #059669; text-align: center; margin-bottom: 0.5rem;">HORSEED</h1>
+     <p id="welcomeMessage" style="text-align: center; color: #6b7280; margin-bottom: 2rem;">Soo dhawoow HORSEED</p>
+     <div id="loginError" class="error-message hidden"></div>
+     <form id="loginForm"><label for="loginPhone" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="loginPhone" class="input-field" placeholder="252xxxxxxxxx" required> <label for="loginPassword" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Password</label> <input type="password" id="loginPassword" class="input-field" placeholder="Geli password" required> <button type="submit" class="btn-primary"> <span id="loginButtonText">Gal</span> <span id="loginLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+     <div class="link-text">
+      Akoon ma lihid? <a id="goToSignup">Diiwaangeli</a>
+     </div>
+    </div><!-- Dashboard Screen -->
+    <div id="dashboardScreen" class="card hidden" style="max-width: 800px;">
+     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+      <div>
+       <h1 style="font-size: 2rem; font-weight: 700; color: #059669;">HORSEED</h1>
+       <p style="color: #6b7280; margin-top: 0.25rem;">Akoonka: <span id="userPhone"></span></p>
+      </div>
+     </div>
+     <div class="dashboard-grid"><button class="dashboard-btn" onclick="showIibso()"> <img src="https://i.postimg.cc/KcqmYc7c/download.jpg" alt="Iibso" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 0.5rem;">
+       <div class="label">
+        Iibso
+       </div></button> <button class="dashboard-btn" onclick="showDalbo()"> <img src="https://i.postimg.cc/J7fMX6FF/images-(3).jpg" alt="Dalbo" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 0.5rem;">
+       <div class="label">
+        Dalbo
+       </div></button> <button class="dashboard-btn" onclick="showUSSD()"> <img src="https://i.postimg.cc/wxsw10L1/download.png" alt="USSD" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 0.5rem;">
+       <div class="label">
+        USSD
+       </div></button> <button class="dashboard-btn" onclick="showWhatsApp()"> <img src="https://i.postimg.cc/zGftG5kF/download-(1).png" alt="WhatsApp" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 0.5rem;">
+       <div class="label">
+        WhatsApp
+       </div></button> <button class="dashboard-btn" onclick="showHistori()"> <img src="https://static.thenounproject.com/png/1653024-200.png" alt="Histori" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 0.5rem;">
+       <div class="label">
+        Histori
+       </div></button> <button class="dashboard-btn" id="logoutBtn">
+       <div class="icon">
+        🚪
+       </div>
+       <div class="label">
+        Logout
+       </div></button>
+     </div>
+    </div><!-- Iibso Screen -->
+    <div id="iibsoScreen" class="card hidden" style="max-width: 900px;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1.5rem;">Iibso Alaabta</h2>
+     <div id="productGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; max-height: 60%; overflow-y: auto;"></div>
+    </div><!-- Dalbo Screen -->
+    <div id="dalboScreen" class="card hidden" style="max-width: 600px;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1.5rem;">Dalbo Adeeg</h2>
+     <div id="dalboMessage" class="success-message hidden"></div>
+     <form id="dalboForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Magaca</label> <input type="text" id="dalboName" class="input-field" placeholder="Geli magacaaga" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="dalboNumber" class="input-field" placeholder="252xxxxxxxxx" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Cinwaanka</label> <input type="text" id="dalboAddress" class="input-field" placeholder="Geli cinwaankaaga" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Faahfaahin</label> <textarea id="dalboDescription" class="input-field" placeholder="Qor faahfaahinta dalabkaaga" rows="4" required></textarea> <button type="submit" class="btn-primary"> <span id="dalboButtonText">Send</span> <span id="dalboLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- USSD Screen -->
+    <div id="ussdScreen" class="card hidden" style="max-width: 600px;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1.5rem;">Dir Lacag (USSD)</h2>
+     <div id="ussdMessage" class="success-message hidden"></div>
+     <form id="ussdForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Magaca</label> <input type="text" id="ussdName" class="input-field" placeholder="Geli magacaaga" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Magaca Project-ka</label> <input type="text" id="ussdProject" class="input-field" placeholder="Geli magaca project-ka" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lacagta ($)</label> <input type="number" id="ussdMoney" class="input-field" placeholder="0.25 - 1000000" min="0.25" max="1000000" step="0.01" required> <button type="submit" class="btn-primary"> <span id="ussdButtonText">Send</span> <span id="ussdLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- WhatsApp Screen -->
+    <div id="whatsappScreen" class="card hidden" style="max-width: 600px;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1.5rem;">WhatsApp Cabasho</h2>
+     <div id="whatsappMessage" class="success-message hidden"></div>
+     <form id="whatsappForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Magaca</label> <input type="text" id="whatsappName" class="input-field" placeholder="Geli magacaaga" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="whatsappNumber" class="input-field" placeholder="252xxxxxxxxx" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Faahfaahin (Cabasho/Su'aalo)</label> <textarea id="whatsappDescription" class="input-field" placeholder="Qor cabashadaada ama su'aashaada" rows="4" required></textarea> <button type="submit" class="btn-primary"> <span id="whatsappButtonText">Send</span> <span id="whatsappLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- Histori Screen -->
+    <div id="historiScreen" class="card hidden" style="max-width: 900px;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1.5rem;">Histori Iibsiga</h2>
+     <div id="historiList" style="max-height: 70%; overflow-y: auto;"></div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: "HORSEED",
+      welcome_message: "Soo dhawoow HORSEED"
+    };
+
+    let allUsers = [];
+    let currentUser = null;
+
+    function loadUsersFromLocalStorage() {
+      const stored = localStorage.getItem('horseed_all_users');
+      if (stored) {
+        allUsers = JSON.parse(stored);
+      }
+    }
+
+    function saveUsersToLocalStorage() {
+      localStorage.setItem('horseed_all_users', JSON.stringify(allUsers));
+    }
+
+    function initializeApp() {
+      loadUsersFromLocalStorage();
+
+      const storedUser = localStorage.getItem('horseed_current_user');
+      if (storedUser) {
+        currentUser = JSON.parse(storedUser);
+        showDashboard();
+      }
+    }
+
+    async function onConfigChange(config) {
+      const appTitle = config.app_title || defaultConfig.app_title;
+      const welcomeMessage = config.welcome_message || defaultConfig.welcome_message;
+
+      document.getElementById('appTitle').textContent = appTitle;
+      document.getElementById('loginAppTitle').textContent = appTitle;
+      document.getElementById('welcomeMessage').textContent = welcomeMessage;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["welcome_message", config.welcome_message || defaultConfig.welcome_message]
+        ])
+      });
+    }
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const phone = document.getElementById('signupPhone').value;
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupConfirmPassword').value;
+
+      document.getElementById('signupError').classList.add('hidden');
+      document.getElementById('signupSuccess').classList.add('hidden');
+
+      if (password !== confirmPassword) {
+        document.getElementById('signupError').textContent = 'Password-yada ma iswada aha!';
+        document.getElementById('signupError').classList.remove('hidden');
+        return;
+      }
+
+      if (password.length < 6) {
+        document.getElementById('signupError').textContent = 'Password waa inuu ka badan yahay 6 xaraf!';
+        document.getElementById('signupError').classList.remove('hidden');
+        return;
+      }
+
+      const existingUser = allUsers.find(user => user.phone_number === phone);
+      if (existingUser) {
+        document.getElementById('signupError').textContent = 'Lambarkaan horay ayaa loo diiwaan geliyey!';
+        document.getElementById('signupError').classList.remove('hidden');
+        return;
+      }
+
+      if (allUsers.length >= 8000000) {
+        document.getElementById('signupError').textContent = 'Nidaamku wuxuu galay xadka ugu sarreeya ee isticmaalayaasha. Fadlan isku day mar kale.';
+        document.getElementById('signupError').classList.remove('hidden');
+        return;
+      }
+
+      document.getElementById('signupButtonText').classList.add('hidden');
+      document.getElementById('signupLoading').classList.remove('hidden');
+      document.querySelector('#signupForm button').disabled = true;
+
+      const newUser = {
+        userId: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+        phone_number: phone,
+        password: password,
+        created_at: new Date().toISOString(),
+        last_login: ""
+      };
+
+      allUsers.push(newUser);
+      saveUsersToLocalStorage();
+
+      document.getElementById('signupButtonText').classList.remove('hidden');
+      document.getElementById('signupLoading').classList.add('hidden');
+      document.querySelector('#signupForm button').disabled = false;
+
+      document.getElementById('signupSuccess').textContent = 'Diiwaangalintii waa guuleysatay! Hadda login samee.';
+      document.getElementById('signupSuccess').classList.remove('hidden');
+      document.getElementById('signupForm').reset();
+      setTimeout(() => {
+        showLogin();
+      }, 2000);
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const phone = document.getElementById('loginPhone').value;
+      const password = document.getElementById('loginPassword').value;
+
+      document.getElementById('loginError').classList.add('hidden');
+
+      const user = allUsers.find(u => u.phone_number === phone && u.password === password);
+
+      if (!user) {
+        document.getElementById('loginError').textContent = 'Lambarka ama password-ka qaldan!';
+        document.getElementById('loginError').classList.remove('hidden');
+        return;
+      }
+
+      document.getElementById('loginButtonText').classList.add('hidden');
+      document.getElementById('loginLoading').classList.remove('hidden');
+      document.querySelector('#loginForm button').disabled = true;
+
+      user.last_login = new Date().toISOString();
+      saveUsersToLocalStorage();
+
+      document.getElementById('loginButtonText').classList.remove('hidden');
+      document.getElementById('loginLoading').classList.add('hidden');
+      document.querySelector('#loginForm button').disabled = false;
+
+      currentUser = user;
+      localStorage.setItem('horseed_current_user', JSON.stringify(user));
+      showDashboard();
+    });
+
+    document.getElementById('goToLogin').addEventListener('click', showLogin);
+    document.getElementById('goToSignup').addEventListener('click', showSignup);
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      currentUser = null;
+      localStorage.removeItem('horseed_current_user');
+      showLogin();
+    });
+
+    // Products data - 61 alaab oo dhan leh sawirro xaqiiqiga ah
+    const products = [
+      {name: 'iPhone 15', price: '$999', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXJtSHEU295H48LTgCjNJ3Oa0a6ybvd-nuuA&s'},
+      {name: 'Samsung Galaxy', price: '$850', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz6O3cAr6A13ZitURScnkAZEr-H2__st96Qw&s'},
+      {name: 'Redmi Note', price: '$200', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWPwHdrWnP5hdtN64jwabmn9z28WgHMzM12w&s'},
+      {name: 'Infinix Hot', price: '$150', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXMtyW4RorxAE3l6puGNj03_rJmQ7bw0_g3g&s'},
+      {name: 'Vivo V30', price: '$300', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6xDXrCJuI_SFPu98csraHMGMIzTXRgDVDSw&s'},
+      {name: 'Oppo Reno', price: '$280', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7NvWbajDTx_jQU63SiZPmj1zVUeputa6vUA&s'},
+      {name: 'Tecno Spark', price: '$120', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIiTnXjLQDQU29qr3ivUSoR6NWLdlGK0W_tg&s'},
+      {name: 'Itel A58', price: '$80', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQidnmfUGBSY0nOt45LxC-RF3Avg-hba5-KNg&s'},
+      {name: 'Huawei P60', price: '$600', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVG_soebgs4ggci_q1FKeuc9cSmpKROoN6dA&s'},
+      {name: 'Nokia 3310', price: '$50', icon: '��', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ51ITKS6bgz0G-CV1Haxq1Inf6d55cYGxSPQ&s'},
+      {name: 'Phone Cover Blue', price: '$2.5', icon: '📱', image: 'https://i.postimg.cc/tJvKXzcs/photo-. .jpg'},
+      {name: 'Phone Cover Red', price: '$1.75', icon: '📱', image: 'https://i.postimg.cc/FzFfthMM/photo-. .jpg'},
+      {name: 'Phone Cover Black', price: '$2', icon: '📱', image: 'https://i.postimg.cc/3wSry2zT/photo-. .jpg'},
+      {name: 'Phone Cover Green', price: '$1.8', icon: '📱', image: 'https://i.postimg.cc/NGVyCvJL/photo-. .jpg'},
+      {name: 'Phone Cover Pink', price: '$2.5', icon: '📱', image: 'https://i.postimg.cc/7hgyNztq/photo-. .jpg'},
+      {name: 'Phone Cover Gold', price: '$1.9', icon: '📱', image: 'https://i.postimg.cc/595GnfN8/photo-. .jpg'},
+      {name: 'Phone Cover Silver', price: '$3', icon: '📱', image: 'https://i.postimg.cc/x896WbTn/photo-. .jpg'},
+      {name: 'Gaming Laptop', price: '$899', icon: '💻', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNy1Nk240JKpHCJX8QUOqBQ31sayD8_GUOCg&s'},
+      {name: 'Gaming Headset', price: '$75', icon: '🎧', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp3ycqDYOY8xo17Yx4UYBc3Xszlhn2EZBWfg&s'},
+      {name: 'Designer Watch', price: '$180', icon: '⌚', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwAt8lQ523_gpL8lNO5Jowa9iSZ2ZDFA95sw&s'},
+      {name: 'Luxury Handbag', price: '$220', icon: '👜', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-suDqgE-bce5CV01_RM6SzEzigZPMvbb52w&s'},
+      {name: 'Wireless Speaker', price: '$65', icon: '🔊', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr8M9dyvAXx4TibvSmuZZqveejA5tadqjoUg&s'},
+      {name: 'Smart Watch', price: '$150', icon: '⌚', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMraeWvEijmG6ChhSMEWQDA5toBbT9FlRGSg&s'},
+      {name: 'Bluetooth Earbuds', price: '$45', icon: '🎧', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXpjRXJpfdsDtAtQOTZ3O07QPXZ0tp0gDANA&s'},
+      {name: 'Suudka Raga', price: '$60', icon: '👔', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdAYp3T-e1TGx4NIlm23OSyetl8e5OHYf_qA&s'},
+      {name: 'Shaati Rag', price: '$5.5', icon: '👕', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqssWuMuoHCbEM5_e3VbTEpWIvx3nia_W3oA&s'},
+      {name: 'Surwaal Rag', price: '$9', icon: '👖', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3o6mbKZQei-2Wliwcrn49gmdaimHao0pqKg&s'},
+      {name: 'Dirac Dumar', price: '$21', icon: '👗', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo-_mBXAufmSYuUAh6TPEn1lcrm_Axv-wiyA&s'},
+      {name: 'Jaakad', price: '$7.5', icon: '🧥', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfkwGuR6jBigQrPHKzaly8_L4wX9whKYKIOQ&s'},
+      {name: 'Nike Air Max', price: '$120', icon: '👟', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM2ZjMp8O6Quu2i-PZGv6wibTWhOnoAxrUeA&s'},
+      {name: 'Adidas Sneakers', price: '$95', icon: '👟', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz9CUieYt5uQrKoChj3firWTeK2KBaIYe50A&s'},
+      {name: 'Kab Rasmi', price: '$120', icon: '👞', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZZFT7rd2a9iVvJpXQQmY7gYUTGHphk363WQ&s'},
+      {name: 'Sandal', price: '$35', icon: '🩴', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYTuNB_gEEqYnzV1zZr6P0jTuN-zVQNWOImQ&s'},
+      {name: 'Boot', price: '$150', icon: '🥾', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1xa2BF4o5TynoRJPeyUwxCcU8ICpIlN1XrQ&s'},
+      {name: 'Lipstick Set', price: '$35', icon: '💄', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0kZGpb-swedBdyAW7aJgbGtCHJC6K0lNaYA&s'},
+      {name: 'Face Cream', price: '$45', icon: '����', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWNr0OOSwfHGh5MWDwDVHrgUJp8Qj5IuQEpA&s'},
+      {name: 'Foundation', price: '$25', icon: '💄', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCJD60jWMCN1RLpgezFan6yADl3jqMvA6ZFg&s'},
+      {name: 'Perfume', price: '$45', icon: '🌸', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKuKZYpGWaAZHYqvBryVbCvJsnXZLEhjhWxQ&s'},
+      {name: 'Nail Polish', price: '$8', icon: '💅', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4Fb7XMvYa4PR2StRGrfMr6v479bQTgLMXNA&s'},
+      {name: 'Forex Master', price: '$400', icon: '📈', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s'},
+      {name: 'Crypto King', price: '$350', icon: '₿', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s'},
+      {name: 'Stock Genius', price: '$320', icon: '📊', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ0-BwMD4kc4FXCAi2ljaaWCdVbUeUUppKRg&s'},
+      {name: 'Gold Trader', price: '$290', icon: '🥇', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDyjzYgo27sMA6i4J0kEcAm0qJhCWTn28t-A&s'},
+      {name: 'Oil Expert', price: '$260', icon: '🛢️', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNhgwy2XsjnGR7pUNy9T7tV_jsAlrSkYap2Q&s'},
+      {name: 'Bond Master', price: '$230', icon: '💼', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNhgwy2XsjnGR7pUNy9T7tV_jsAlrSkYap2Q&s'},
+      {name: 'Commodity Pro', price: '$210', icon: '📦', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2qq8-vcrChw9tpU5sq79QOmK80jpv3Xx02w&s'},
+      {name: 'Index Hunter', price: '$190', icon: '📉', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP4pWPhGZc29S5WkC-Ba3ZlzbGB0HTwHAFeQ&s'},
+      {name: 'Currency Wizard', price: '$160', icon: '💱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuxhV4QMeANzxwiMMEIkZp_c_3eajY8aoKg&s'},
+      {name: 'Metal Trader', price: '$140', icon: '⚙️', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyrMp_qbaJzcqtvBha1TLmSfEHwT0YAErmdA&s'},
+      {name: 'Energy Expert', price: '$130', icon: '⚡', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXiHJ7uIcb2IlHaSHioslYh2GEV8Kpm_xCCg&s'},
+      {name: 'Tech Stocks', price: '$120', icon: '💻', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaXp37ZLvnjE8Lcd-PyBPvmSCpEsi5_fdZSA&s'},
+      {name: 'Real Estate', price: '$110', icon: '🏠', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjXLa-oJLaL8tEspanl5oV5PD4IbtwkpL-Xw&s'},
+      {name: 'Bitcoin Pro', price: '$380', icon: '₿', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s'},
+      {name: 'Ethereum Elite', price: '$340', icon: 'Ξ', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s'},
+      {name: 'Silver Trader', price: '$180', icon: '🥈', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDyjzYgo27sMA6i4J0kEcAm0qJhCWTn28t-A&s'},
+      {name: 'Platinum Expert', price: '$250', icon: '💎', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDyjzYgo27sMA6i4J0kEcAm0qJhCWTn28t-A&s'},
+      {name: 'Options Master', price: '$270', icon: '📋', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ0-BwMD4kc4FXCAi2ljaaWCdVbUeUUppKRg&s'},
+      {name: 'Futures Pro', price: '$240', icon: '⏭️', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP4pWPhGZc29S5WkC-Ba3ZlzbGB0HTwHAFeQ&s'},
+      {name: 'Day Trader', price: '$200', icon: '☀️', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s'},
+      {name: 'Swing Trader', price: '$170', icon: '🎯', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s'},
+      {name: 'Long Term Investor', price: '$150', icon: '📅', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjXLa-oJLaL8tEspanl5oV5PD4IbtwkpL-Xw&s'}
+    ];
+
+    function loadProducts() {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      
+      products.forEach((product, index) => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.3s ease;';
+        card.onmouseover = () => { card.style.borderColor = '#059669'; card.style.transform = 'translateY(-4px)'; };
+        card.onmouseout = () => { card.style.borderColor = '#e5e7eb'; card.style.transform = 'translateY(0)'; };
+        card.onclick = () => buyProduct(product);
+        
+        const isRealImage = product.image.startsWith('http');
+        
+        card.innerHTML = `
+          ${isRealImage ? 
+            `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100px; object-fit: contain; margin-bottom: 0.5rem; border-radius: 8px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+             <div style="font-size: 3rem; margin-bottom: 0.5rem; display: none;">${product.icon}</div>` 
+            : 
+            `<div style="font-size: 3rem; margin-bottom: 0.5rem;">${product.icon}</div>`
+          }
+          <div style="font-size: 0.85rem; font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">${product.name}</div>
+          <div style="font-size: 0.9rem; color: #059669; font-weight: 700;">${product.price}</div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    function buyProduct(product) {
+      const purchaseHistory = JSON.parse(localStorage.getItem('horseed_history') || '[]');
+      const purchase = {
+        productName: product.name,
+        productIcon: product.image,
+        price: product.price,
+        date: new Date().toLocaleDateString('so-SO'),
+        time: new Date().toLocaleTimeString('so-SO'),
+        timestamp: Date.now()
+      };
+      
+      purchaseHistory.push(purchase);
+      localStorage.setItem('horseed_history', JSON.stringify(purchaseHistory));
+      
+      // Ku dar histori
+      const tempMessage = document.createElement('div');
+      tempMessage.className = 'success-message';
+      tempMessage.textContent = `✓ Waxaad dirtay dalabkan: ${product.name}`;
+      tempMessage.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; min-width: 300px;';
+      document.body.appendChild(tempMessage);
+      
+      setTimeout(() => {
+        document.body.removeChild(tempMessage);
+      }, 3000);
+      
+      // Fur WhatsApp
+      const message = `Waxaan rabaa inan dalbo:%0A%0A📦 *${product.name}*%0A💰 Qiimaha: ${product.price}%0A%0AMahadsanid!`;
+      const whatsappUrl = `https://wa.me/618877686?text=${message}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    }
+
+    // Dalbo Form
+    document.getElementById('dalboForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('dalboName').value;
+      const number = document.getElementById('dalboNumber').value;
+      const address = document.getElementById('dalboAddress').value;
+      const description = document.getElementById('dalboDescription').value;
+      
+      document.getElementById('dalboButtonText').classList.add('hidden');
+      document.getElementById('dalboLoading').classList.remove('hidden');
+      document.querySelector('#dalboForm button').disabled = true;
+      
+      const message = `Magaca: ${name}%0ALambarka: ${number}%0ACinwaanka: ${address}%0AFaahfaahin: ${description}`;
+      const whatsappUrl = `https://wa.me/618877686?text=${message}`;
+      
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        
+        document.getElementById('dalboButtonText').classList.remove('hidden');
+        document.getElementById('dalboLoading').classList.add('hidden');
+        document.querySelector('#dalboForm button').disabled = false;
+        
+        document.getElementById('dalboMessage').textContent = '✓ Dalabkaaga waad gudbisay!';
+        document.getElementById('dalboMessage').classList.remove('hidden');
+        document.getElementById('dalboForm').reset();
+        
+        setTimeout(() => {
+          document.getElementById('dalboMessage').classList.add('hidden');
+        }, 5000);
+      }, 1000);
+    });
+
+    // USSD Form
+    document.getElementById('ussdForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('ussdName').value;
+      const project = document.getElementById('ussdProject').value;
+      const money = document.getElementById('ussdMoney').value;
+      
+      document.getElementById('ussdButtonText').classList.add('hidden');
+      document.getElementById('ussdLoading').classList.remove('hidden');
+      document.querySelector('#ussdForm button').disabled = true;
+      
+      const ussdCode = `*712*618877686*${money}#`;
+      const telUrl = `tel:${encodeURIComponent(ussdCode)}`;
+      
+      setTimeout(() => {
+        window.open(telUrl, '_self');
+        
+        document.getElementById('ussdButtonText').classList.remove('hidden');
+        document.getElementById('ussdLoading').classList.add('hidden');
+        document.querySelector('#ussdForm button').disabled = false;
+        
+        document.getElementById('ussdMessage').textContent = `✓ Waxaad dirtay $${money}. Lacagta waxaa laguugu adeegayaa sida ugu dhaqsiyah badan!`;
+        document.getElementById('ussdMessage').classList.remove('hidden');
+        document.getElementById('ussdForm').reset();
+        
+        setTimeout(() => {
+          document.getElementById('ussdMessage').classList.add('hidden');
+        }, 5000);
+      }, 1000);
+    });
+
+    // WhatsApp Form
+    document.getElementById('whatsappForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('whatsappName').value;
+      const number = document.getElementById('whatsappNumber').value;
+      const description = document.getElementById('whatsappDescription').value;
+      
+      document.getElementById('whatsappButtonText').classList.add('hidden');
+      document.getElementById('whatsappLoading').classList.remove('hidden');
+      document.querySelector('#whatsappForm button').disabled = true;
+      
+      const message = `Magaca: ${name}%0ALambarka: ${number}%0AFaahfaahin: ${description}`;
+      const whatsappUrl = `https://wa.me/618877686?text=${message}`;
+      
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        
+        document.getElementById('whatsappButtonText').classList.remove('hidden');
+        document.getElementById('whatsappLoading').classList.add('hidden');
+        document.querySelector('#whatsappForm button').disabled = false;
+        
+        document.getElementById('whatsappMessage').textContent = '✓ Fariintaada waa la diray!';
+        document.getElementById('whatsappMessage').classList.remove('hidden');
+        document.getElementById('whatsappForm').reset();
+        
+        setTimeout(() => {
+          document.getElementById('whatsappMessage').classList.add('hidden');
+        }, 5000);
+      }, 1000);
+    });
+
+    function loadHistori() {
+      const historiList = document.getElementById('historiList');
+      const history = JSON.parse(localStorage.getItem('horseed_history') || '[]');
+      
+      // Clean old entries (older than 30 days)
+      const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+      const filteredHistory = history.filter(item => item.timestamp > thirtyDaysAgo);
+      localStorage.setItem('horseed_history', JSON.stringify(filteredHistory));
+      
+      if (filteredHistory.length === 0) {
+        historiList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">Wax histori ah ma jiraan</p>';
+        return;
+      }
+      
+      historiList.innerHTML = '';
+      filteredHistory.reverse().forEach(item => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background: #f9fafb; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem;';
+        
+        const isRealImage = item.productIcon && item.productIcon.startsWith('http');
+        
+        card.innerHTML = `
+          ${isRealImage ? 
+            `<img src="${item.productIcon}" alt="${item.productName}" style="width: 80px; height: 80px; object-fit: contain; border-radius: 8px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+             <div style="font-size: 3rem; display: none;">📦</div>` 
+            : 
+            `<div style="font-size: 3rem;">📦</div>`
+          }
+          <div style="flex: 1;">
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">${item.productName}</div>
+            <div style="font-size: 0.9rem; color: #6b7280;">${item.date} - ${item.time}</div>
+          </div>
+          <div style="font-weight: 700; color: #059669; font-size: 1.1rem;">${item.price}</div>
+        `;
+        
+        historiList.appendChild(card);
+      });
+    }
+
+    function showSignup() {
+      hideAllScreens();
+      document.getElementById('signupScreen').classList.remove('hidden');
+    }
+
+    function showLogin() {
+      hideAllScreens();
+      document.getElementById('loginScreen').classList.remove('hidden');
+    }
+
+    function showDashboard() {
+      hideAllScreens();
+      document.getElementById('dashboardScreen').classList.remove('hidden');
+      if (currentUser) {
+        document.getElementById('userPhone').textContent = currentUser.phone_number;
+      }
+    }
+
+    function showIibso() {
+      hideAllScreens();
+      document.getElementById('iibsoScreen').classList.remove('hidden');
+      loadProducts();
+    }
+
+    function showDalbo() {
+      hideAllScreens();
+      document.getElementById('dalboScreen').classList.remove('hidden');
+    }
+
+    function showUSSD() {
+      hideAllScreens();
+      document.getElementById('ussdScreen').classList.remove('hidden');
+    }
+
+    function showWhatsApp() {
+      hideAllScreens();
+      document.getElementById('whatsappScreen').classList.remove('hidden');
+    }
+
+    function showHistori() {
+      hideAllScreens();
+      document.getElementById('historiScreen').classList.remove('hidden');
+      loadHistori();
+    }
+
+    function hideAllScreens() {
+      document.getElementById('signupScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboardScreen').classList.add('hidden');
+      document.getElementById('iibsoScreen').classList.add('hidden');
+      document.getElementById('dalboScreen').classList.add('hidden');
+      document.getElementById('ussdScreen').classList.add('hidden');
+      document.getElementById('whatsappScreen').classList.add('hidden');
+      document.getElementById('historiScreen').classList.add('hidden');
+    }
+
+    initializeApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a89041fa7679863',t:'MTc2NDgyNzMyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
