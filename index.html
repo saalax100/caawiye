@@ -1,0 +1,2467 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRSD Exchange - Somali Digital Currency</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .success-message {
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-backdrop {
+            backdrop-filter: blur(5px);
+        }
+        .chart-container {
+            height: 120px;
+            display: flex;
+            align-items: end;
+            gap: 2px;
+            padding: 10px;
+            background: linear-gradient(to top, rgba(59, 130, 246, 0.1), transparent);
+            border-radius: 8px;
+        }
+        
+        /* Mobile-first responsive design */
+        @media (max-width: 640px) {
+            .mobile-text-sm { font-size: 0.875rem; }
+            .mobile-text-base { font-size: 1rem; }
+            .mobile-text-lg { font-size: 1.125rem; }
+            .mobile-text-xl { font-size: 1.25rem; }
+            .mobile-text-2xl { font-size: 1.5rem; }
+            .mobile-p-2 { padding: 0.5rem; }
+            .mobile-p-3 { padding: 0.75rem; }
+            .mobile-p-4 { padding: 1rem; }
+            .mobile-gap-2 { gap: 0.5rem; }
+            .mobile-gap-3 { gap: 0.75rem; }
+            .mobile-gap-4 { gap: 1rem; }
+            .mobile-space-y-3 > * + * { margin-top: 0.75rem; }
+            .mobile-space-y-4 > * + * { margin-top: 1rem; }
+            .mobile-h-12 { height: 3rem; }
+            .mobile-h-14 { height: 3.5rem; }
+            .mobile-rounded-lg { border-radius: 0.5rem; }
+            .mobile-shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        }
+        
+        /* Tablet responsive design */
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .tablet-text-base { font-size: 1rem; }
+            .tablet-text-lg { font-size: 1.125rem; }
+            .tablet-text-xl { font-size: 1.25rem; }
+            .tablet-p-4 { padding: 1rem; }
+            .tablet-p-6 { padding: 1.5rem; }
+            .tablet-gap-4 { gap: 1rem; }
+            .tablet-gap-6 { gap: 1.5rem; }
+        }
+        
+        /* Ensure modals are properly sized on all devices */
+        .modal-container {
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 1rem;
+        }
+        
+        /* Touch-friendly buttons */
+        .touch-button {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* Prevent horizontal scroll */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+        
+        /* Scrollable ID Card Styles - Responsive for all devices */
+        .scrollable-card {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            scrollbar-width: thick;
+            scrollbar-color: #3b82f6 #e5e7eb;
+        }
+        
+        /* Desktop scrollbar - More visible */
+        .scrollable-card::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        .scrollable-card::-webkit-scrollbar-track {
+            background: #e5e7eb;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+        }
+        
+        .scrollable-card::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+            border-radius: 6px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .scrollable-card::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #1d4ed8, #1e40af);
+            transform: scale(1.1);
+        }
+        
+        /* Mobile and tablet optimizations - Even more visible */
+        @media (max-width: 1024px) {
+            .scrollable-card::-webkit-scrollbar {
+                width: 16px;
+            }
+            
+            .scrollable-card::-webkit-scrollbar-thumb {
+                background: linear-gradient(180deg, #ef4444, #dc2626);
+                border: 2px solid #fef2f2;
+            }
+            
+            .scrollable-card::-webkit-scrollbar-thumb:active {
+                background: linear-gradient(180deg, #dc2626, #b91c1c);
+            }
+        }
+        
+        /* Force scrollbar to always show */
+        .scrollable-card::-webkit-scrollbar {
+            -webkit-appearance: none;
+        }
+        
+        /* Additional mobile touch indicators */
+        @media (max-width: 640px) {
+            .scrollable-card {
+                position: relative;
+            }
+        }
+        
+        /* Responsive grid adjustments */
+        @media (max-width: 640px) {
+            .mobile-grid-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+            .mobile-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .tablet-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .tablet-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Success Message -->
+    <div id="successMessage" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden success-message">
+        <span id="successText">✅ Success!</span>
+    </div>
+
+    <!-- Register Page -->
+    <div id="registerPage" class="min-h-screen gradient-bg flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 w-full max-w-md card-shadow mobile-p-4">
+            <div class="text-center mb-6 sm:mb-8">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <span class="text-white text-xl sm:text-2xl font-bold">H</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 mobile-text-xl">HRSD Exchange</h1>
+                <p class="text-gray-600 text-sm sm:text-base mobile-text-sm">Somali Digital Currency Platform</p>
+                <p class="text-xs sm:text-sm text-blue-600 mt-2 mobile-text-sm">10+ Million Users Worldwide</p>
+            </div>
+
+            <form id="registerForm" class="space-y-4 sm:space-y-6 mobile-space-y-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2 mobile-text-sm">Gmail Address</label>
+                    <input type="email" id="registerEmail" required 
+                           class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-sm sm:text-base touch-button mobile-h-12"
+                           placeholder="example@gmail.com">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2 mobile-text-sm">Password</label>
+                    <input type="password" id="registerPassword" required 
+                           class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-sm sm:text-base touch-button mobile-h-12"
+                           placeholder="Enter your password">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2 mobile-text-sm">Xaqiiji Password</label>
+                    <input type="password" id="confirmPassword" required 
+                           class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-sm sm:text-base touch-button mobile-h-12"
+                           placeholder="Confirm your password">
+                </div>
+                
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 sm:py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition duration-200 shadow-lg text-sm sm:text-base touch-button mobile-h-12">
+                    🚀 Samee Akoon Cusub
+                </button>
+            </form>
+
+            <div class="mt-4 sm:mt-6 text-center">
+                <p class="text-gray-600 text-sm sm:text-base mobile-text-sm">Akoon ma leedahay?</p>
+                <button onclick="showLogin()" class="text-blue-600 hover:text-blue-800 font-semibold mt-2 text-sm sm:text-base mobile-text-sm touch-button">
+                    Halkan ka gal akoonkaaga
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen gradient-bg flex items-center justify-center p-2 sm:p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 w-full max-w-md card-shadow mobile-p-4">
+            <div class="text-center mb-6 sm:mb-8">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <span class="text-white text-xl sm:text-2xl font-bold">H</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 mobile-text-xl">Soo Gal</h1>
+                <p class="text-gray-600 text-sm sm:text-base mobile-text-sm">Welcome back to HRSD Exchange</p>
+            </div>
+
+            <form id="loginForm" class="space-y-4 sm:space-y-6 mobile-space-y-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2 mobile-text-sm">Gmail Address</label>
+                    <input type="email" id="loginEmail" required 
+                           class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-sm sm:text-base touch-button mobile-h-12"
+                           placeholder="example@gmail.com">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2 mobile-text-sm">Password</label>
+                    <input type="password" id="loginPassword" required 
+                           class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-sm sm:text-base touch-button mobile-h-12"
+                           placeholder="Enter your password">
+                </div>
+                
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 sm:py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition duration-200 shadow-lg text-sm sm:text-base touch-button mobile-h-12">
+                    🔐 Soo Gal
+                </button>
+            </form>
+
+            <div class="mt-4 sm:mt-6 text-center">
+                <p class="text-gray-600 text-sm sm:text-base mobile-text-sm">Akoon ma leedahay?</p>
+                <button onclick="showRegister()" class="text-blue-600 hover:text-blue-800 font-semibold mt-2 text-sm sm:text-base mobile-text-sm touch-button">
+                    Halkan ka samee akoon cusub
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="min-h-screen bg-gray-50 hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+                <div class="flex justify-between items-center h-14 sm:h-16">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold text-sm sm:text-base">H</span>
+                        </div>
+                        <h1 class="ml-2 sm:ml-3 text-lg sm:text-xl font-bold text-gray-800 mobile-text-lg">HRSD Exchange</h1>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 sm:space-x-4">
+                        <div class="text-right hidden sm:block">
+                            <div class="text-gray-600 text-sm mobile-text-sm">Ahlan <span id="userEmail" class="font-semibold text-blue-600"></span></div>
+                            <div class="text-xs sm:text-sm text-gray-500 mobile-text-sm">ID: <span id="userId" class="font-semibold text-purple-600"></span></div>
+                        </div>
+                        <div class="text-right sm:hidden">
+                            <div class="text-xs text-gray-500">ID: <span id="userIdMobile" class="font-semibold text-purple-600"></span></div>
+                        </div>
+                        <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg transition duration-200 text-xs sm:text-sm touch-button">
+                            🚪 <span class="hidden sm:inline">Ka Bax</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Balance Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 mobile-gap-3">
+                <!-- USD Balance -->
+                <div class="bg-gradient-to-r from-green-400 to-green-600 rounded-xl p-4 sm:p-6 text-white card-shadow mobile-p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-100 text-xs sm:text-sm mobile-text-sm">USD Balance</p>
+                            <p id="usdBalance" class="text-lg sm:text-2xl font-bold mobile-text-lg">$0.00</p>
+                        </div>
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-white p-1">
+                            <img src="https://i.postimg.cc/zVM6Xx88/usd.png" alt="USD" class="w-full h-full object-cover rounded-full" onerror="this.src=''; this.alt='💵'; this.className='text-2xl sm:text-3xl';">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HRSD Balance -->
+                <div class="bg-gradient-to-r from-blue-400 to-blue-600 rounded-xl p-4 sm:p-6 text-white card-shadow mobile-p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-100 text-xs sm:text-sm mobile-text-sm">HRSD Balance</p>
+                            <p id="hrsdBalance" class="text-lg sm:text-2xl font-bold mobile-text-lg">0.00 HRSD</p>
+                        </div>
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-white p-1">
+                            <img src="https://i.postimg.cc/ppY5P6DM/hrsd.png" alt="HRSD" class="w-full h-full object-cover rounded-full" onerror="this.src=''; this.alt='🪙'; this.className='text-2xl sm:text-3xl';">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bitcoin Balance -->
+                <div class="bg-gradient-to-r from-orange-400 to-orange-600 rounded-xl p-4 sm:p-6 text-white card-shadow mobile-p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-orange-100 text-xs sm:text-sm mobile-text-sm">Bitcoin Balance</p>
+                            <p id="bitcoinBalance" class="text-lg sm:text-2xl font-bold mobile-text-lg">0.00000 BTC</p>
+                        </div>
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-white p-1">
+                            <img src="https://i.postimg.cc/N95RMkgv/bitcoin.png" alt="Bitcoin" class="w-full h-full object-cover rounded-full" onerror="this.src=''; this.alt='₿'; this.className='text-2xl sm:text-3xl';">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Robot Balance -->
+                <div class="bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-xl p-4 sm:p-6 text-white card-shadow mobile-p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-cyan-100 text-xs sm:text-sm mobile-text-sm">Robot Balance</p>
+                            <p id="robotBalance" class="text-lg sm:text-2xl font-bold mobile-text-lg">$0.00</p>
+                        </div>
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-white p-1">
+                            <img src="https://i.postimg.cc/CLY64CFd/photo-2024-12-19-21-47-37.jpg" alt="Robot" class="w-full h-full object-cover rounded-full" onerror="this.src=''; this.alt='🤖'; this.className='text-2xl sm:text-3xl';">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 mobile-grid-2 tablet-grid-3">
+                <button onclick="showDeposit()" class="bg-green-500 hover:bg-green-600 text-white p-3 sm:p-4 rounded-xl font-semibold transition duration-200 shadow-lg flex flex-col items-center space-y-1 sm:space-y-2 touch-button mobile-p-3">
+                    <span class="text-lg sm:text-2xl">💰</span>
+                    <span class="text-xs sm:text-sm mobile-text-sm">Lacag Geli</span>
+                </button>
+                
+                <button onclick="showWithdraw()" class="bg-red-500 hover:bg-red-600 text-white p-3 sm:p-4 rounded-xl font-semibold transition duration-200 shadow-lg flex flex-col items-center space-y-1 sm:space-y-2 touch-button mobile-p-3">
+                    <span class="text-lg sm:text-2xl">💸</span>
+                    <span class="text-xs sm:text-sm mobile-text-sm">Lacag Bax</span>
+                </button>
+                
+                <button onclick="showUSSD()" class="bg-purple-500 hover:bg-purple-600 text-white p-3 sm:p-4 rounded-xl font-semibold transition duration-200 shadow-lg flex flex-col items-center space-y-1 sm:space-y-2 touch-button mobile-p-3">
+                    <span class="text-lg sm:text-2xl">📱</span>
+                    <span class="text-xs sm:text-sm mobile-text-sm">USSD</span>
+                </button>
+                
+                <button onclick="showTrade()" class="bg-blue-500 hover:bg-blue-600 text-white p-3 sm:p-4 rounded-xl font-semibold transition duration-200 shadow-lg flex flex-col items-center space-y-1 sm:space-y-2 touch-button mobile-p-3">
+                    <span class="text-lg sm:text-2xl">📈</span>
+                    <span class="text-xs sm:text-sm mobile-text-sm">Trade</span>
+                </button>
+                
+                <button onclick="showIDCard()" class="bg-yellow-500 hover:bg-yellow-600 text-white p-3 sm:p-4 rounded-xl font-semibold transition duration-200 shadow-lg flex flex-col items-center space-y-1 sm:space-y-2 touch-button mobile-p-3">
+                    <span class="text-lg sm:text-2xl">🆔</span>
+                    <span class="text-xs sm:text-sm mobile-text-sm">ID Card</span>
+                </button>
+                
+                <button onclick="showRobot()" class="bg-cyan-500 hover:bg-cyan-600 text-white p-3 sm:p-4 rounded-xl font-semibold transition duration-200 shadow-lg flex flex-col items-center space-y-1 sm:space-y-2 touch-button mobile-p-3">
+                    <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-white p-0.5">
+                        <img src="https://i.postimg.cc/CLY64CFd/photo-2024-12-19-21-47-37.jpg" alt="Robot" class="w-full h-full object-cover rounded-full" onerror="this.src=''; this.alt='🤖'; this.className='text-lg sm:text-2xl';">
+                    </div>
+                    <span class="text-xs sm:text-sm mobile-text-sm">Robot</span>
+                </button>
+                
+                <button onclick="showSwap()" class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white p-3 sm:p-4 rounded-2xl font-bold transition duration-300 shadow-xl transform hover:scale-105 flex flex-col items-center space-y-1 sm:space-y-2 touch-button mobile-p-3 border-2 border-white/20">
+                    <div class="flex items-center space-x-1">
+                        <span class="text-lg sm:text-xl animate-spin">⚡</span>
+                        <span class="text-lg sm:text-xl">💱</span>
+                        <span class="text-lg sm:text-xl animate-bounce">⚡</span>
+                    </div>
+                    <span class="text-xs sm:text-sm mobile-text-sm font-extrabold tracking-wide">SWAP</span>
+                </button>
+                
+                <button onclick="openWhatsApp()" class="bg-gray-600 hover:bg-gray-700 text-white p-3 sm:p-4 rounded-xl font-semibold transition duration-200 shadow-lg flex flex-col items-center space-y-1 sm:space-y-2 touch-button mobile-p-3">
+                    <span class="text-lg sm:text-2xl">💬</span>
+                    <span class="text-xs sm:text-sm mobile-text-sm">WhatsApp</span>
+                </button>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-shadow">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">📊 Warbixin Dhaqaale</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <p class="text-gray-600 text-sm">Isticmaalayaasha Platform-ka</p>
+                        <p class="text-2xl font-bold text-blue-600">10.1M+</p>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <p class="text-gray-600 text-sm">HRSD Market Cap</p>
+                        <p class="text-2xl font-bold text-green-600">$135.4M</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center p-2 sm:p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-md card-shadow modal-container mobile-p-4">
+            <div class="flex justify-between items-center mb-4 sm:mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mobile-text-xl">💰 Lacag Geli</h2>
+                <button onclick="closeModal('depositModal')" class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl touch-button">&times;</button>
+            </div>
+
+            <form id="depositForm" class="space-y-3 sm:space-y-4 mobile-space-y-3">
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2 mobile-text-sm">Deposit Type</label>
+                    <select onchange="updateDepositFields()" class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base touch-button mobile-h-12">
+                        <option value="evcplus">EVCPlus</option>
+                    </select>
+                </div>
+
+                <div id="evcplusDepositFields" class="space-y-3 sm:space-y-4 mobile-space-y-3">
+                    <!-- EVCPlus Image -->
+                    <div class="text-center mb-4">
+                        <img src="https://i.postimg.cc/k4698h5k/download-2-removebg-preview.png" alt="EVCPlus" class="w-20 h-20 mx-auto rounded-lg shadow-md" onerror="this.src=''; this.alt='📱'; this.className='text-4xl mx-auto';">
+                        <p class="text-sm text-gray-600 mt-2 font-semibold">EVCPlus Deposit</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-2 mobile-text-sm">Lacagta (USD)</label>
+                        <input type="number" id="depositEvcAmount" step="0.01" min="1" required 
+                               class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base touch-button mobile-h-12"
+                               placeholder="Geli lacagta aad rabto">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-2 mobile-text-sm">Lambarka EVCPlus</label>
+                        <input type="tel" id="depositNumber" required 
+                               class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base touch-button mobile-h-12"
+                               placeholder="252xxxxxxxx">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 sm:py-3 rounded-lg font-semibold transition duration-200 text-sm sm:text-base touch-button mobile-h-12">
+                    ✅ Xaqiiji Deposit
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="withdrawModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md card-shadow">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">💸 Lacag Bax</h2>
+                <button onclick="closeModal('withdrawModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+
+            <form id="withdrawForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Withdraw Type</label>
+                    <select id="withdrawType" onchange="updateWithdrawFields()" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option value="evcplus">EVCPlus</option>
+                        <option value="bitcoin">Bitcoin</option>
+                    </select>
+                </div>
+
+                <div id="evcplusFields" class="space-y-4 hidden">
+                    <!-- EVCPlus Image -->
+                    <div class="text-center mb-4">
+                        <img src="https://i.postimg.cc/k4698h5k/download-2-removebg-preview.png" alt="EVCPlus" class="w-20 h-20 mx-auto rounded-lg shadow-md" onerror="this.src=''; this.alt='📱'; this.className='text-4xl mx-auto';">
+                        <p class="text-sm text-gray-600 mt-2 font-semibold">EVCPlus Withdraw</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Lacagta (HRSD)</label>
+                        <input type="number" id="withdrawHrsdAmount" step="0.01" min="1" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                               placeholder="Geli lacagta aad rabto">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Lambarka EVCPlus</label>
+                        <input type="tel" id="evcplusNumber" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                               placeholder="252xxxxxxxx">
+                    </div>
+                </div>
+
+                <div id="bitcoinFields" class="space-y-4 hidden">
+                    <!-- Bitcoin Image -->
+                    <div class="text-center mb-4">
+                        <img src="https://i.postimg.cc/N95RMkgv/bitcoin.png" alt="Bitcoin" class="w-20 h-20 mx-auto rounded-lg shadow-md" onerror="this.src=''; this.alt='₿'; this.className='text-4xl mx-auto';">
+                        <p class="text-sm text-gray-600 mt-2 font-semibold">Bitcoin Withdraw</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Bitcoin Amount</label>
+                        <input type="number" id="withdrawBitcoinAmount" step="0.00001" min="0.00001" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                               placeholder="0.00000">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Bitcoin Address</label>
+                        <input type="text" id="withdrawBitcoinAddress" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                               placeholder="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-semibold transition duration-200">
+                    ✅ Xaqiiji Withdraw
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- USSD Modal -->
+    <div id="ussdModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md card-shadow">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">📱 USSD Service</h2>
+                <button onclick="closeModal('ussdModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+
+            <!-- Step 1: Enter Amount -->
+            <div id="ussdStep1">
+                <div class="text-center mb-6">
+                    <div class="text-6xl mb-4">📱</div>
+                    <p class="text-gray-600 mb-2">Current Balance:</p>
+                    <p id="currentHrsdBalance" class="text-2xl font-bold text-blue-600">0.00 HRSD</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Enter Amount</label>
+                        <input type="number" id="ussdAmount" step="0.01" min="1" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-center text-xl"
+                               placeholder="0.00">
+                    </div>
+                    
+                    <button onclick="showUSSDSend()" class="w-full bg-purple-500 hover:bg-purple-600 text-white py-3 rounded-lg font-semibold transition duration-200">
+                        ➡️ Next
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Send Confirmation -->
+            <div id="ussdStep2" class="hidden">
+                <div class="text-center mb-6">
+                    <div class="text-6xl mb-4">💸</div>
+                    <p class="text-gray-600 mb-2">Amount to Send:</p>
+                    <p id="confirmAmount" class="text-2xl font-bold text-purple-600">0.00 HRSD</p>
+                </div>
+
+                <div class="space-y-4">
+                    <button onclick="sendUSSD()" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition duration-200">
+                        📤 Send
+                    </button>
+                    
+                    <button onclick="backToAmount()" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold transition duration-200">
+                        ⬅️ Back
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: USSD Code Display with Payment Indicator -->
+            <div id="ussdStep3" class="hidden text-center">
+                <div class="text-6xl mb-4">📱</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-4">USSD Code</h3>
+                <div class="bg-gray-100 rounded-lg p-4 mb-4">
+                    <p id="ussdCode" class="text-lg font-mono font-bold text-purple-600">*712*618877686*1#</p>
+                </div>
+                
+                <!-- Red Pulsing Payment Indicator -->
+                <div class="flex items-center justify-center mb-4">
+                    <div id="paymentIndicator" class="w-4 h-4 bg-red-500 rounded-full animate-pulse mr-2"></div>
+                    <span class="text-red-600 font-semibold">Paying...</span>
+                </div>
+                
+                <p class="text-gray-600 mb-4">Sug ilaa 30 sikiin si loo xaqiijiyo lacagtaada</p>
+                
+                <!-- Timer Display -->
+                <div class="bg-blue-50 rounded-lg p-3 mb-4">
+                    <p class="text-gray-600">Waqti haray: <span id="ussdTimeRemaining" class="font-bold text-blue-600">00:30</span></p>
+                </div>
+            </div>
+
+            <!-- Step 4: Success Confirmation -->
+            <div id="ussdStep4" class="hidden text-center">
+                <div class="text-6xl mb-4">✅</div>
+                <div class="flex items-center justify-center mb-4">
+                    <div class="w-4 h-4 bg-green-500 rounded-full mr-2"></div>
+                    <span class="text-green-600 font-bold text-lg">Waa la ansixiyey</span>
+                </div>
+                <p class="text-gray-600 mb-4">USSD transaction waa la dhammaystay</p>
+                <p class="text-sm text-blue-600 mb-4">Balances ayaa iska jiri doona ilaa deposit la sameeyo</p>
+                <button onclick="closeModal('ussdModal')" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg">
+                    Xir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trade Modal -->
+    <div id="tradeModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center p-2 sm:p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl p-3 sm:p-6 w-full max-w-4xl card-shadow modal-container mobile-p-3">
+            <div class="flex justify-between items-center mb-4 sm:mb-6">
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-white p-1 shadow-md">
+                        <img src="https://i.postimg.cc/ppY5P6DM/hrsd.png" alt="HRSD" class="w-full h-full object-cover rounded-full" onerror="this.src=''; this.alt='🪙'; this.className='text-lg sm:text-2xl';">
+                    </div>
+                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800 mobile-text-lg">📈 HRSD Trading</h2>
+                </div>
+                <button onclick="closeModal('tradeModal')" class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl touch-button">&times;</button>
+            </div>
+
+            <!-- Price Display -->
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white mb-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm">HRSD Price</p>
+                        <div class="flex items-center space-x-2">
+                            <span id="currentPrice" class="text-3xl font-bold">$0.1000</span>
+                            <span id="trendArrow" class="text-2xl">📈</span>
+                        </div>
+                        <p id="priceChange" class="text-sm text-green-400">+2.5%</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-blue-100 text-sm">24h High: <span id="high24h" class="font-bold">$0.1200</span></p>
+                        <p class="text-blue-100 text-sm">24h Low: <span id="low24h" class="font-bold">$0.0950</span></p>
+                        <p class="text-blue-100 text-sm">Volume: <span id="volume24h" class="font-bold">1,250 HRSD</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Chart -->
+            <div class="bg-white rounded-xl border p-4 mb-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">📊 Live Chart</h3>
+                <div id="liveChart" class="chart-container"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mobile-gap-3">
+                <!-- Buy/Sell Forms -->
+                <div class="lg:col-span-2 space-y-3 sm:space-y-4 lg:space-y-6">
+                    <!-- Buy Form -->
+                    <div class="bg-green-50 rounded-xl p-6 border border-green-200">
+                        <h3 class="text-lg font-bold text-green-700 mb-4">💰 Iibso HRSD</h3>
+                        <p class="text-sm text-gray-600 mb-4">Balance: <span id="buyUsdBalance" class="font-bold">$0.00</span></p>
+                        
+                        <form id="buyForm" class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-semibold mb-2">USD Amount</label>
+                                <input type="number" id="buyAmount" step="0.01" min="0.01" 
+                                       oninput="calculateBuy()"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                       placeholder="0.00">
+                            </div>
+                            
+                            <div class="bg-white p-3 rounded-lg border">
+                                <p class="text-sm text-gray-600">Waxaad heli doonto:</p>
+                                <p id="buyResult" class="text-lg font-bold text-green-600">0.00 HRSD</p>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition duration-200">
+                                🛒 Iibso
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Sell Form -->
+                    <div class="bg-red-50 rounded-xl p-6 border border-red-200">
+                        <h3 class="text-lg font-bold text-red-700 mb-4">💸 Iibi HRSD</h3>
+                        <p class="text-sm text-gray-600 mb-4">Balance: <span id="sellHrsdBalance" class="font-bold">0.00 HRSD</span></p>
+                        
+                        <form id="sellForm" class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-semibold mb-2">HRSD Amount</label>
+                                <input type="number" id="sellAmount" step="0.01" min="0.01" 
+                                       oninput="calculateSell()"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                                       placeholder="0.00">
+                            </div>
+                            
+                            <div class="bg-white p-3 rounded-lg border">
+                                <p class="text-sm text-gray-600">Waxaad heli doonto:</p>
+                                <p id="sellResult" class="text-lg font-bold text-red-600">$0.00</p>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-semibold transition duration-200">
+                                💰 Iibi
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Trading Activity -->
+                <div class="space-y-6">
+                    <!-- Recent Buyers -->
+                    <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+                        <h4 class="font-bold text-green-700 mb-3">🟢 Iibsadayaasha</h4>
+                        <div id="recentBuyers" class="space-y-2 max-h-40 overflow-y-auto">
+                            <p class="text-gray-500 text-center py-4">Wali cid ma iibsan...</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Sellers -->
+                    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+                        <h4 class="font-bold text-red-700 mb-3">🔴 Iibiyayaasha</h4>
+                        <div id="recentSellers" class="space-y-2 max-h-40 overflow-y-auto">
+                            <p class="text-gray-500 text-center py-4">Wali cid ma iibin...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ID Card Modal -->
+    <div id="idCardModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md card-shadow">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">🆔 ID CARD</h2>
+                <button onclick="closeModal('idCardModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+
+            <!-- ID Card Display -->
+            <div class="text-center mb-6">
+                <!-- Responsive Scrollable ID Card Container -->
+                <div class="mb-4 bg-gray-100 rounded-lg p-2 sm:p-3 md:p-4 mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
+                    <div class="overflow-y-scroll max-h-60 sm:max-h-72 md:max-h-80 lg:max-h-96 scrollable-card border-2 border-dashed border-blue-400 rounded-lg bg-white relative">
+                        <img src="https://i.postimg.cc/0QDcZB6V/photo-2024-12-19-21-47-38.jpg" alt="HRSD ID Card" class="w-full h-auto min-h-96 rounded-lg shadow-lg cursor-grab active:cursor-grabbing select-none" onerror="this.src=''; this.alt='🆔'; this.className='text-6xl mx-auto mb-4';">
+                        <!-- Scroll Indicator -->
+                        <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold animate-bounce">
+                            ↕️ Jiid
+                        </div>
+                    </div>
+                    <p class="text-xs sm:text-sm text-blue-600 mt-2 font-bold">📱 Jiid kor iyo hoos si aad u aragto qeybaha kale</p>
+                    <p class="text-xs text-green-600 mt-1 font-medium">💻 Dhammaan aaladaha: Mobile, Tablet, Computer</p>
+                </div>
+                
+                <!-- ID Card Description -->
+                <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                    <p class="text-blue-800 font-semibold text-lg">Waa ID CARD aqoonsiga ee shirkada HRSD.COIN</p>
+                </div>
+                
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white mb-4">
+                    <div class="w-20 h-20 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <span class="text-blue-600 text-2xl font-bold">🆔</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">HRSD ID CARD</h3>
+                    <p class="text-blue-100 text-sm">Digital Identity Card</p>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-3 mt-4">
+                        <p class="text-sm">User ID</p>
+                        <p id="idCardUserId" class="text-lg font-bold">1000</p>
+                    </div>
+                </div>
+                
+                <!-- Request Button -->
+                <button onclick="requestIDCard()" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition duration-200 mb-4">
+                    📋 Dalbo
+                </button>
+                
+                <!-- Status Message -->
+                <div id="idCardStatus" class="hidden">
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                        <div class="flex items-center justify-center mb-2">
+                            <div id="statusIndicator" class="w-4 h-4 bg-red-500 rounded-full animate-pulse mr-2"></div>
+                            <span class="text-blue-600 font-semibold">Sug ilaa 24 saac</span>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-gray-600 text-sm mb-2">Waqti haray:</p>
+                            <p id="timeRemaining" class="text-lg font-bold text-blue-600">23:59:59</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Success Message -->
+                <div id="idCardSuccess" class="hidden">
+                    <div class="bg-green-50 rounded-lg p-4">
+                        <div class="flex items-center justify-center mb-2">
+                            <div class="w-4 h-4 bg-green-500 rounded-full mr-2"></div>
+                            <span class="text-green-600 font-bold">✅ Waxaa laguu sameeyey kaarkaaga aqoonsiga</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Robot Modal -->
+    <div id="robotModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md card-shadow">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">🤖 HRSD Robot</h2>
+                <button onclick="closeModal('robotModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+
+            <!-- Robot Image and Info -->
+            <div class="text-center mb-6">
+                <img src="https://i.postimg.cc/wTHDr0Rq/photo-2024-12-19-21-47-36.jpg" alt="HRSD Robot" class="w-32 h-32 mx-auto rounded-lg shadow-md mb-4" onerror="this.src=''; this.alt='🤖'; this.className='text-6xl mx-auto mb-4';">
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        Waxaan ahay robot ay leedahay shirkada HRSD.COIN waxaan kuu tarede gareengaraa COINKA.HRSD oo aan kaaga sameenkaraa faaido aniga oo kuu sameen kara sell, iyo buy.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Request Robot Button -->
+            <button onclick="showRobotRequest()" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-3 rounded-lg font-semibold transition duration-200 mb-4">
+                📋 Dalbo Robotka
+            </button>
+        </div>
+    </div>
+
+    <!-- Robot Request Modal -->
+    <div id="robotRequestModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md card-shadow max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">🤖 Robot Trading</h2>
+                <button onclick="closeModal('robotRequestModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+
+            <!-- Robot Trading Interface -->
+            <div class="text-center mb-6">
+                <img id="robotTradingImage" src="https://i.postimg.cc/CLY64CFd/photo-2024-12-19-21-47-37.jpg" alt="Robot Trading" class="w-32 h-32 mx-auto rounded-lg shadow-md mb-4 transition-transform duration-500" onerror="this.src=''; this.alt='🤖'; this.className='text-6xl mx-auto mb-4';">
+                
+                <!-- Robot Balance Display -->
+                <div class="bg-cyan-50 rounded-lg p-4 mb-4">
+                    <p class="text-gray-600 text-sm">Robot Balance</p>
+                    <p id="robotBalanceDisplay" class="text-2xl font-bold text-cyan-600">$0.00</p>
+                </div>
+
+                <!-- Robot Status -->
+                <div id="robotStatus" class="bg-gray-50 rounded-lg p-3 mb-4">
+                    <div class="flex items-center justify-center mb-2">
+                        <div id="robotIndicator" class="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
+                        <span id="robotStatusText" class="text-gray-600 font-semibold">Robot Joojisan</span>
+                    </div>
+                    
+                    <!-- Mining Status -->
+                    <div id="miningStatus" class="text-center text-xs text-gray-500 hidden">
+                        <div class="flex items-center justify-center mb-1">
+                            <span class="mr-1">⛏️</span>
+                            <span>Next Mining:</span>
+                        </div>
+                        <div id="miningCountdown" class="font-bold text-blue-600">--:--:--</div>
+                        
+                        <!-- 24-Hour Timer Display -->
+                        <div class="mt-2 pt-2 border-t border-gray-200">
+                            <div class="flex items-center justify-center mb-1">
+                                <span class="mr-1">⏰</span>
+                                <span>Waqti haray:</span>
+                            </div>
+                            <div id="robot24HourCountdown" class="font-bold text-red-600">--:--:--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investment Amount Input -->
+            <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                <label class="block text-gray-700 text-sm font-semibold mb-2">💰 Lacagta Maalgashiga (USD)</label>
+                <input type="number" id="robotInvestAmount" step="0.01" min="1" max="1000" 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-center text-lg font-bold"
+                       placeholder="Geli lacagta aad rabto (min $1)">
+                <p class="text-xs text-gray-500 mt-2 text-center">Inta badan lacag aad geliso, inta badan faa'iido ayaad heli doontaa</p>
+            </div>
+
+            <!-- Robot Control Buttons -->
+            <div class="space-y-3">
+                <button onclick="buyRobot()" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition duration-200">
+                    💰 Buy Robot ($1)
+                </button>
+                
+                <button id="tradeButton" onclick="startRobotTrading()" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-semibold transition duration-200 hidden">
+                    📈 Trade
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swap Modal -->
+    <div id="swapModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 w-full max-w-lg card-shadow border-2 border-white/50 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center animate-pulse">
+                        <span class="text-white text-2xl">💱</span>
+                    </div>
+                    <h2 class="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Currency Swap</h2>
+                </div>
+                <button onclick="closeModal('swapModal')" class="text-gray-500 hover:text-gray-700 text-3xl hover:rotate-90 transition-transform duration-300">&times;</button>
+            </div>
+
+            <form id="swapForm" class="space-y-8">
+                <!-- From Currency -->
+                <div class="bg-gradient-to-r from-blue-100 to-cyan-100 rounded-2xl p-6 border-2 border-blue-200/50 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <label class="text-blue-800 text-lg font-bold flex items-center">
+                            <span class="mr-2">📤</span> From
+                        </label>
+                        <div class="bg-blue-200 px-3 py-1 rounded-full">
+                            <span class="text-blue-800 text-sm font-semibold">Balance: <span id="fromBalance" class="font-bold">$0.00</span></span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-white rounded-full p-2 shadow-md flex items-center justify-center">
+                            <img id="fromCurrencyImage" src="https://i.postimg.cc/zVM6Xx88/usd.png" alt="USD" class="w-12 h-12 rounded-full" onerror="this.src=''; this.alt='💵'; this.className='text-2xl';">
+                        </div>
+                        <select id="swapFrom" onchange="updateSwapDisplay()" class="flex-1 px-4 py-4 border-2 border-blue-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 text-lg font-semibold bg-white shadow-inner">
+                            <option value="usd">💵 USD</option>
+                            <option value="hrsd">🪙 HRSD</option>
+                            <option value="bitcoin">₿ Bitcoin</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Amount Input -->
+                <div class="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-2xl p-6 border-2 border-yellow-200/50 shadow-lg">
+                    <label class="block text-orange-800 text-lg font-bold mb-4 flex items-center">
+                        <span class="mr-2">💰</span> Amount
+                    </label>
+                    <input type="number" id="swapAmount" step="0.00000001" min="0.00000001" 
+                           oninput="calculateSwap()"
+                           class="w-full px-6 py-4 border-2 border-orange-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 text-center text-2xl font-bold bg-white shadow-inner"
+                           placeholder="0.00">
+                </div>
+
+                <!-- Swap Arrow with Animation -->
+                <div class="text-center relative">
+                    <div class="bg-gradient-to-r from-pink-500 to-purple-600 w-20 h-20 rounded-full mx-auto flex items-center justify-center shadow-xl border-4 border-white hover:scale-110 transition-transform duration-300 cursor-pointer animate-bounce">
+                        <div class="text-4xl text-white animate-spin">⚡</div>
+                    </div>
+                    <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+                        <div class="bg-white px-4 py-2 rounded-full shadow-lg border-2 border-pink-200">
+                            <p id="exchangeRate" class="text-sm font-bold text-pink-600">1 USD = 10 HRSD</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- To Currency -->
+                <div class="bg-gradient-to-r from-green-100 to-emerald-100 rounded-2xl p-6 border-2 border-green-200/50 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <label class="text-green-800 text-lg font-bold flex items-center">
+                            <span class="mr-2">📥</span> To
+                        </label>
+                        <div class="bg-green-200 px-3 py-1 rounded-full">
+                            <span class="text-green-800 text-sm font-semibold">Balance: <span id="toBalance" class="font-bold">0.00 HRSD</span></span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-white rounded-full p-2 shadow-md flex items-center justify-center">
+                            <img id="toCurrencyImage" src="https://i.postimg.cc/ppY5P6DM/hrsd.png" alt="HRSD" class="w-12 h-12 rounded-full" onerror="this.src=''; this.alt='🪙'; this.className='text-2xl';">
+                        </div>
+                        <select id="swapTo" onchange="updateSwapDisplay()" class="flex-1 px-4 py-4 border-2 border-green-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 text-lg font-semibold bg-white shadow-inner">
+                            <option value="hrsd">🪙 HRSD</option>
+                            <option value="usd">💵 USD</option>
+                            <option value="bitcoin">₿ Bitcoin</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Result with Glow Effect -->
+                <div class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-6 border-2 border-purple-200/50 shadow-xl relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-400/20 animate-pulse"></div>
+                    <div class="relative z-10">
+                        <p class="text-purple-800 text-lg font-bold mb-2 flex items-center justify-center">
+                            <span class="mr-2">✨</span> Waxaad heli doonto:
+                        </p>
+                        <p id="swapResult" class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent text-center">0.00</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600 text-white py-4 rounded-2xl font-bold text-xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 border-2 border-white/30">
+                    <span class="flex items-center justify-center space-x-2">
+                        <span class="animate-spin">⚡</span>
+                        <span>💱</span>
+                        <span>Bedel Currency</span>
+                        <span>💱</span>
+                        <span class="animate-spin">⚡</span>
+                    </span>
+                </button>
+            </form>
+
+
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let users = JSON.parse(localStorage.getItem('users')) || {};
+        let userBalances = JSON.parse(localStorage.getItem('userBalances')) || {};
+        let robotBalances = JSON.parse(localStorage.getItem('robotBalances')) || {};
+        let robotStatus = JSON.parse(localStorage.getItem('robotStatus')) || {};
+        let currentUser = localStorage.getItem('currentUser');
+        let userCounter = parseInt(localStorage.getItem('userCounter')) || 1000; // Start from 1000
+        let idCardTimer;
+        let idCardTimeLeft = 24 * 60 * 60; // 24 hours in seconds
+        let robotTimer;
+        let robotImageTimer;
+        let globalRobotTimer; // Global timer for all active robots
+
+        // Success message function
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            const successText = document.getElementById('successText');
+            successText.textContent = message;
+            successDiv.classList.remove('hidden');
+            
+            setTimeout(() => {
+                successDiv.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Initialize user balance - always starts at 0
+        function initUserBalance(email) {
+            if (!userBalances[email]) {
+                userBalances[email] = {
+                    usd: 0,
+                    hrsd: 0,
+                    bitcoin: 0
+                };
+                localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            }
+            
+            // Initialize robot balance
+            if (!robotBalances[email]) {
+                robotBalances[email] = 0;
+                localStorage.setItem('robotBalances', JSON.stringify(robotBalances));
+            }
+            
+            // Initialize robot status
+            if (!robotStatus[email]) {
+                robotStatus[email] = {
+                    isActive: false,
+                    hasRobot: false
+                };
+                localStorage.setItem('robotStatus', JSON.stringify(robotStatus));
+            }
+        }
+
+        // Registration
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (users[email]) {
+                alert('Gmail-kan horay ayaa loo isticmaalay!');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Password-yada ma isku mid aha!');
+                return;
+            }
+            
+            // Generate unique user ID
+            const userId = userCounter++;
+            localStorage.setItem('userCounter', userCounter);
+            
+            users[email] = { 
+                password: password,
+                userId: userId,
+                registrationDate: new Date().toISOString()
+            };
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            currentUser = email;
+            localStorage.setItem('currentUser', currentUser);
+            initUserBalance(email);
+            
+            showSuccess(`✅ Waad is diiwaan galisay! ID-kaaga: ${userId}`);
+            
+            // Clear the form
+            document.getElementById('registerForm').reset();
+            
+            setTimeout(() => {
+                showLogin();
+            }, 2000);
+        });
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!users[email] || users[email].password !== password) {
+                alert('Gmail ama password qalad ah!');
+                return;
+            }
+            
+            currentUser = email;
+            localStorage.setItem('currentUser', currentUser);
+            initUserBalance(email);
+            
+            showSuccess('✅ Waxaad soo gashay akoonkaaga!');
+            
+            setTimeout(() => {
+                showDashboard();
+            }, 1500);
+        });
+
+        // Show different pages
+        function showRegister() {
+            document.getElementById('registerPage').classList.remove('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            
+            document.getElementById('userEmail').textContent = currentUser;
+            
+            // Display user ID
+            if (users[currentUser] && users[currentUser].userId) {
+                document.getElementById('userId').textContent = users[currentUser].userId;
+                document.getElementById('userIdMobile').textContent = users[currentUser].userId;
+            }
+            
+            updateBalanceDisplay();
+        }
+
+        // Update balance display
+        function updateBalanceDisplay() {
+            if (currentUser && userBalances[currentUser]) {
+                document.getElementById('usdBalance').textContent = `$${userBalances[currentUser].usd.toFixed(2)}`;
+                document.getElementById('hrsdBalance').textContent = `${userBalances[currentUser].hrsd.toFixed(4)} HRSD`;
+                document.getElementById('bitcoinBalance').textContent = `${userBalances[currentUser].bitcoin.toFixed(5)} BTC`;
+                
+                // Update robot balance
+                if (robotBalances[currentUser] !== undefined) {
+                    document.getElementById('robotBalance').textContent = `$${robotBalances[currentUser].toFixed(2)}`;
+                    
+                    // Update robot balance display in modal if visible
+                    const robotBalanceDisplay = document.getElementById('robotBalanceDisplay');
+                    if (robotBalanceDisplay) {
+                        robotBalanceDisplay.textContent = `$${robotBalances[currentUser].toFixed(2)}`;
+                    }
+                }
+            }
+        }
+
+        // Modal functions
+        function showDeposit() {
+            document.getElementById('depositModal').classList.remove('hidden');
+        }
+
+        function showWithdraw() {
+            document.getElementById('withdrawModal').classList.remove('hidden');
+        }
+
+        function showUSSD() {
+            document.getElementById('ussdModal').classList.remove('hidden');
+            // Update current balance display
+            if (currentUser && userBalances[currentUser]) {
+                document.getElementById('currentHrsdBalance').textContent = `${userBalances[currentUser].hrsd.toFixed(4)} HRSD`;
+            }
+        }
+
+        function showTrade() {
+            document.getElementById('tradeModal').classList.remove('hidden');
+            startLiveTrading();
+        }
+
+        function showSwap() {
+            document.getElementById('swapModal').classList.remove('hidden');
+            updateSwapDisplay();
+        }
+
+
+
+        function showIDCard() {
+            document.getElementById('idCardModal').classList.remove('hidden');
+            // Update user ID display
+            if (currentUser && users[currentUser] && users[currentUser].userId) {
+                document.getElementById('idCardUserId').textContent = users[currentUser].userId;
+            }
+        }
+
+        function showRobot() {
+            document.getElementById('robotModal').classList.remove('hidden');
+        }
+
+        function showRobotRequest() {
+            document.getElementById('robotModal').classList.add('hidden');
+            document.getElementById('robotRequestModal').classList.remove('hidden');
+            updateRobotDisplay();
+        }
+
+        // ID Card request function
+        function requestIDCard() {
+            const message = `Fadlan dir sawirkaaga, sadaxdaada, magac oo dhameystiran, lambarkaaga iyo ID code korka muuqda. Mahadsanid. Lambarkan: 618877686`;
+            
+            // Open WhatsApp with the message
+            window.open(`https://wa.me/618877686?text=${encodeURIComponent(message)}`, '_blank');
+            
+            // Show status and start timer
+            document.getElementById('idCardStatus').classList.remove('hidden');
+            document.getElementById('idCardSuccess').classList.add('hidden');
+            
+            // Reset timer to 24 hours
+            idCardTimeLeft = 24 * 60 * 60;
+            startIDCardTimer();
+            
+            showSuccess('✅ Codsiga ID Card waa la diray WhatsApp-ka!');
+        }
+
+        // Start ID Card timer
+        function startIDCardTimer() {
+            // Clear existing timer if any
+            if (idCardTimer) {
+                clearInterval(idCardTimer);
+            }
+            
+            idCardTimer = setInterval(() => {
+                idCardTimeLeft--;
+                
+                // Update time display (HH:MM:SS format)
+                const hours = Math.floor(idCardTimeLeft / 3600);
+                const minutes = Math.floor((idCardTimeLeft % 3600) / 60);
+                const seconds = idCardTimeLeft % 60;
+                
+                const timeDisplay = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                const timeElement = document.getElementById('timeRemaining');
+                if (timeElement) {
+                    timeElement.textContent = timeDisplay;
+                }
+                
+                // When timer reaches 0
+                if (idCardTimeLeft <= 0) {
+                    clearInterval(idCardTimer);
+                    completeIDCardProcess();
+                }
+            }, 1000);
+        }
+
+        // Complete ID Card process
+        function completeIDCardProcess() {
+            // Hide status, show success
+            document.getElementById('idCardStatus').classList.add('hidden');
+            document.getElementById('idCardSuccess').classList.remove('hidden');
+            
+            // Change indicator to green
+            const indicator = document.getElementById('statusIndicator');
+            if (indicator) {
+                indicator.classList.remove('bg-red-500', 'animate-pulse');
+                indicator.classList.add('bg-green-500');
+            }
+            
+            showSuccess('✅ Waxaa laguu sameeyey kaarkaaga aqoonsiga!');
+        }
+
+        // Reset modals when closed
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            
+            if (modalId === 'ussdModal') {
+                // Reset USSD modal to step 1
+                document.getElementById('ussdStep1').classList.remove('hidden');
+                document.getElementById('ussdStep2').classList.add('hidden');
+                document.getElementById('ussdStep3').classList.add('hidden');
+                document.getElementById('ussdStep4').classList.add('hidden');
+                
+                // Clear timer if running
+                if (ussdTimer) {
+                    clearInterval(ussdTimer);
+                }
+                
+                // Reset payment indicator
+                const indicator = document.getElementById('paymentIndicator');
+                if (indicator) {
+                    indicator.classList.remove('bg-green-500');
+                    indicator.classList.add('bg-red-500', 'animate-pulse');
+                }
+                
+                // Reset amount input
+                document.getElementById('ussdAmount').value = '';
+                currentUSSDAmount = 0;
+            } else if (modalId === 'swapModal') {
+                // Reset swap form
+                document.getElementById('swapForm').reset();
+                document.getElementById('swapResult').textContent = '0.00';
+            } else if (modalId === 'tradeModal') {
+                // Stop trading timer
+                if (tradingTimer) {
+                    clearInterval(tradingTimer);
+                    tradingTimer = null;
+                }
+                
+                // Reset forms
+                document.getElementById('buyForm').reset();
+                document.getElementById('sellForm').reset();
+                document.getElementById('buyResult').textContent = '0.00 HRSD';
+                document.getElementById('sellResult').textContent = '$0.00';
+            } else if (modalId === 'idCardModal') {
+                // Stop ID Card timer
+                if (idCardTimer) {
+                    clearInterval(idCardTimer);
+                }
+                
+                // Reset ID Card modal
+                document.getElementById('idCardStatus').classList.add('hidden');
+                document.getElementById('idCardSuccess').classList.add('hidden');
+                
+                // Reset indicator
+                const indicator = document.getElementById('statusIndicator');
+                if (indicator) {
+                    indicator.classList.remove('bg-green-500');
+                    indicator.classList.add('bg-red-500', 'animate-pulse');
+                }
+            } else if (modalId === 'robotRequestModal') {
+                // Only stop image animation timer (global robot system continues)
+                if (robotImageTimer) {
+                    clearInterval(robotImageTimer);
+                    robotImageTimer = null;
+                }
+                
+                // Reset robot image transform
+                const robotImage = document.getElementById('robotTradingImage');
+                if (robotImage) {
+                    robotImage.style.transform = '';
+                }
+            }
+        }
+
+        // Update withdraw fields based on type
+        function updateWithdrawFields() {
+            const type = document.getElementById('withdrawType').value;
+            
+            document.getElementById('evcplusFields').classList.add('hidden');
+            document.getElementById('bitcoinFields').classList.add('hidden');
+            
+            if (type === 'evcplus') {
+                document.getElementById('evcplusFields').classList.remove('hidden');
+            } else if (type === 'bitcoin') {
+                document.getElementById('bitcoinFields').classList.remove('hidden');
+            }
+        }
+
+        // Update deposit fields based on type
+        function updateDepositFields() {
+            // EVCPlus is the only option, so always show it
+            document.getElementById('evcplusDepositFields').classList.remove('hidden');
+        }
+
+        // Deposit functionality
+        document.getElementById('depositForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('depositEvcAmount').value);
+            const number = document.getElementById('depositNumber').value;
+            
+            // Add USD directly to balance
+            userBalances[currentUser].usd += amount;
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            closeModal('depositModal');
+            updateBalanceDisplay();
+            
+            // Open WhatsApp with confirmation
+            const message = `Waxaan kushubtay $${amount} USD EVCPlus-ka waxaana lacahta kasoo diray tusaale lanbarkan ${number}. Waxaa lagu daray $${amount.toFixed(2)} USD balance-kaaga.`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+            
+            showSuccess(`✅ $${amount.toFixed(2)} USD ayaa lagu daray balance-kaaga!`);
+        });
+
+        // Withdraw functionality
+        document.getElementById('withdrawForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const type = document.getElementById('withdrawType').value;
+            let amount, message, usdEquivalent;
+            
+            if (type === 'evcplus') {
+                amount = parseFloat(document.getElementById('withdrawHrsdAmount').value);
+                const number = document.getElementById('evcplusNumber').value;
+                
+                // Convert HRSD to USD equivalent (1 HRSD = $0.1)
+                usdEquivalent = amount * 0.1;
+                
+                if (userBalances[currentUser].usd < usdEquivalent) {
+                    alert(`USD balance ma ku filna! Waxaad u baahan tahay $${usdEquivalent.toFixed(2)} USD`);
+                    return;
+                }
+                userBalances[currentUser].usd -= usdEquivalent;
+                message = `Waxaan labaxay ${amount} HRSD ($${usdEquivalent.toFixed(2)} USD) EVCPlus-ka iigu soo dir lambarka: ${number}`;
+            } else if (type === 'bitcoin') {
+                amount = parseFloat(document.getElementById('withdrawBitcoinAmount').value);
+                const address = document.getElementById('withdrawBitcoinAddress').value;
+                
+                // Convert Bitcoin to USD equivalent (1 BTC = $40,000)
+                usdEquivalent = amount * 40000;
+                
+                if (userBalances[currentUser].usd < usdEquivalent) {
+                    alert(`USD balance ma ku filna! Waxaad u baahan tahay $${usdEquivalent.toFixed(2)} USD`);
+                    return;
+                }
+                userBalances[currentUser].usd -= usdEquivalent;
+                message = `Waxaan labaxay ${amount} Bitcoin ($${usdEquivalent.toFixed(2)} USD) iigu soo dir address: ${address}`;
+            }
+            
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            closeModal('withdrawModal');
+            updateBalanceDisplay();
+            
+            // Open WhatsApp with confirmation
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+            
+            showSuccess(`✅ $${usdEquivalent.toFixed(2)} USD ayaa laga jaray balance-kaaga!`);
+        });
+
+        // USSD functionality
+        let ussdTimer;
+        let ussdTimeLeft = 30; // 30 seconds
+        let currentUSSDAmount = 0;
+        
+        // Show USSD Send confirmation
+        function showUSSDSend() {
+            const amount = parseFloat(document.getElementById('ussdAmount').value);
+            if (!amount || amount <= 0) {
+                alert('Fadlan gali lacag sax ah!');
+                return;
+            }
+            
+            currentUSSDAmount = amount;
+            document.getElementById('confirmAmount').textContent = `${amount.toFixed(2)} HRSD`;
+            
+            // Hide step 1, show step 2
+            document.getElementById('ussdStep1').classList.add('hidden');
+            document.getElementById('ussdStep2').classList.remove('hidden');
+        }
+        
+        // Back to amount entry
+        function backToAmount() {
+            document.getElementById('ussdStep2').classList.add('hidden');
+            document.getElementById('ussdStep1').classList.remove('hidden');
+        }
+        
+        // Send USSD
+        function sendUSSD() {
+            // Generate USSD code with the amount
+            const ussdCode = `*712*618877686*${currentUSSDAmount}#`;
+            document.getElementById('ussdCode').textContent = ussdCode;
+            
+            // Hide step 2, show step 3
+            document.getElementById('ussdStep2').classList.add('hidden');
+            document.getElementById('ussdStep3').classList.remove('hidden');
+            
+            // Start 30-minute timer
+            startUSSDTimer();
+        }
+        
+        function startUSSDTimer() {
+            ussdTimeLeft = 30; // Reset to 30 seconds
+            
+            ussdTimer = setInterval(() => {
+                ussdTimeLeft--;
+                
+                // Update time display (MM:SS format)
+                const minutes = Math.floor(ussdTimeLeft / 60);
+                const seconds = ussdTimeLeft % 60;
+                document.getElementById('ussdTimeRemaining').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // When timer reaches 0
+                if (ussdTimeLeft <= 0) {
+                    clearInterval(ussdTimer);
+                    completeUSSDTransaction();
+                }
+            }, 1000);
+        }
+        
+        function completeUSSDTransaction() {
+            // Hide step 3, show step 4
+            document.getElementById('ussdStep3').classList.add('hidden');
+            document.getElementById('ussdStep4').classList.remove('hidden');
+            
+            // Change payment indicator to green
+            const indicator = document.getElementById('paymentIndicator');
+            if (indicator) {
+                indicator.classList.remove('bg-red-500', 'animate-pulse');
+                indicator.classList.add('bg-green-500');
+            }
+            
+            // Automatically open phone dialer with USSD code
+            const ussdCode = `*712*618877686*${currentUSSDAmount}#`;
+            const telUrl = `tel:${encodeURIComponent(ussdCode)}`;
+            
+            // Try to open dialer automatically
+            try {
+                window.location.href = telUrl;
+            } catch (error) {
+                // Fallback: try with window.open
+                window.open(telUrl, '_self');
+            }
+            
+            // Note: Balances remain unchanged as requested
+            // Only deposit will actually add to USD balance
+            
+            showSuccess(`✅ USSD transaction completed! Wacitaanka mobileka ayaa si otomatik ah u furmay.`);
+        }
+
+        // Swap functionality
+        const exchangeRates = {
+            'usd-hrsd': 10,      // $1 = 10 HRSD (since 1 HRSD = $0.1)
+            'hrsd-usd': 0.1,     // 1 HRSD = $0.1
+            'usd-bitcoin': 0.000025,
+            'bitcoin-usd': 40000,
+            'hrsd-bitcoin': 0.0000025,  // 1 HRSD = 0.0000025 BTC (since 1 HRSD = $0.1)
+            'bitcoin-hrsd': 400000,     // 1 BTC = 400,000 HRSD
+            'usd-robot': 1,      // $1 = $1 Robot (1:1 exchange)
+            'robot-usd': 1,      // $1 Robot = $1 USD
+            'hrsd-robot': 0.1,   // 1 HRSD = $0.1 Robot
+            'robot-hrsd': 10,    // $1 Robot = 10 HRSD
+            'bitcoin-robot': 40000, // 1 BTC = $40,000 Robot
+            'robot-bitcoin': 0.000025 // $1 Robot = 0.000025 BTC
+        };
+
+        function updateSwapDisplay() {
+            const fromCurrency = document.getElementById('swapFrom').value;
+            const toCurrency = document.getElementById('swapTo').value;
+            
+            // Update currency images
+            const currencyImages = {
+                'usd': 'https://i.postimg.cc/zVM6Xx88/usd.png',
+                'bitcoin': 'https://i.postimg.cc/N95RMkgv/bitcoin.png',
+                'hrsd': 'https://i.postimg.cc/ppY5P6DM/hrsd.png'
+            };
+            
+            // Update currency images
+            document.getElementById('fromCurrencyImage').style.display = 'block';
+            document.getElementById('fromCurrencyImage').src = currencyImages[fromCurrency];
+            document.getElementById('fromCurrencyImage').alt = fromCurrency.toUpperCase();
+            
+            document.getElementById('toCurrencyImage').style.display = 'block';
+            document.getElementById('toCurrencyImage').src = currencyImages[toCurrency];
+            document.getElementById('toCurrencyImage').alt = toCurrency.toUpperCase();
+            
+            if (currentUser && userBalances[currentUser]) {
+                const balances = userBalances[currentUser];
+                
+                // Update from balance
+                let fromBalanceText = '';
+                if (fromCurrency === 'usd') fromBalanceText = `$${balances.usd.toFixed(2)}`;
+                else if (fromCurrency === 'hrsd') fromBalanceText = `${balances.hrsd.toFixed(4)} HRSD`;
+                else if (fromCurrency === 'bitcoin') fromBalanceText = `${balances.bitcoin.toFixed(5)} BTC`;
+                
+                // Update to balance
+                let toBalanceText = '';
+                if (toCurrency === 'usd') toBalanceText = `$${balances.usd.toFixed(2)}`;
+                else if (toCurrency === 'hrsd') toBalanceText = `${balances.hrsd.toFixed(4)} HRSD`;
+                else if (toCurrency === 'bitcoin') toBalanceText = `${balances.bitcoin.toFixed(5)} BTC`;
+                
+                document.getElementById('fromBalance').textContent = fromBalanceText;
+                document.getElementById('toBalance').textContent = toBalanceText;
+            }
+
+            // Update exchange rate display
+            const rateKey = `${fromCurrency}-${toCurrency}`;
+            const rate = exchangeRates[rateKey] || 1;
+            document.getElementById('exchangeRate').textContent = `1 ${fromCurrency.toUpperCase()} = ${rate} ${toCurrency.toUpperCase()}`;
+            
+            // Recalculate if amount is entered
+            calculateSwap();
+        }
+
+        function calculateSwap() {
+            const fromCurrency = document.getElementById('swapFrom').value;
+            const toCurrency = document.getElementById('swapTo').value;
+            const amount = parseFloat(document.getElementById('swapAmount').value) || 0;
+            
+            const rateKey = `${fromCurrency}-${toCurrency}`;
+            const rate = exchangeRates[rateKey] || 1;
+            const result = amount * rate;
+            
+            let resultText = '';
+            if (toCurrency === 'usd') resultText = `$${result.toFixed(2)}`;
+            else if (toCurrency === 'hrsd') resultText = `${result.toFixed(4)} HRSD`;
+            else if (toCurrency === 'bitcoin') resultText = `${result.toFixed(8)} BTC`;
+            
+            document.getElementById('swapResult').textContent = resultText;
+        }
+
+        // Swap form submission
+        document.getElementById('swapForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fromCurrency = document.getElementById('swapFrom').value;
+            const toCurrency = document.getElementById('swapTo').value;
+            const amount = parseFloat(document.getElementById('swapAmount').value);
+            
+            if (fromCurrency === toCurrency) {
+                alert('Ma karo inaad isku mid u beddesho!');
+                return;
+            }
+            
+            // Check if user has enough balance
+            const balances = userBalances[currentUser];
+            let hasEnoughBalance = false;
+            
+            if (fromCurrency === 'usd' && balances.usd >= amount) hasEnoughBalance = true;
+            else if (fromCurrency === 'hrsd' && balances.hrsd >= amount) hasEnoughBalance = true;
+            else if (fromCurrency === 'bitcoin' && balances.bitcoin >= amount) hasEnoughBalance = true;
+            
+            if (!hasEnoughBalance) {
+                alert(`${fromCurrency.toUpperCase()} balance ma ku filna!`);
+                return;
+            }
+            
+            // Calculate conversion
+            const rateKey = `${fromCurrency}-${toCurrency}`;
+            const rate = exchangeRates[rateKey] || 1;
+            const convertedAmount = amount * rate;
+            
+            // Update balances
+            if (fromCurrency === 'usd') balances.usd -= amount;
+            else if (fromCurrency === 'hrsd') balances.hrsd -= amount;
+            else if (fromCurrency === 'bitcoin') balances.bitcoin -= amount;
+            
+            if (toCurrency === 'usd') balances.usd += convertedAmount;
+            else if (toCurrency === 'hrsd') balances.hrsd += convertedAmount;
+            else if (toCurrency === 'bitcoin') balances.bitcoin += convertedAmount;
+            
+            // Save to localStorage
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            
+            closeModal('swapModal');
+            updateBalanceDisplay();
+            
+            showSuccess(`✅ ${amount} ${fromCurrency.toUpperCase()} ayaa loo beddelay ${convertedAmount.toFixed(8)} ${toCurrency.toUpperCase()}!`);
+        });
+
+
+
+        // Robot Functions
+        function updateRobotDisplay() {
+            if (!currentUser) return;
+            
+            const hasRobot = robotStatus[currentUser]?.hasRobot || false;
+            const isActive = robotStatus[currentUser]?.isActive || false;
+            
+            // Update robot status
+            const indicator = document.getElementById('robotIndicator');
+            const statusText = document.getElementById('robotStatusText');
+            const miningStatus = document.getElementById('miningStatus');
+            const tradeButton = document.getElementById('tradeButton');
+            
+            if (indicator && statusText) {
+                if (!hasRobot) {
+                    indicator.className = 'w-3 h-3 bg-gray-400 rounded-full mr-2';
+                    statusText.textContent = 'Robot Ma Laha';
+                    if (miningStatus) miningStatus.classList.add('hidden');
+                    if (tradeButton) tradeButton.classList.add('hidden');
+                } else if (isActive) {
+                    indicator.className = 'w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse';
+                    statusText.textContent = 'Robot Shaqeynaya + Mining';
+                    if (miningStatus) {
+                        miningStatus.classList.remove('hidden');
+                        updateMiningCountdown();
+                    }
+                    if (tradeButton) tradeButton.classList.add('hidden');
+                } else {
+                    indicator.className = 'w-3 h-3 bg-yellow-500 rounded-full mr-2';
+                    statusText.textContent = 'Robot Joojisan - Taabo Trade';
+                    if (miningStatus) miningStatus.classList.add('hidden');
+                    if (tradeButton) tradeButton.classList.remove('hidden');
+                }
+            }
+            
+            updateBalanceDisplay();
+        }
+        
+        // Update mining countdown display
+        function updateMiningCountdown() {
+            if (!currentUser || !robotStatus[currentUser]) return;
+            
+            const now = Date.now();
+            const lastMiningTime = robotStatus[currentUser].lastMiningTime || 0;
+            const investmentAmount = robotStatus[currentUser].investmentAmount || 1;
+            
+            // Calculate mining interval based on investment
+            let miningInterval;
+            if (investmentAmount >= 100) {
+                miningInterval = 10 * 1000; // 10 seconds for $100+
+            } else if (investmentAmount >= 50) {
+                miningInterval = 15 * 1000; // 15 seconds for $50+
+            } else if (investmentAmount >= 10) {
+                miningInterval = 30 * 1000; // 30 seconds for $10+
+            } else {
+                miningInterval = 60 * 1000; // 60 seconds for $1-$9
+            }
+            
+            const nextMiningTime = lastMiningTime + miningInterval;
+            const timeLeft = Math.max(0, nextMiningTime - now);
+            
+            const countdownElement = document.getElementById('miningCountdown');
+            if (countdownElement) {
+                if (timeLeft <= 0) {
+                    countdownElement.textContent = 'Mining Ready!';
+                    countdownElement.className = 'font-bold text-green-600';
+                } else {
+                    const seconds = Math.ceil(timeLeft / 1000);
+                    countdownElement.textContent = `${seconds}s`;
+                    countdownElement.className = 'font-bold text-blue-600';
+                }
+            }
+        }
+
+        function buyRobot() {
+            if (!currentUser) return;
+            
+            const investAmount = parseFloat(document.getElementById('robotInvestAmount').value) || 1;
+            
+            if (investAmount < 1) {
+                alert('Lacagta ugu yar ee robotka lagu iibsan karo waa $1 USD');
+                return;
+            }
+            
+            if (userBalances[currentUser].usd < investAmount) {
+                alert(`USD balance ma ku filna! Waxaad u baahan tahay $${investAmount.toFixed(2)} USD`);
+                return;
+            }
+            
+            // Deduct investment amount from USD balance
+            userBalances[currentUser].usd -= investAmount;
+            
+            // Add investment amount to robot balance
+            robotBalances[currentUser] = investAmount;
+            
+            // Mark user as having robot but NOT active yet
+            robotStatus[currentUser].hasRobot = true;
+            robotStatus[currentUser].isActive = false;
+            robotStatus[currentUser].investmentAmount = investAmount;
+            robotStatus[currentUser].startTime = null; // Will be set when trading starts
+            robotStatus[currentUser].duration = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            
+            // Save to localStorage
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            localStorage.setItem('robotBalances', JSON.stringify(robotBalances));
+            localStorage.setItem('robotStatus', JSON.stringify(robotStatus));
+            
+            updateRobotDisplay();
+            
+            // Show trade button
+            document.getElementById('tradeButton').classList.remove('hidden');
+            
+            showSuccess(`✅ Waxaad iibsatay robotka HRSD! Taabo botonka Trade si uu shaqada kuugu bilaabo!`);
+        }
+
+        function startRobotTrading() {
+            if (!currentUser || !robotStatus[currentUser]?.hasRobot) {
+                alert('Waa inaad marka hore iibsataa robotka!');
+                return;
+            }
+            
+            // Activate the robot
+            robotStatus[currentUser].isActive = true;
+            robotStatus[currentUser].startTime = Date.now(); // Set start time for 24-hour countdown
+            
+            // Initialize mining time if not set
+            if (!robotStatus[currentUser].lastMiningTime) {
+                robotStatus[currentUser].lastMiningTime = Date.now();
+            }
+            
+            localStorage.setItem('robotStatus', JSON.stringify(robotStatus));
+            
+            updateRobotDisplay();
+            startRobotImageAnimation();
+            startMiningCountdownTimer();
+            start24HourRobotTimer(); // Start 24-hour timer
+            
+            // Hide trade button after starting
+            document.getElementById('tradeButton').classList.add('hidden');
+            
+            showSuccess(`✅ Robot waa bilaabay shaqada! Wuxuu bilaabay uruurinta mining isagoo faa'iidada ku daraya HRSD balance-kaaga! Muddo: 24 saac`);
+        }
+        
+        // Start mining countdown timer
+        let miningCountdownTimer;
+        let robot24HourTimer;
+        
+        function startMiningCountdownTimer() {
+            if (miningCountdownTimer) {
+                clearInterval(miningCountdownTimer);
+            }
+            
+            miningCountdownTimer = setInterval(() => {
+                if (currentUser && robotStatus[currentUser]?.isActive) {
+                    updateMiningCountdown();
+                    update24HourCountdown();
+                }
+            }, 1000); // Update every second
+        }
+        
+        // Update 24-hour countdown display
+        function update24HourCountdown() {
+            if (!currentUser || !robotStatus[currentUser]?.isActive || !robotStatus[currentUser]?.startTime) return;
+            
+            const now = Date.now();
+            const startTime = robotStatus[currentUser].startTime;
+            const duration = robotStatus[currentUser].duration || (24 * 60 * 60 * 1000);
+            const elapsed = now - startTime;
+            const timeLeft = Math.max(0, duration - elapsed);
+            
+            const countdownElement = document.getElementById('robot24HourCountdown');
+            if (countdownElement) {
+                if (timeLeft <= 0) {
+                    countdownElement.textContent = '00:00:00';
+                    countdownElement.className = 'font-bold text-red-600';
+                } else {
+                    const hours = Math.floor(timeLeft / (60 * 60 * 1000));
+                    const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
+                    const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
+                    
+                    const timeDisplay = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    countdownElement.textContent = timeDisplay;
+                    
+                    // Change color based on time remaining
+                    if (timeLeft < 60 * 60 * 1000) { // Less than 1 hour
+                        countdownElement.className = 'font-bold text-red-600 animate-pulse';
+                    } else if (timeLeft < 3 * 60 * 60 * 1000) { // Less than 3 hours
+                        countdownElement.className = 'font-bold text-orange-600';
+                    } else {
+                        countdownElement.className = 'font-bold text-green-600';
+                    }
+                }
+            }
+        }
+        
+        // Start 24-hour robot timer
+        function start24HourRobotTimer() {
+            if (robot24HourTimer) {
+                clearInterval(robot24HourTimer);
+            }
+            
+            robot24HourTimer = setInterval(() => {
+                if (currentUser && robotStatus[currentUser]?.isActive && robotStatus[currentUser]?.startTime) {
+                    const now = Date.now();
+                    const startTime = robotStatus[currentUser].startTime;
+                    const duration = robotStatus[currentUser].duration || (24 * 60 * 60 * 1000);
+                    const elapsed = now - startTime;
+                    
+                    // Check if 24 hours have passed
+                    if (elapsed >= duration) {
+                        // Stop robot and return investment to USD balance
+                        stopRobotAfter24Hours();
+                        clearInterval(robot24HourTimer);
+                    }
+                }
+            }, 1000); // Check every second
+        }
+        
+        // Stop robot after 24 hours and return investment
+        function stopRobotAfter24Hours() {
+            if (!currentUser || !robotStatus[currentUser]) return;
+            
+            const investmentAmount = robotStatus[currentUser].investmentAmount || 0;
+            
+            // Stop robot
+            robotStatus[currentUser].isActive = false;
+            robotStatus[currentUser].startTime = null;
+            
+            // Return original investment to USD balance
+            userBalances[currentUser].usd += investmentAmount;
+            
+            // Reset robot balance to 0
+            robotBalances[currentUser] = 0;
+            
+            // Save to localStorage
+            localStorage.setItem('robotStatus', JSON.stringify(robotStatus));
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            localStorage.setItem('robotBalances', JSON.stringify(robotBalances));
+            
+            // Clear timers
+            if (robotImageTimer) {
+                clearInterval(robotImageTimer);
+                robotImageTimer = null;
+            }
+            
+            if (miningCountdownTimer) {
+                clearInterval(miningCountdownTimer);
+                miningCountdownTimer = null;
+            }
+            
+            updateRobotDisplay();
+            
+            showSuccess(`⏰ 24 saac ayaa dhamaatay! Robot waa joojiyey. $${investmentAmount.toFixed(2)} ayaa dib ugu laabtay USD balance-kaaga!`);
+        }
+
+        function stopRobotTrading() {
+            if (!currentUser) return;
+            
+            robotStatus[currentUser].isActive = false;
+            
+            // Convert robot balance back to USD balance
+            const robotBalanceAmount = robotBalances[currentUser] || 0;
+            if (robotBalanceAmount > 0) {
+                userBalances[currentUser].usd += robotBalanceAmount;
+                robotBalances[currentUser] = 0;
+                
+                showSuccess(`✅ Robot waa joojiyey! $${robotBalanceAmount.toFixed(2)} ayaa dib ugu laabtay USD balance-kaaga!`);
+            } else {
+                showSuccess('✅ Robot trading + mining waa joojiyey!');
+            }
+            
+            localStorage.setItem('robotStatus', JSON.stringify(robotStatus));
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            localStorage.setItem('robotBalances', JSON.stringify(robotBalances));
+            
+            // Clear image animation timer
+            if (robotImageTimer) {
+                clearInterval(robotImageTimer);
+                robotImageTimer = null;
+            }
+            
+            // Clear mining countdown timer
+            if (miningCountdownTimer) {
+                clearInterval(miningCountdownTimer);
+                miningCountdownTimer = null;
+            }
+            
+            updateRobotDisplay();
+        }
+
+        function startRobotImageAnimation() {
+            const robotImage = document.getElementById('robotTradingImage');
+            if (!robotImage) return;
+            
+            robotImageTimer = setInterval(() => {
+                // Rotate image slightly to show activity
+                robotImage.style.transform = robotImage.style.transform === 'rotate(5deg)' ? 'rotate(-5deg)' : 'rotate(5deg)';
+            }, 1000);
+        }
+
+        // Old performRobotTrade function removed - now using performGlobalRobotTrade
+
+        // WhatsApp function
+        function openWhatsApp() {
+            const message = "Mudane waan kusalaamay";
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // Logout function - FIXED to preserve all data
+        function logout() {
+            // Only clear current session, keep ALL data intact
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            
+            // Show login page
+            showLogin();
+            showSuccess('✅ Waad ka baxday akoonkaaga! Xogahaaga waa la kaydiyey.');
+        }
+
+        // Trading System Variables
+        let currentHrsdPrice = 0.1000; // Starting price $0.10
+        let priceHistory = [];
+        let tradingTimer;
+        let chartBars = [];
+        let high24h = 0.1200;
+        let low24h = 0.0950;
+        let volume24h = 1250;
+        let recentBuyers = [];
+        let recentSellers = [];
+        
+        // Sample trader names
+        const traderNames = [
+            'Ahmed M.', 'Fatima A.', 'Mohamed H.', 'Khadija S.', 'Omar K.',
+            'Amina D.', 'Hassan Y.', 'Sahra M.', 'Abdi R.', 'Hodan A.',
+            'Yusuf I.', 'Maryan O.', 'Ali J.', 'Fadumo H.', 'Ibrahim L.'
+        ];
+
+        // Start Live Trading System
+        function startLiveTrading() {
+            // Initialize price history if empty
+            if (priceHistory.length === 0) {
+                for (let i = 0; i < 20; i++) {
+                    priceHistory.push(currentHrsdPrice + (Math.random() - 0.5) * 0.01);
+                }
+            }
+            
+            updateTradingDisplay();
+            
+            // Start price updates every 2 seconds
+            tradingTimer = setInterval(() => {
+                updatePrice();
+                updateChart();
+                updateTradingDisplay();
+                generateTradingActivity();
+            }, 2000);
+        }
+
+        // Update HRSD price with realistic fluctuations
+        function updatePrice() {
+            // Generate realistic price movement (-3% to +3%)
+            const change = (Math.random() - 0.5) * 0.006; // 0.6% max change per update
+            const newPrice = currentHrsdPrice * (1 + change);
+            
+            // Keep price within bounds ($0.09 to $0.15)
+            currentHrsdPrice = Math.max(0.09, Math.min(0.15, newPrice));
+            
+            // Update 24h high/low
+            if (currentHrsdPrice > high24h) high24h = currentHrsdPrice;
+            if (currentHrsdPrice < low24h) low24h = currentHrsdPrice;
+            
+            // Add to price history
+            priceHistory.push(currentHrsdPrice);
+            if (priceHistory.length > 20) {
+                priceHistory.shift(); // Keep only last 20 prices
+            }
+            
+            // Update volume
+            volume24h += Math.floor(Math.random() * 50) + 10;
+        }
+
+        // Update live chart
+        function updateChart() {
+            const chartContainer = document.getElementById('liveChart');
+            if (!chartContainer) return;
+            
+            chartContainer.innerHTML = '';
+            
+            const maxPrice = Math.max(...priceHistory);
+            const minPrice = Math.min(...priceHistory);
+            const priceRange = maxPrice - minPrice || 0.001;
+            
+            priceHistory.forEach((price, index) => {
+                const height = ((price - minPrice) / priceRange) * 100 + 10; // 10-110px height
+                const isUp = index > 0 && price > priceHistory[index - 1];
+                const isDown = index > 0 && price < priceHistory[index - 1];
+                
+                const bar = document.createElement('div');
+                bar.className = `w-3 rounded-t transition-all duration-500 ${
+                    isUp ? 'bg-green-400' : isDown ? 'bg-red-400' : 'bg-gray-400'
+                }`;
+                bar.style.height = height + 'px';
+                
+                chartContainer.appendChild(bar);
+            });
+        }
+
+        // Update trading display
+        function updateTradingDisplay() {
+            if (!document.getElementById('currentPrice')) return;
+            
+            const previousPrice = priceHistory.length > 1 ? priceHistory[priceHistory.length - 2] : currentHrsdPrice;
+            const priceChangePercent = ((currentHrsdPrice - previousPrice) / previousPrice * 100);
+            const isUp = currentHrsdPrice > previousPrice;
+            const isDown = currentHrsdPrice < previousPrice;
+            
+            // Update current price
+            document.getElementById('currentPrice').textContent = `$${currentHrsdPrice.toFixed(4)}`;
+            
+            // Update trend arrow
+            const trendArrow = document.getElementById('trendArrow');
+            if (isUp) {
+                trendArrow.textContent = '📈';
+                trendArrow.className = 'text-2xl text-green-500';
+            } else if (isDown) {
+                trendArrow.textContent = '📉';
+                trendArrow.className = 'text-2xl text-red-500';
+            } else {
+                trendArrow.textContent = '➡️';
+                trendArrow.className = 'text-2xl text-gray-500';
+            }
+            
+            // Update price change with color
+            const priceChangeElement = document.getElementById('priceChange');
+            priceChangeElement.textContent = `${priceChangePercent >= 0 ? '+' : ''}${priceChangePercent.toFixed(2)}%`;
+            priceChangeElement.className = `text-sm ${isUp ? 'text-green-400' : isDown ? 'text-red-400' : 'text-gray-400'}`;
+            
+            // Update 24h stats
+            document.getElementById('high24h').textContent = `$${high24h.toFixed(4)}`;
+            document.getElementById('low24h').textContent = `$${low24h.toFixed(4)}`;
+            document.getElementById('volume24h').textContent = `${volume24h.toLocaleString()} HRSD`;
+            
+            // Update balance displays
+            if (currentUser && userBalances[currentUser]) {
+                document.getElementById('buyUsdBalance').textContent = `$${userBalances[currentUser].usd.toFixed(2)}`;
+                document.getElementById('sellHrsdBalance').textContent = `${userBalances[currentUser].hrsd.toFixed(4)} HRSD`;
+            }
+        }
+
+        // Generate fake trading activity
+        function generateTradingActivity() {
+            // Randomly generate buy/sell activity
+            if (Math.random() < 0.7) { // 70% chance of activity
+                const isBuy = Math.random() < 0.5;
+                const traderName = traderNames[Math.floor(Math.random() * traderNames.length)];
+                const amount = (Math.random() * 50 + 5).toFixed(2); // 5-55 HRSD
+                const price = currentHrsdPrice.toFixed(4);
+                const time = new Date().toLocaleTimeString('en-US', { 
+                    hour12: false, 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit' 
+                });
+                
+                const activity = {
+                    name: traderName,
+                    amount: amount,
+                    price: price,
+                    time: time
+                };
+                
+                if (isBuy) {
+                    recentBuyers.unshift(activity);
+                    if (recentBuyers.length > 5) recentBuyers.pop();
+                } else {
+                    recentSellers.unshift(activity);
+                    if (recentSellers.length > 5) recentSellers.pop();
+                }
+                
+                updateTradingActivityDisplay();
+            }
+        }
+
+        // Update trading activity display
+        function updateTradingActivityDisplay() {
+            const buyersContainer = document.getElementById('recentBuyers');
+            const sellersContainer = document.getElementById('recentSellers');
+            
+            if (buyersContainer) {
+                buyersContainer.innerHTML = recentBuyers.map(buyer => `
+                    <div class="flex justify-between items-center bg-white rounded p-2 shadow-sm">
+                        <div>
+                            <span class="font-semibold text-green-700">${buyer.name}</span>
+                            <span class="text-gray-600 ml-2">${buyer.amount} HRSD</span>
+                        </div>
+                        <div class="text-right text-xs text-gray-500">
+                            <div>$${buyer.price}</div>
+                            <div>${buyer.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                if (recentBuyers.length === 0) {
+                    buyersContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Wali cid ma iibsan...</p>';
+                }
+            }
+            
+            if (sellersContainer) {
+                sellersContainer.innerHTML = recentSellers.map(seller => `
+                    <div class="flex justify-between items-center bg-white rounded p-2 shadow-sm">
+                        <div>
+                            <span class="font-semibold text-red-700">${seller.name}</span>
+                            <span class="text-gray-600 ml-2">${seller.amount} HRSD</span>
+                        </div>
+                        <div class="text-right text-xs text-gray-500">
+                            <div>$${seller.price}</div>
+                            <div>${seller.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                if (recentSellers.length === 0) {
+                    sellersContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Wali cid ma iibin...</p>';
+                }
+            }
+        }
+
+        // Calculate buy amount
+        function calculateBuy() {
+            const usdAmount = parseFloat(document.getElementById('buyAmount').value) || 0;
+            const hrsdAmount = usdAmount / currentHrsdPrice;
+            document.getElementById('buyResult').textContent = `${hrsdAmount.toFixed(4)} HRSD`;
+        }
+
+        // Calculate sell amount
+        function calculateSell() {
+            const hrsdAmount = parseFloat(document.getElementById('sellAmount').value) || 0;
+            const usdAmount = hrsdAmount * currentHrsdPrice;
+            document.getElementById('sellResult').textContent = `$${usdAmount.toFixed(4)}`;
+        }
+
+        // Buy HRSD functionality
+        document.getElementById('buyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const usdAmount = parseFloat(document.getElementById('buyAmount').value);
+            
+            if (userBalances[currentUser].usd < usdAmount) {
+                alert('USD balance ma ku filna!');
+                return;
+            }
+
+            const hrsdAmount = usdAmount / currentHrsdPrice;
+            
+            // Update balances
+            userBalances[currentUser].usd -= usdAmount;
+            userBalances[currentUser].hrsd += hrsdAmount;
+            
+            // Save to localStorage
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            if (fromCurrency === 'robot' || toCurrency === 'robot') {
+                localStorage.setItem('robotBalances', JSON.stringify(robotBalances));
+            }
+            
+            // Update displays
+            updateBalanceDisplay();
+            updateTradingDisplay();
+            
+            // Reset form
+            document.getElementById('buyForm').reset();
+            document.getElementById('buyResult').textContent = '0.00 HRSD';
+            
+            showSuccess(`✅ Waxaad iibsatay ${hrsdAmount.toFixed(4)} HRSD!`);
+        });
+
+        // Sell HRSD functionality
+        document.getElementById('sellForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const hrsdAmount = parseFloat(document.getElementById('sellAmount').value);
+            
+            if (userBalances[currentUser].hrsd < hrsdAmount) {
+                alert('HRSD balance ma ku filna!');
+                return;
+            }
+            
+            const usdAmount = hrsdAmount * currentHrsdPrice;
+            
+            // Update balances
+            userBalances[currentUser].hrsd -= hrsdAmount;
+            userBalances[currentUser].usd += usdAmount;
+            
+            // Save to localStorage
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            if (fromCurrency === 'robot' || toCurrency === 'robot') {
+                localStorage.setItem('robotBalances', JSON.stringify(robotBalances));
+            }
+            
+            // Update displays
+            updateBalanceDisplay();
+            updateTradingDisplay();
+            
+            // Reset form
+            document.getElementById('sellForm').reset();
+            document.getElementById('sellResult').textContent = '$0.00';
+            
+            showSuccess(`✅ Waxaad iibisay ${hrsdAmount.toFixed(4)} HRSD!`);
+        });
+
+        // Global Robot Management System
+        function startGlobalRobotSystem() {
+            // Clear any existing global timer
+            if (globalRobotTimer) {
+                clearInterval(globalRobotTimer);
+            }
+            
+            // Start global robot timer that runs for ALL users
+            globalRobotTimer = setInterval(() => {
+                // Process all users with active robots
+                Object.keys(robotStatus).forEach(userEmail => {
+                    if (robotStatus[userEmail]?.isActive && robotStatus[userEmail]?.hasRobot) {
+                        performGlobalRobotTrade(userEmail);
+                        performRobotMining(userEmail);
+                    }
+                });
+            }, 3000); // Every 3 seconds
+        }
+        
+        // Robot Mining System - Mining speed based on investment amount
+        function performRobotMining(userEmail) {
+            if (!userBalances[userEmail] || !robotStatus[userEmail]) return;
+            
+            const now = Date.now();
+            const lastMiningTime = robotStatus[userEmail].lastMiningTime || 0;
+            const investmentAmount = robotStatus[userEmail].investmentAmount || 1;
+            
+            // Calculate mining interval based on investment
+            // $1 = 60 seconds, $10 = 30 seconds, $50 = 15 seconds, $100+ = 10 seconds
+            let miningInterval;
+            if (investmentAmount >= 100) {
+                miningInterval = 10 * 1000; // 10 seconds for $100+
+            } else if (investmentAmount >= 50) {
+                miningInterval = 15 * 1000; // 15 seconds for $50+
+            } else if (investmentAmount >= 10) {
+                miningInterval = 30 * 1000; // 30 seconds for $10+
+            } else {
+                miningInterval = 60 * 1000; // 60 seconds for $1-$9
+            }
+            
+            // Check if mining interval has passed
+            if (now - lastMiningTime >= miningInterval) {
+                // Calculate mining reward based on investment
+                const baseMiningReward = 0.001; // Base mining per cycle
+                const bonusMultiplier = investmentAmount / 100; // Investment bonus
+                const totalMiningReward = baseMiningReward + (baseMiningReward * bonusMultiplier);
+                
+                // Add mining reward to balance
+                userBalances[userEmail].hrsd += totalMiningReward;
+                
+                // Update last mining time
+                robotStatus[userEmail].lastMiningTime = now;
+                
+                // Save to localStorage
+                localStorage.setItem('userBalances', JSON.stringify(userBalances));
+                localStorage.setItem('robotStatus', JSON.stringify(robotStatus));
+                
+                // Show success only for current user
+                if (userEmail === currentUser) {
+                    const intervalText = miningInterval >= 60000 ? `${miningInterval/1000}s` : `${miningInterval/1000}s`;
+                    showSuccess(`⛏️ Robot Mining: +${totalMiningReward.toFixed(6)} HRSD (${intervalText} cycle)`);
+                    updateBalanceDisplay();
+                }
+            }
+        }
+        
+        function performGlobalRobotTrade(userEmail) {
+            if (!userBalances[userEmail] || !robotStatus[userEmail]?.investmentAmount) return;
+            
+            // Get investment amount to calculate proportional profits
+            const investmentAmount = robotStatus[userEmail].investmentAmount || 1;
+            const profitMultiplier = investmentAmount / 100; // Higher investment = higher profits
+            
+            // Get current and previous price to determine trend
+            const currentPrice = currentHrsdPrice;
+            const previousPrice = priceHistory.length > 1 ? priceHistory[priceHistory.length - 2] : currentPrice;
+            const priceChange = currentPrice - previousPrice;
+            const priceChangePercent = (priceChange / previousPrice) * 100;
+            
+            if (priceChangePercent > 0.5) {
+                // Price going up significantly - Robot sells for profit based on investment
+                const baseProfit = 0.00018;
+                const hrsdProfit = baseProfit * (1 + profitMultiplier);
+                userBalances[userEmail].hrsd += hrsdProfit;
+                
+                // Show success only for current user
+                if (userEmail === currentUser) {
+                    showSuccess(`🤖 Robot SELL: +${hrsdProfit.toFixed(6)} HRSD faa'iido`);
+                }
+            } else if (priceChangePercent < -0.5) {
+                // Price going down significantly - Robot buys for future profit
+                const baseProfit = 0.00018;
+                const hrsdProfit = baseProfit * (1 + profitMultiplier);
+                userBalances[userEmail].hrsd += hrsdProfit;
+                
+                // Show success only for current user
+                if (userEmail === currentUser) {
+                    showSuccess(`🤖 Robot BUY: +${hrsdProfit.toFixed(6)} HRSD`);
+                }
+            } else if (Math.abs(priceChangePercent) < 0.1) {
+                // Price stable - Profit from market making based on investment
+                const baseProfit = 0.00018;
+                const hrsdProfit = baseProfit * (1 + profitMultiplier);
+                userBalances[userEmail].hrsd += hrsdProfit;
+                
+                // Show success only for current user
+                if (userEmail === currentUser) {
+                    showSuccess(`🤖 Robot Market Making: +${hrsdProfit.toFixed(6)} HRSD faa'iido`);
+                }
+            } else {
+                // Random trades with investment-based profits
+                const isProfit = Math.random() < 0.95; // 95% chance of profit, 5% chance of loss
+                
+                if (isProfit) {
+                    const baseProfit = 0.00018;
+                    const hrsdProfit = baseProfit * (1 + profitMultiplier);
+                    userBalances[userEmail].hrsd += hrsdProfit;
+                    
+                    // Show success only for current user
+                    if (userEmail === currentUser) {
+                        showSuccess(`🤖 Robot: +${hrsdProfit.toFixed(6)} HRSD faa'iido`);
+                    }
+                } else {
+                    // Very small loss (not affected by investment amount)
+                    const hrsdLoss = 0.00001;
+                    if (userBalances[userEmail].hrsd >= hrsdLoss) {
+                        userBalances[userEmail].hrsd -= hrsdLoss;
+                        
+                        // Show success only for current user
+                        if (userEmail === currentUser) {
+                            showSuccess(`🤖 Robot: -${hrsdLoss.toFixed(6)} HRSD khasaare`);
+                        }
+                    }
+                }
+            }
+            
+            // Save balances after each trade
+            localStorage.setItem('userBalances', JSON.stringify(userBalances));
+            localStorage.setItem('robotBalances', JSON.stringify(robotBalances));
+            
+            // Update display only for current user
+            if (userEmail === currentUser) {
+                updateBalanceDisplay();
+            }
+        }
+
+        // Check for existing active robots on page load
+        function checkExistingRobots() {
+            Object.keys(robotStatus).forEach(userEmail => {
+                if (robotStatus[userEmail]?.isActive && robotStatus[userEmail]?.startTime) {
+                    const now = Date.now();
+                    const startTime = robotStatus[userEmail].startTime;
+                    const duration = robotStatus[userEmail].duration || (24 * 60 * 60 * 1000);
+                    const elapsed = now - startTime;
+                    
+                    // If 24 hours have passed, stop the robot
+                    if (elapsed >= duration) {
+                        const investmentAmount = robotStatus[userEmail].investmentAmount || 0;
+                        
+                        // Stop robot
+                        robotStatus[userEmail].isActive = false;
+                        robotStatus[userEmail].startTime = null;
+                        
+                        // Return investment to USD balance
+                        if (!userBalances[userEmail]) {
+                            userBalances[userEmail] = { usd: 0, hrsd: 0, bitcoin: 0 };
+                        }
+                        userBalances[userEmail].usd += investmentAmount;
+                        
+                        // Reset robot balance
+                        robotBalances[userEmail] = 0;
+                        
+                        // Save changes
+                        localStorage.setItem('robotStatus', JSON.stringify(robotStatus));
+                        localStorage.setItem('userBalances', JSON.stringify(userBalances));
+                        localStorage.setItem('robotBalances', JSON.stringify(robotBalances));
+                        
+                        // Show message only for current user
+                        if (userEmail === currentUser) {
+                            showSuccess(`⏰ Robot-kaagii 24 saac ayuu dhamaystay! $${investmentAmount.toFixed(2)} ayaa dib ugu laabtay USD balance-kaaga!`);
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize app
+        if (currentUser && users[currentUser]) {
+            showDashboard();
+        } else {
+            showRegister();
+        }
+        
+        // Check existing robots first, then start global system
+        checkExistingRobots();
+        startGlobalRobotSystem();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98aa7a53d21a15d5',t:'MTc1OTgwOTQ4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
