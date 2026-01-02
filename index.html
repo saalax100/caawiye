@@ -1,0 +1,2512 @@
+<!doctype html>
+<html lang="so" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HORSEED - Ganacsi App</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    .app-wrapper {
+      min-height: 100%;
+      width: 100%;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      padding: 2rem;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      margin-bottom: 1rem;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #059669;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      background: #059669;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: #047857;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+    }
+
+    .btn-primary:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .dashboard-btn {
+      background: white;
+      border: none;
+      border-radius: 12px;
+      padding: 1.25rem 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dashboard-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    }
+
+    .dashboard-btn .icon {
+      font-size: 2rem;
+    }
+
+    .dashboard-btn .label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .error-message {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 14px;
+    }
+
+    .success-message {
+      background: #d1fae5;
+      color: #065f46;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 14px;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .link-text {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #6b7280;
+    }
+
+    .link-text a {
+      color: #059669;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .link-text a:hover {
+      text-decoration: underline;
+    }
+
+    .trade-item {
+      background: white;
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .trade-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #f3f4f6;
+    }
+
+    .trade-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .trade-details {
+      flex: 1;
+    }
+
+    .trade-name {
+      font-weight: 600;
+      color: #1f2937;
+      font-size: 0.9rem;
+    }
+
+    .trade-action {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .trade-amount {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .trade-amount.buy {
+      color: #10b981;
+    }
+
+    .trade-amount.sell {
+      color: #ef4444;
+    }
+
+    .trade-coin-icon {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    .price-chart {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .price-display {
+      text-align: center;
+      color: white;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .price-coin-icon {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.5rem;
+    }
+
+    .price-info {
+      text-align: left;
+    }
+
+    .price-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .price-change {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .price-change.up {
+      color: #10b981;
+    }
+
+    .price-change.down {
+      color: #ef4444;
+    }
+
+    .chart-container {
+      height: 150px;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      padding: 0 0.5rem;
+    }
+
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(to top, #8b5cf6, #a78bfa);
+      border-radius: 4px 4px 0 0;
+      transition: all 0.5s ease;
+      min-height: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      #productGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper">
+   <div style="width: 100%; min-height: 100%;"><!-- Sign Up Screen -->
+    <div id="signupScreen" class="card"><img src="https://i.postimg.cc/T3Yd2yF6/photo-.jpg" alt="HORSEED Logo" style="width: 120px; height: 120px; object-fit: contain; margin: 0 auto 1rem auto; display: block; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);" onerror="this.style.display='none';">
+     <h1 id="appTitle" style="font-size: 2.5rem; font-weight: 700; color: #059669; text-align: center; margin-bottom: 0.5rem;">HORSEED</h1>
+     <p style="text-align: center; color: #6b7280; margin-bottom: 2rem;">Samee Akoon Cusub</p>
+     <div id="signupError" class="error-message hidden"></div>
+     <div id="signupSuccess" class="success-message hidden"></div>
+     <form id="signupForm"><label for="signupPhone" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="signupPhone" class="input-field" placeholder="252xxxxxxxxx" required> <label for="signupPassword" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Password</label> <input type="password" id="signupPassword" class="input-field" placeholder="Geli password" required> <label for="signupConfirmPassword" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Xaqiiji Password</label> <input type="password" id="signupConfirmPassword" class="input-field" placeholder="Ku celi password" required> <button type="submit" class="btn-primary"> <span id="signupButtonText">Diiwaangeli</span> <span id="signupLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+     <div class="link-text">
+      Akoon ma leedahay? <a id="goToLogin">Login</a>
+     </div>
+    </div><!-- Login Screen -->
+    <div id="loginScreen" class="card hidden"><img src="https://i.postimg.cc/T3Yd2yF6/photo-.jpg" alt="HORSEED Logo" style="width: 120px; height: 120px; object-fit: contain; margin: 0 auto 1rem auto; display: block; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);" onerror="this.style.display='none';">
+     <h1 id="loginAppTitle" style="font-size: 2.5rem; font-weight: 700; color: #059669; text-align: center; margin-bottom: 0.5rem;">HORSEED</h1>
+     <p id="welcomeMessage" style="text-align: center; color: #6b7280; margin-bottom: 2rem;">Soo dhawoow HORSEED</p>
+     <div id="loginError" class="error-message hidden"></div>
+     <form id="loginForm"><label for="loginPhone" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="loginPhone" class="input-field" placeholder="252xxxxxxxxx" required> <label for="loginPassword" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Password</label> <input type="password" id="loginPassword" class="input-field" placeholder="Geli password" required> <button type="submit" class="btn-primary"> <span id="loginButtonText">Gal</span> <span id="loginLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+     <div class="link-text">
+      Akoon ma lihid? <a id="goToSignup">Diiwaangeli</a>
+     </div>
+    </div><!-- Dashboard Screen -->
+    <div id="dashboardScreen" class="card hidden" style="max-width: 900px; width: 100%;">
+     <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; font-weight: 700; color: #059669;">HORSEED</h1>
+      <p style="color: #6b7280; margin-top: 0.5rem;">Akoonka: <span id="userPhone"></span></p>
+     </div>
+     <div class="dashboard-grid"><button class="dashboard-btn" onclick="showIibso()"> <img src="https://i.postimg.cc/KcqmYc7c/download.jpg" alt="Iibso" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 0.5rem;" onerror="this.innerHTML='<div class=icon>🛒</div>';">
+       <div class="label">
+        Iibso
+       </div></button> <button class="dashboard-btn" onclick="showDalbo()"> <img src="https://i.postimg.cc/J7fMX6FF/images-(3).jpg" alt="Dalbo" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 0.5rem;" onerror="this.innerHTML='<div class=icon>📦</div>';">
+       <div class="label">
+        Dalbo
+       </div></button> <button class="dashboard-btn" onclick="showMarketHRSD()">
+       <div class="icon">
+        💎
+       </div>
+       <div class="label">
+        Market HRSD.COIN
+       </div></button> <button class="dashboard-btn" onclick="showUSSD()"> <img src="https://i.postimg.cc/wxsw10L1/download.png" alt="USSD" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 0.5rem;" onerror="this.innerHTML='<div class=icon>📱</div>';">
+       <div class="label">
+        USSD
+       </div></button> <button class="dashboard-btn" onclick="showWhatsApp()"> <img src="https://i.postimg.cc/zGftG5kF/download-(1).png" alt="WhatsApp" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 0.5rem;" onerror="this.innerHTML='<div class=icon>💬</div>';">
+       <div class="label">
+        WhatsApp
+       </div></button> <button class="dashboard-btn" onclick="showHistori()"> <img src="https://static.thenounproject.com/png/1653024-200.png" alt="Histori" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 0.5rem;" onerror="this.innerHTML='<div class=icon>📋</div>';">
+       <div class="label">
+        Histori
+       </div></button> <button class="dashboard-btn" id="logoutBtn">
+       <div class="icon">
+        🚪
+       </div>
+       <div class="label">
+        Logout
+       </div></button>
+     </div>
+    </div><!-- Iibso Screen -->
+    <div id="iibsoScreen" class="card hidden" style="max-width: 1200px; width: 100%;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1.5rem;">Iibso Alaabta</h2>
+     <div id="productGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; max-height: 60%; overflow-y: auto;"></div>
+    </div><!-- Dalbo Screen -->
+    <div id="dalboScreen" class="card hidden" style="max-width: 700px; width: 100%;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1.5rem;">Dalbo Adeeg</h2>
+     <div id="dalboMessage" class="success-message hidden"></div>
+     <form id="dalboForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Magaca</label> <input type="text" id="dalboName" class="input-field" placeholder="Geli magacaaga" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="dalboNumber" class="input-field" placeholder="252xxxxxxxxx" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Cinwaanka</label> <input type="text" id="dalboAddress" class="input-field" placeholder="Geli cinwaankaaga" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Faahfaahin</label> <textarea id="dalboDescription" class="input-field" placeholder="Qor faahfaahinta dalabkaaga" rows="4" required></textarea> <button type="submit" class="btn-primary"> <span id="dalboButtonText">Send</span> <span id="dalboLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- USSD Screen -->
+    <div id="ussdScreen" class="card hidden" style="max-width: 700px; width: 100%;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1.5rem;">Dir Lacag (USSD)</h2>
+     <div id="ussdMessage" class="success-message hidden"></div>
+     <form id="ussdForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Magaca</label> <input type="text" id="ussdName" class="input-field" placeholder="Geli magacaaga" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Magaca Project-ka</label> <input type="text" id="ussdProject" class="input-field" placeholder="Geli magaca project-ka" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lacagta ($)</label> <input type="number" id="ussdMoney" class="input-field" placeholder="0.25 - 1000000" min="0.25" max="1000000" step="0.01" required> <button type="submit" class="btn-primary"> <span id="ussdButtonText">Send</span> <span id="ussdLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- WhatsApp Screen -->
+    <div id="whatsappScreen" class="card hidden" style="max-width: 700px; width: 100%;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1.5rem;">WhatsApp Cabasho</h2>
+     <div id="whatsappMessage" class="success-message hidden"></div>
+     <form id="whatsappForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Magaca</label> <input type="text" id="whatsappName" class="input-field" placeholder="Geli magacaaga" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="whatsappNumber" class="input-field" placeholder="252xxxxxxxxx" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Faahfaahin (Cabasho/Su'aalo)</label> <textarea id="whatsappDescription" class="input-field" placeholder="Qor cabashadaada ama su'aashaada" rows="4" required></textarea> <button type="submit" class="btn-primary"> <span id="whatsappButtonText">Send</span> <span id="whatsappLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- Histori Screen -->
+    <div id="historiScreen" class="card hidden" style="max-width: 1000px; width: 100%;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1.5rem;">Histori Iibsiga</h2>
+     <div id="historiList" style="max-height: 70%; overflow-y: auto;"></div>
+    </div><!-- Market HRSD.COIN Screen -->
+    <div id="marketHRSDScreen" class="card hidden" style="max-width: 900px; width: 100%;"><button onclick="showDashboard()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-bottom: 1rem; text-align: center;">💎 Market HRSD.COIN</h2><!-- Balances -->
+     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+      <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; padding: 1.25rem; text-align: center; color: white;">
+       <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 0.5rem;">
+        USD Balance
+       </div>
+       <div style="font-size: 1.5rem; font-weight: 700;">
+        $<span id="usdBalance">0.00</span>
+       </div>
+      </div>
+      <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 12px; padding: 1.25rem; text-align: center; color: white;">
+       <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 0.5rem;">
+        HRSD Balance
+       </div>
+       <div style="font-size: 1.5rem; font-weight: 700;">
+        <span id="hrsdBalance">0.000</span> 💎
+       </div>
+      </div>
+      <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); border-radius: 12px; padding: 1.25rem; text-align: center; color: white;">
+       <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 0.5rem;">
+        Bitcoin Balance
+       </div>
+       <div style="font-size: 1.5rem; font-weight: 700;">
+        <span id="btcBalance">0.00</span> ₿
+       </div>
+      </div>
+      <div style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border-radius: 12px; padding: 1.25rem; text-align: center; color: white;">
+       <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 0.5rem;">
+        Robot Balance
+       </div>
+       <div style="font-size: 1.5rem; font-weight: 700;">
+        $<span id="robotBalance">0.00</span>
+       </div>
+      </div>
+     </div><!-- Action Buttons -->
+     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;"><button onclick="showDeposit()" style="background: #10b981; color: white; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'"> 💵 Deposit </button> <button onclick="showWithdrawal()" style="background: #ef4444; color: white; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'"> 💸 Withdrawal </button> <button onclick="showMarketUSSD()" style="background: #3b82f6; color: white; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'"> 📱 USSD </button>
+     </div>
+     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;"><button onclick="showRobot()" style="background: #8b5cf6; color: white; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#7c3aed'" onmouseout="this.style.background='#8b5cf6'"> 🤖 Robot </button> <button onclick="showTrade()" style="background: #f59e0b; color: white; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'"> 💹 Trade </button> <button onclick="showSwap()" style="background: #06b6d4; color: white; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#0891b2'" onmouseout="this.style.background='#06b6d4'"> 🔄 Swap </button>
+     </div>
+     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;"><button onclick="showExchange()" style="background: #ec4899; color: white; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#db2777'" onmouseout="this.style.background='#ec4899'"> 💱 Exchange </button> <button onclick="showMarketWhatsApp()" style="background: #10b981; color: white; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'"> 📞 WhatsApp </button> <button onclick="showCalculator()" style="background: #6366f1; color: white; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#4f46e5'" onmouseout="this.style.background='#6366f1'"> 🧮 Calculator </button>
+     </div>
+    </div><!-- Deposit Screen -->
+    <div id="depositScreen" class="card hidden" style="max-width: 700px; width: 100%;"><button onclick="showMarketHRSD()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #10b981; margin-bottom: 1.5rem;">💵 Deposit USD</h2>
+     <div id="depositMessage" class="success-message hidden"></div>
+     <form id="depositForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lacagta ($)</label> <input type="number" id="depositAmount" class="input-field" placeholder="Tusaale: 1" min="0.01" step="0.01" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="depositNumber" class="input-field" placeholder="Tusaale: 613627375" required> <button type="submit" class="btn-primary" style="background: #10b981;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'"> <span id="depositButtonText">Send</span> <span id="depositLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- Withdrawal Screen -->
+    <div id="withdrawalScreen" class="card hidden" style="max-width: 700px; width: 100%;"><button onclick="showMarketHRSD()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #ef4444; margin-bottom: 1.5rem;">💸 Withdrawal USD</h2>
+     <div id="withdrawalError" class="error-message hidden"></div>
+     <div id="withdrawalMessage" class="success-message hidden"></div>
+     <form id="withdrawalForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lacagta ($)</label> <input type="number" id="withdrawalAmount" class="input-field" placeholder="Tusaale: 0.25" min="0.01" step="0.01" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="withdrawalNumber" class="input-field" placeholder="Tusaale: 618877686" required> <button type="submit" class="btn-primary" style="background: #ef4444;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'"> <span id="withdrawalButtonText">Send</span> <span id="withdrawalLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- Market USSD Screen -->
+    <div id="marketUSSDScreen" class="card hidden" style="max-width: 700px; width: 100%;"><button onclick="showMarketHRSD()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #3b82f6; margin-bottom: 1.5rem;">📱 USSD Payment</h2>
+     <div id="marketUSSDMessage" class="success-message hidden"></div>
+     <form id="marketUSSDForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lacagta ($)</label> <input type="number" id="marketUSSDAmount" class="input-field" placeholder="Tusaale: 1" min="0.01" step="0.01" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="marketUSSDNumber" class="input-field" placeholder="Tusaale: 618877686" required> <button type="submit" class="btn-primary" style="background: #3b82f6;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'"> <span id="marketUSSDButtonText">Send</span> <span id="marketUSSDLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- Robot Screen -->
+    <div id="robotScreen" class="card hidden" style="max-width: 700px; width: 100%;"><button onclick="showMarketHRSD()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #8b5cf6; margin-bottom: 1.5rem;">�� Robot Trading</h2>
+     <div id="robotMessage" class="success-message hidden"></div>
+     <div id="robotError" class="error-message hidden"></div><!-- Robot Info Box -->
+     <div style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; color: white;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"><span style="font-weight: 500;">Robot Status:</span> <span id="robotStatus" style="font-weight: 700; font-size: 1.1rem;">Inactive 🔴</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"><span style="font-weight: 500;">Mining Rate:</span> <span style="font-weight: 700;">+0.0005 HRSD/min 💎</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"><span style="font-weight: 500;">Token Price:</span> <span style="font-weight: 700; font-size: 1.2rem;">$0.50 / HRSD 🪙</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;"><span style="font-weight: 500;">Total Mined:</span> <span style="font-weight: 700; font-size: 1.2rem;"><span id="totalMinedHRSD">0.0000</span> HRSD 💎</span>
+      </div>
+     </div><!-- Robot Image (Top) -->
+     <div id="robotImageTop" style="text-align: center; margin-bottom: 1.5rem; display: none;"><img src="https://i.postimg.cc/ZKX8xknn/photo-..jpg" alt="Robot" style="width: 100%; max-width: 300px; border-radius: 12px; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);" onerror="this.parentElement.innerHTML='<div style=font-size:5rem;text-align:center;>🤖</div>';">
+     </div><!-- Robot Form -->
+     <form id="robotForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lacagta ($)</label> <input type="number" id="robotAmount" class="input-field" placeholder="Geli qadarka lacagta" min="0.01" step="0.01" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Lambarka Telefoonka</label> <input type="tel" id="robotNumber" class="input-field" placeholder="Tusaale: 618877686" required> <button type="submit" class="btn-primary" style="background: #8b5cf6; margin-bottom: 1rem;" onmouseover="this.style.background='#7c3aed'" onmouseout="this.style.background='#8b5cf6'"> <span id="robotButtonText">PUY</span> <span id="robotLoading" class="loading-spinner hidden"></span> </button> <!-- TREDE Button --> <button type="button" id="tredeButton" onclick="startTrede()" class="btn-primary" style="background: #f59e0b; display: none;" onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'"> <span id="tredeButtonText">TREDE</span> <span id="tredeLoading" class="loading-spinner hidden"></span> </button>
+     </form><!-- TREDE Animation Area -->
+     <div id="tredeArea" class="hidden" style="margin-top: 1.5rem;">
+      <div style="text-align: center; margin-bottom: 1rem;"><img src="https://i.postimg.cc/ZKX8xknn/photo-..jpg" alt="Robot Trading" style="width: 100%; max-width: 350px; border-radius: 12px; box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);" onerror="this.parentElement.innerHTML='<div style=font-size:5rem;text-align:center;>💹</div>';">
+      </div><!-- Tokens Animation Container -->
+      <div id="tokensContainer" style="position: relative; height: 150px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border-radius: 12px; overflow: hidden; box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);"><!-- Tokens will be added here dynamically -->
+      </div>
+     </div>
+    </div><!-- Trade Screen -->
+    <div id="tradeScreen" class="card hidden" style="max-width: 900px; width: 100%;"><button onclick="showMarketHRSD()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #f59e0b; margin-bottom: 1.5rem;">💹 Trade HRSD.COIN</h2><!-- Live Price Chart -->
+     <div class="price-chart">
+      <div class="price-display"><img src="https://i.postimg.cc/ZKX8xknn/photo-..jpg" alt="HRSD.COIN" class="price-coin-icon" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2745%27 fill=%27%23f59e0b%27/%3E%3Ctext x=%2750%27 y=%2760%27 font-size=%2740%27 text-anchor=%27middle%27 fill=%27white%27%3E💎%3C/text%3E%3C/svg%3E';">
+       <div class="price-info">
+        <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 0.25rem;">
+         HRSD.COIN Live Price
+        </div>
+        <div class="price-value">
+         $<span id="livePriceValue">1.00</span>
+        </div>
+        <div class="price-change up" id="priceChange">
+         +0.00 (0.00%)
+        </div>
+       </div>
+      </div>
+      <div class="chart-container" id="priceChart"><!-- Chart bars will be generated here -->
+      </div>
+     </div><!-- Live Traders List -->
+     <div style="background: #f9fafb; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; max-height: 300px; overflow-y: auto;">
+      <h3 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem; text-align: center;">📊 Live Traders (Dadka Tredaaya)</h3>
+      <div id="liveTradersList"><!-- Live traders will appear here -->
+      </div>
+     </div>
+     <div id="tradeMessage" class="success-message hidden"></div>
+     <div id="tradeError" class="error-message hidden"></div>
+     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;"><button id="buyTab" onclick="showBuyForm()" style="background: #10b981; color: white; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"> <img src="https://i.postimg.cc/ZKX8xknn/photo-..jpg" alt="Buy" style="width: 28px; height: 28px; object-fit: contain; border-radius: 50%; background: white; padding: 2px;" onerror="this.style.display='none';"> <span>Buy 💎</span> </button> <button id="sellTab" onclick="showSellForm()" style="background: #e5e7eb; color: #6b7280; border: none; border-radius: 10px; padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"> <img id="sellTabImg" src="https://i.postimg.cc/ZKX8xknn/photo-..jpg" alt="Sell" style="width: 28px; height: 28px; object-fit: contain; border-radius: 50%; background: white; padding: 2px; display: none;" onerror="this.style.display='none';"> <span>Sell 💎</span> </button>
+     </div>
+     <form id="buyForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">HRSD.COIN Amount</label> <input type="number" id="buyAmount" class="input-field" placeholder="Geli tirada HRSD.COIN" min="0.01" step="0.01" required> <button type="submit" class="btn-primary" style="background: #10b981;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'"> <span id="buyButtonText">Buy HRSD.COIN</span> <span id="buyLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+     <form id="sellForm" class="hidden"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">HRSD.COIN Amount</label> <input type="number" id="sellAmount" class="input-field" placeholder="Geli tirada HRSD.COIN" min="0.01" step="0.01" required> <button type="submit" class="btn-primary" style="background: #ef4444;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'"> <span id="sellButtonText">Sell HRSD.COIN</span> <span id="sellLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- Swap Screen -->
+    <div id="swapScreen" class="card hidden" style="max-width: 700px; width: 100%;"><button onclick="showMarketHRSD()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #06b6d4; margin-bottom: 1.5rem;">🔄 Swap (Bedesho)</h2>
+     <div id="swapMessage" class="success-message hidden"></div>
+     <div id="swapError" class="error-message hidden"></div>
+     <div style="background: #f0fdfa; border: 2px solid #06b6d4; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+      <div style="text-align: center; margin-bottom: 1rem;">
+       <div style="font-size: 0.9rem; color: #0891b2; margin-bottom: 0.5rem;">
+        Swap Rate
+       </div>
+       <div style="font-size: 1.5rem; font-weight: 700; color: #06b6d4;">
+        1:1 Exchange
+       </div>
+      </div>
+     </div>
+     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1.5rem;"><button id="usdToHrsdTab" onclick="showUsdToHrsd()" style="background: #06b6d4; color: white; border: none; border-radius: 10px; padding: 0.75rem; font-size: 0.9rem; font-weight: 600; cursor: pointer;">USD → HRSD</button> <button id="hrsdToUsdTab" onclick="showHrsdToUsd()" style="background: #e5e7eb; color: #6b7280; border: none; border-radius: 10px; padding: 0.75rem; font-size: 0.9rem; font-weight: 600; cursor: pointer;">HRSD → USD</button> <button id="usdToBtcTab" onclick="showUsdToBtc()" style="background: #e5e7eb; color: #6b7280; border: none; border-radius: 10px; padding: 0.75rem; font-size: 0.9rem; font-weight: 600; cursor: pointer;">USD → BTC</button>
+     </div>
+     <form id="usdToHrsdForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">USD Amount</label> <input type="number" id="usdToHrsdAmount" class="input-field" placeholder="Geli qadarka USD" min="0.01" step="0.01" required oninput="updateSwapPreview('usd-hrsd')">
+      <div style="background: #f3f4f6; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+       <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: #6b7280;">Waxaad helaysaa:</span> <span style="color: #06b6d4; font-weight: 700; font-size: 1.1rem;"><span id="usdToHrsdPreview">0.000</span> HRSD.COIN</span>
+       </div>
+      </div><button type="submit" class="btn-primary" style="background: #06b6d4;" onmouseover="this.style.background='#0891b2'" onmouseout="this.style.background='#06b6d4'"> <span id="usdToHrsdButtonText">Swap USD → HRSD</span> <span id="usdToHrsdLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+     <form id="hrsdToUsdForm" class="hidden"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">HRSD.COIN Amount</label> <input type="number" id="hrsdToUsdAmount" class="input-field" placeholder="Geli qadarka HRSD.COIN" min="0.01" step="0.01" required oninput="updateSwapPreview('hrsd-usd')">
+      <div style="background: #f3f4f6; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+       <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: #6b7280;">Waxaad helaysaa:</span> <span style="color: #10b981; font-weight: 700; font-size: 1.1rem;">$<span id="hrsdToUsdPreview">0.00</span></span>
+       </div>
+      </div><button type="submit" class="btn-primary" style="background: #06b6d4;" onmouseover="this.style.background='#0891b2'" onmouseout="this.style.background='#06b6d4'"> <span id="hrsdToUsdButtonText">Swap HRSD → USD</span> <span id="hrsdToUsdLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+     <form id="usdToBtcForm" class="hidden"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">USD Amount</label> <input type="number" id="usdToBtcAmount" class="input-field" placeholder="Geli qadarka USD" min="0.01" step="0.01" required oninput="updateSwapPreview('usd-btc')">
+      <div style="background: #f3f4f6; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+       <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: #6b7280;">Waxaad helaysaa:</span> <span style="color: #f97316; font-weight: 700; font-size: 1.1rem;"><span id="usdToBtcPreview">0.00000000</span> BTC</span>
+       </div>
+      </div><button type="submit" class="btn-primary" style="background: #06b6d4;" onmouseover="this.style.background='#0891b2'" onmouseout="this.style.background='#06b6d4'"> <span id="usdToBtcButtonText">Swap USD → BTC</span> <span id="usdToBtcLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- Exchange Screen -->
+    <div id="exchangeScreen" class="card hidden" style="max-width: 1200px; width: 100%; background: #0f1419; padding: 0; border-radius: 0;">
+     <div style="background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%); padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; display: flex; align-items: center; justify-content: space-between;"><button onclick="showMarketHRSD()" style="background: none; border: none; color: #f0b90b; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;"> <span style="font-size: 1.5rem;">←</span> <span style="font-weight: 600;">Market</span> </button>
+      <h2 style="font-size: 1.5rem; font-weight: 700; color: #f0b90b; margin: 0;">💱 Live Exchange</h2>
+      <div style="width: 80px;"></div>
+     </div><!-- Exchange Balance Display -->
+     <div style="background: #1a1f2e; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+      <div style="text-align: center;">
+       <div style="color: #848e9c; font-size: 0.75rem; margin-bottom: 0.25rem;">
+        USD Balance
+       </div>
+       <div style="color: #10b981; font-weight: 700; font-size: 1.1rem;">
+        $<span id="exchangeUsdBalance">0.00</span>
+       </div>
+      </div>
+      <div style="text-align: center;">
+       <div style="color: #848e9c; font-size: 0.75rem; margin-bottom: 0.25rem;">
+        HRSD Balance
+       </div>
+       <div style="color: #f0b90b; font-weight: 700; font-size: 1.1rem;">
+        <span id="exchangeHrsdBalance">0.000</span> 💎
+       </div>
+      </div>
+      <div style="text-align: center;">
+       <div style="color: #848e9c; font-size: 0.75rem; margin-bottom: 0.25rem;">
+        BTC Balance
+       </div>
+       <div style="color: #f97316; font-weight: 700; font-size: 1.1rem;">
+        <span id="exchangeBtcBalance">0.00</span> ₿
+       </div>
+      </div>
+      <div style="text-align: center;">
+       <div style="color: #848e9c; font-size: 0.75rem; margin-bottom: 0.25rem;">
+        Robot Balance
+       </div>
+       <div style="color: #8b5cf6; font-weight: 700; font-size: 1.1rem;">
+        $<span id="exchangeRobotBalance">0.00</span>
+       </div>
+      </div>
+     </div><!-- Live Prices Table -->
+     <div style="background: #0f1419; overflow-y: auto; max-height: 600px;"><!-- Table Header -->
+      <div style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; background: #1a1f2e; border-bottom: 1px solid #2a3441; position: sticky; top: 0; z-index: 10;">
+       <div style="color: #848e9c; font-size: 0.8rem; font-weight: 600;">
+        Coin
+       </div>
+       <div style="color: #848e9c; font-size: 0.8rem; font-weight: 600; text-align: right;">
+        Price
+       </div>
+       <div style="color: #848e9c; font-size: 0.8rem; font-weight: 600; text-align: right;">
+        24h Change
+       </div>
+       <div style="color: #848e9c; font-size: 0.8rem; font-weight: 600; text-align: right;">
+        Volume
+       </div>
+      </div><!-- HRSD.COIN -->
+      <div class="crypto-row" data-crypto="HRSD" onclick="showExchangeBuyModal('HRSD', 'HRSD.COIN', '💎')" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         💎
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          HRSD.COIN
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          HRSD
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="HRSD">1.00</span>
+       </div>
+       <div class="crypto-change" data-crypto="HRSD" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $1.2M
+       </div>
+      </div><!-- Bitcoin -->
+      <div class="crypto-row" data-crypto="BTC" onclick="showExchangeBuyModal('BTC', 'Bitcoin', '₿')" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         ₿
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Bitcoin
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          BTC
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="BTC">55555.00</span>
+       </div>
+       <div class="crypto-change" data-crypto="BTC" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $28.4B
+       </div>
+      </div><!-- Ethereum -->
+      <div class="crypto-row" data-crypto="ETH" onclick="showExchangeBuyModal('ETH', 'Ethereum', '⟠')" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         ⟠
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Ethereum
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          ETH
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="ETH">2777.00</span>
+       </div>
+       <div class="crypto-change" data-crypto="ETH" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $15.2B
+       </div>
+      </div><!-- Tron -->
+      <div class="crypto-row" data-crypto="TRX" onclick="showExchangeBuyModal('TRX', 'Tron', '◆')" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         ◆
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Tron
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          TRX
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="TRX">0.192</span>
+       </div>
+       <div class="crypto-change" data-crypto="TRX" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $891M
+       </div>
+      </div><!-- Ripple -->
+      <div class="crypto-row" data-crypto="XRP" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         ◉
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Ripple
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          XRP
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="XRP">0.606</span>
+       </div>
+       <div class="crypto-change" data-crypto="XRP" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $2.4B
+       </div>
+      </div><!-- Binance Coin -->
+      <div class="crypto-row" data-crypto="BNB" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         🔶
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Binance Coin
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          BNB
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="BNB">416.00</span>
+       </div>
+       <div class="crypto-change" data-crypto="BNB" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $1.8B
+       </div>
+      </div><!-- Toncoin -->
+      <div class="crypto-row" data-crypto="TON" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         💠
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Toncoin
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          TON
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="TON">2.38</span>
+       </div>
+       <div class="crypto-change" data-crypto="TON" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $345M
+       </div>
+      </div><!-- Solana -->
+      <div class="crypto-row" data-crypto="SOL" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         ◎
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Solana
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          SOL
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="SOL">119.00</span>
+       </div>
+       <div class="crypto-change" data-crypto="SOL" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $3.2B
+       </div>
+      </div><!-- Dogecoin -->
+      <div class="crypto-row" data-crypto="DOGE" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         🐕
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Dogecoin
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          DOGE
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="DOGE">0.140</span>
+       </div>
+       <div class="crypto-change" data-crypto="DOGE" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $1.1B
+       </div>
+      </div><!-- Shiba Inu -->
+      <div class="crypto-row" data-crypto="SHIB" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         🐕
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Shiba Inu
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          SHIB
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="SHIB">0.00001818</span>
+       </div>
+       <div class="crypto-change" data-crypto="SHIB" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $567M
+       </div>
+      </div><!-- Pepe -->
+      <div class="crypto-row" data-crypto="PEPE" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         🐸
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Pepe
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          PEPE
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="PEPE">0.00000909</span>
+       </div>
+       <div class="crypto-change" data-crypto="PEPE" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $423M
+       </div>
+      </div><!-- Cardano -->
+      <div class="crypto-row" data-crypto="ADA" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         ₳
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Cardano
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          ADA
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="ADA">0.540</span>
+       </div>
+       <div class="crypto-change" data-crypto="ADA" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $689M
+       </div>
+      </div><!-- Avalanche -->
+      <div class="crypto-row" data-crypto="AVAX" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         🔺
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Avalanche
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          AVAX
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="AVAX">31.25</span>
+       </div>
+       <div class="crypto-change" data-crypto="AVAX" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $512M
+       </div>
+      </div><!-- Polkadot -->
+      <div class="crypto-row" data-crypto="DOT" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         ●
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Polkadot
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          DOT
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="DOT">5.26</span>
+       </div>
+       <div class="crypto-change" data-crypto="DOT" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $334M
+       </div>
+      </div><!-- Polygon -->
+      <div class="crypto-row" data-crypto="MATIC" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         🟣
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Polygon
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          MATIC
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="MATIC">0.675</span>
+       </div>
+       <div class="crypto-change" data-crypto="MATIC" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $456M
+       </div>
+      </div><!-- Litecoin -->
+      <div class="crypto-row" data-crypto="LTC" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         Ł
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Litecoin
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          LTC
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="LTC">83.33</span>
+       </div>
+       <div class="crypto-change" data-crypto="LTC" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $678M
+       </div>
+      </div><!-- Uniswap -->
+      <div class="crypto-row" data-crypto="UNI" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         🦄
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Uniswap
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          UNI
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="UNI">7.14</span>
+       </div>
+       <div class="crypto-change" data-crypto="UNI" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $234M
+       </div>
+      </div><!-- Cosmos -->
+      <div class="crypto-row" data-crypto="ATOM" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         ⚛
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Cosmos
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          ATOM
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="ATOM">6.67</span>
+       </div>
+       <div class="crypto-change" data-crypto="ATOM" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $178M
+       </div>
+      </div><!-- Chainlink -->
+      <div class="crypto-row" data-crypto="LINK" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid #2a3441; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         🔗
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Chainlink
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          LINK
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="LINK">14.08</span>
+       </div>
+       <div class="crypto-change" data-crypto="LINK" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $789M
+       </div>
+      </div><!-- Stellar -->
+      <div class="crypto-row" data-crypto="XLM" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr; gap: 1rem; padding: 1rem 1.5rem; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1a1f2e'" onmouseout="this.style.background='transparent'">
+       <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="font-size: 1.5rem;">
+         ✦
+        </div>
+        <div>
+         <div style="color: #eaecef; font-weight: 600; font-size: 0.95rem;">
+          Stellar
+         </div>
+         <div style="color: #848e9c; font-size: 0.75rem;">
+          XLM
+         </div>
+        </div>
+       </div>
+       <div style="color: #eaecef; font-weight: 600; text-align: right; font-size: 0.95rem;">
+        $<span class="crypto-price" data-crypto="XLM">0.120</span>
+       </div>
+       <div class="crypto-change" data-crypto="XLM" style="font-weight: 600; text-align: right; font-size: 0.9rem;">
+        +0.00%
+       </div>
+       <div style="color: #848e9c; text-align: right; font-size: 0.85rem;">
+        $123M
+       </div>
+      </div>
+     </div>
+    </div><!-- Market WhatsApp Screen -->
+    <div id="marketWhatsAppScreen" class="card hidden" style="max-width: 700px; width: 100%;"><button onclick="showMarketHRSD()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #10b981; margin-bottom: 1.5rem;">📞 WhatsApp Support</h2>
+     <div style="background: #d1fae5; border: 2px solid #10b981; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; text-align: center;">
+      <div style="font-size: 1.1rem; color: #065f46; margin-bottom: 0.5rem;">
+       💬 HRSD.COIN Market Support 24/7
+      </div>
+      <p style="color: #047857; font-size: 0.9rem;">Waxaan ku caawinay dhamaanshaha adeegyada Market HRSD.COIN!</p>
+     </div>
+     <div id="marketWhatsAppMessage" class="success-message hidden"></div>
+     <form id="marketWhatsAppForm"><label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Magaca</label> <input type="text" id="marketWhatsAppName" class="input-field" placeholder="Geli magacaaga" required> <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">Faahfaahin (Su'aalo/Support)</label> <textarea id="marketWhatsAppDescription" class="input-field" placeholder="Qor su'aashaada ama dhibaatooyinka Market HRSD.COIN" rows="4" required></textarea> <button type="submit" class="btn-primary" style="background: #10b981;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'"> <span id="marketWhatsAppButtonText">Send WhatsApp</span> <span id="marketWhatsAppLoading" class="loading-spinner hidden"></span> </button>
+     </form>
+    </div><!-- Exchange Buy Modal -->
+    <div id="exchangeBuyModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem;">
+     <div class="card" style="max-width: 500px; width: 100%; background: #1a1f2e; color: white;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+       <h3 style="font-size: 1.5rem; font-weight: 700; color: #f0b90b; margin: 0;">Iibso <span id="modalCryptoName"></span></h3><button onclick="closeExchangeModal()" style="background: none; border: none; color: #848e9c; cursor: pointer; font-size: 1.5rem;">✕</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 1.5rem; padding: 1rem; background: #0f1419; border-radius: 10px;">
+       <div style="font-size: 3rem; margin-bottom: 0.5rem;">
+        <span id="modalCryptoIcon"></span>
+       </div>
+       <div style="color: #eaecef; font-size: 1.2rem; font-weight: 600;">
+        Qiimaha Hadda
+       </div>
+       <div style="color: #10b981; font-size: 2rem; font-weight: 700; margin-top: 0.5rem;">
+        $<span id="modalCryptoPrice">0.00</span>
+       </div>
+      </div>
+      <div id="exchangeModalError" class="error-message hidden"></div>
+      <div id="exchangeModalSuccess" class="success-message hidden"></div>
+      <form id="exchangeBuyForm"><label style="display: block; margin-bottom: 0.5rem; color: #eaecef; font-weight: 500;">Qadarka USD</label> <input type="number" id="exchangeBuyUsdAmount" class="input-field" placeholder="Geli qadarka USD" min="0.01" step="0.01" required oninput="updateExchangePreview()" style="background: #0f1419; color: white; border-color: #2a3441;">
+       <div style="background: #0f1419; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: #848e9c;">Waxaad helaysaa:</span> <span style="color: #f0b90b; font-weight: 700; font-size: 1.1rem;"><span id="exchangeCryptoPreview">0.000</span> <span id="exchangeCryptoSymbol"></span></span>
+        </div>
+       </div><button type="submit" class="btn-primary" style="background: #f0b90b; color: #0f1419;" onmouseover="this.style.background='#d9a00a'" onmouseout="this.style.background='#f0b90b'"> <span id="exchangeBuyButtonText">Iibso Hadda</span> <span id="exchangeBuyLoading" class="loading-spinner hidden"></span> </button>
+      </form>
+     </div>
+    </div><!-- Calculator Screen -->
+    <div id="calculatorScreen" class="card hidden" style="max-width: 500px; width: 100%;"><button onclick="showMarketHRSD()" style="background: none; border: none; color: #059669; cursor: pointer; font-size: 1.5rem; margin-bottom: 1rem;">← Dib u noqo</button>
+     <h2 style="font-size: 1.75rem; font-weight: 700; color: #6366f1; margin-bottom: 1.5rem; text-align: center;">🧮 Calculator</h2>
+     <div style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);">
+      <div id="calcDisplay" style="background: #1e1b4b; color: #ffffff; border-radius: 10px; padding: 1.5rem; font-size: 2rem; text-align: right; margin-bottom: 1rem; min-height: 60px; word-break: break-all; font-family: 'Courier New', monospace;">
+       0
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;"><!-- Row 1 --> <button onclick="clearCalc()" style="background: #ef4444; color: white; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">C</button> <button onclick="deleteCalc()" style="background: #f59e0b; color: white; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'">⌫</button> <button onclick="appendCalc('/')" style="background: #8b5cf6; color: white; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#7c3aed'" onmouseout="this.style.background='#8b5cf6'">÷</button> <button onclick="appendCalc('*')" style="background: #8b5cf6; color: white; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#7c3aed'" onmouseout="this.style.background='#8b5cf6'">×</button> <!-- Row 2 --> <button onclick="appendCalc('7')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">7</button> <button onclick="appendCalc('8')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">8</button> <button onclick="appendCalc('9')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">9</button> <button onclick="appendCalc('-')" style="background: #8b5cf6; color: white; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#7c3aed'" onmouseout="this.style.background='#8b5cf6'">−</button> <!-- Row 3 --> <button onclick="appendCalc('4')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">4</button> <button onclick="appendCalc('5')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">5</button> <button onclick="appendCalc('6')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">6</button> <button onclick="appendCalc('+')" style="background: #8b5cf6; color: white; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#7c3aed'" onmouseout="this.style.background='#8b5cf6'">+</button> <!-- Row 4 --> <button onclick="appendCalc('1')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">1</button> <button onclick="appendCalc('2')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">2</button> <button onclick="appendCalc('3')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">3</button> <button onclick="calculateCalc()" style="background: #10b981; color: white; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; grid-row: span 2; transition: all 0.2s;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">=</button> <!-- Row 5 --> <button onclick="appendCalc('0')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; grid-column: span 2; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">0</button> <button onclick="appendCalc('.')" style="background: #ffffff; color: #1f2937; border: none; border-radius: 10px; padding: 1.25rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='#ffffff'">.</button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: "HORSEED",
+      welcome_message: "Soo dhawoow HORSEED"
+    };
+
+    let allUsers = [];
+    let currentUser = null;
+    let userBalances = { usd: 0, hrsd: 0.000, btc: 0, robot: 0 };
+
+    function getUserBalanceKey() {
+      if (!currentUser) return null;
+      return `horseed_balances_${currentUser.userId}`;
+    }
+
+    function getUserHistoryKey() {
+      if (!currentUser) return null;
+      return `horseed_history_${currentUser.userId}`;
+    }
+
+    function getUserMiningKey() {
+      if (!currentUser) return null;
+      return `horseed_robot_mining_${currentUser.userId}`;
+    }
+
+    function getUserMinedKey() {
+      if (!currentUser) return null;
+      return `horseed_total_mined_${currentUser.userId}`;
+    }
+
+    function getUserMiningStartKey() {
+      if (!currentUser) return null;
+      return `horseed_robot_start_${currentUser.userId}`;
+    }
+
+    function loadUsersFromLocalStorage() {
+      const stored = localStorage.getItem('horseed_all_users');
+      if (stored) {
+        allUsers = JSON.parse(stored);
+      }
+    }
+
+    function saveUsersToLocalStorage() {
+      localStorage.setItem('horseed_all_users', JSON.stringify(allUsers));
+    }
+
+    function loadBalances() {
+      const balanceKey = getUserBalanceKey();
+      if (!balanceKey) return;
+      
+      const stored = localStorage.getItem(balanceKey);
+      if (stored) {
+        userBalances = JSON.parse(stored);
+      }
+      updateBalanceDisplay();
+    }
+
+    function saveBalances() {
+      const balanceKey = getUserBalanceKey();
+      if (!balanceKey) return;
+      
+      localStorage.setItem(balanceKey, JSON.stringify(userBalances));
+      updateBalanceDisplay();
+    }
+
+    function updateBalanceDisplay() {
+      const usdEl = document.getElementById('usdBalance');
+      const hrsdEl = document.getElementById('hrsdBalance');
+      const btcEl = document.getElementById('btcBalance');
+      const robotEl = document.getElementById('robotBalance');
+      
+      if (usdEl) usdEl.textContent = userBalances.usd.toFixed(2);
+      if (hrsdEl) hrsdEl.textContent = userBalances.hrsd.toFixed(3);
+      if (btcEl) btcEl.textContent = userBalances.btc.toFixed(8);
+      if (robotEl) robotEl.textContent = userBalances.robot.toFixed(2);
+    }
+
+    function initializeApp() {
+      loadUsersFromLocalStorage();
+
+      const storedUser = localStorage.getItem('horseed_current_user');
+      if (storedUser) {
+        currentUser = JSON.parse(storedUser);
+        showDashboard();
+      }
+      
+      checkRobotMiningStatus();
+    }
+
+    async function onConfigChange(config) {
+      const appTitle = config.app_title || defaultConfig.app_title;
+      const welcomeMessage = config.welcome_message || defaultConfig.welcome_message;
+
+      const titleEl = document.getElementById('appTitle');
+      const loginTitleEl = document.getElementById('loginAppTitle');
+      const welcomeEl = document.getElementById('welcomeMessage');
+      
+      if (titleEl) titleEl.textContent = appTitle;
+      if (loginTitleEl) loginTitleEl.textContent = appTitle;
+      if (welcomeEl) welcomeEl.textContent = welcomeMessage;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["welcome_message", config.welcome_message || defaultConfig.welcome_message]
+        ])
+      });
+    }
+
+    // Sign Up Form
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const phone = document.getElementById('signupPhone').value;
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupConfirmPassword').value;
+
+      document.getElementById('signupError').classList.add('hidden');
+      document.getElementById('signupSuccess').classList.add('hidden');
+
+      if (password !== confirmPassword) {
+        document.getElementById('signupError').textContent = 'Password-yada ma iswada aha!';
+        document.getElementById('signupError').classList.remove('hidden');
+        return;
+      }
+
+      if (password.length < 6) {
+        document.getElementById('signupError').textContent = 'Password waa inuu ka badan yahay 6 xaraf!';
+        document.getElementById('signupError').classList.remove('hidden');
+        return;
+      }
+
+      const existingUser = allUsers.find(user => user.phone_number === phone);
+      if (existingUser) {
+        document.getElementById('signupError').textContent = 'Lambarkaan horay ayaa loo diiwaan geliyey!';
+        document.getElementById('signupError').classList.remove('hidden');
+        return;
+      }
+
+      if (allUsers.length >= 8000000) {
+        document.getElementById('signupError').textContent = 'Nidaamku wuxuu galay xadka ugu sarreeya ee isticmaalayaasha.';
+        document.getElementById('signupError').classList.remove('hidden');
+        return;
+      }
+
+      document.getElementById('signupButtonText').classList.add('hidden');
+      document.getElementById('signupLoading').classList.remove('hidden');
+      document.querySelector('#signupForm button').disabled = true;
+
+      setTimeout(() => {
+        const newUser = {
+          userId: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+          phone_number: phone,
+          password: password,
+          created_at: new Date().toISOString(),
+          last_login: ""
+        };
+
+        allUsers.push(newUser);
+        saveUsersToLocalStorage();
+
+        document.getElementById('signupButtonText').classList.remove('hidden');
+        document.getElementById('signupLoading').classList.add('hidden');
+        document.querySelector('#signupForm button').disabled = false;
+
+        document.getElementById('signupSuccess').textContent = 'Diiwaangalintii waa guuleysatay! Hadda login samee.';
+        document.getElementById('signupSuccess').classList.remove('hidden');
+        document.getElementById('signupForm').reset();
+        
+        setTimeout(() => {
+          showLogin();
+        }, 2000);
+      }, 1000);
+    });
+
+    // Login Form
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const phone = document.getElementById('loginPhone').value;
+      const password = document.getElementById('loginPassword').value;
+
+      document.getElementById('loginError').classList.add('hidden');
+
+      const user = allUsers.find(u => u.phone_number === phone && u.password === password);
+
+      if (!user) {
+        document.getElementById('loginError').textContent = 'Lambarka ama password-ka qaldan!';
+        document.getElementById('loginError').classList.remove('hidden');
+        return;
+      }
+
+      document.getElementById('loginButtonText').classList.add('hidden');
+      document.getElementById('loginLoading').classList.remove('hidden');
+      document.querySelector('#loginForm button').disabled = true;
+
+      setTimeout(() => {
+        user.last_login = new Date().toISOString();
+        saveUsersToLocalStorage();
+
+        document.getElementById('loginButtonText').classList.remove('hidden');
+        document.getElementById('loginLoading').classList.add('hidden');
+        document.querySelector('#loginForm button').disabled = false;
+
+        currentUser = user;
+        localStorage.setItem('horseed_current_user', JSON.stringify(user));
+        showDashboard();
+      }, 1000);
+    });
+
+    document.getElementById('goToLogin').addEventListener('click', showLogin);
+    document.getElementById('goToSignup').addEventListener('click', showSignup);
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      currentUser = null;
+      localStorage.removeItem('horseed_current_user');
+      showLogin();
+    });
+
+    const products = [
+      {name: 'iPhone 15', price: '$999', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXJtSHEU295H48LTgCjNJ3Oa0a6ybvd-nuuA&s'},
+      {name: 'Samsung Galaxy', price: '$850', icon: '📱', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz6O3cAr6A13ZitURScnkAZEr-H2__st96Qw&s'},
+      {name: 'Phone Cover Blue', price: '$2.5', icon: '📱', image: 'https://i.postimg.cc/tJvKXzcs/photo-..jpg'},
+      {name: 'Gaming Laptop', price: '$899', icon: '💻', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNy1Nk240JKpHCJX8QUOqBQ31sayD8_GUOCg&s'},
+      {name: 'Gaming Headset', price: '$75', icon: '🎧', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp3ycqDYOY8xo17Yx4UYBc3Xszlhn2EZBWfg&s'},
+      {name: 'Designer Watch', price: '$180', icon: '⌚', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwAt8lQ523_gpL8lNO5Jowa9iSZ2ZDFA95sw&s'}
+    ];
+
+    function loadProducts() {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      
+      products.forEach((product) => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.3s ease;';
+        card.onmouseover = () => { card.style.borderColor = '#059669'; card.style.transform = 'translateY(-4px)'; };
+        card.onmouseout = () => { card.style.borderColor = '#e5e7eb'; card.style.transform = 'translateY(0)'; };
+        card.onclick = () => buyProduct(product);
+        
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100px; object-fit: contain; margin-bottom: 0.5rem; border-radius: 8px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem; display: none;">${product.icon}</div>
+          <div style="font-size: 0.85rem; font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">${product.name}</div>
+          <div style="font-size: 0.9rem; color: #059669; font-weight: 700;">${product.price}</div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    function buyProduct(product) {
+      const historyKey = getUserHistoryKey();
+      if (!historyKey) return;
+      
+      const purchaseHistory = JSON.parse(localStorage.getItem(historyKey) || '[]');
+      const purchase = {
+        productName: product.name,
+        productIcon: product.image,
+        price: product.price,
+        date: new Date().toLocaleDateString('so-SO'),
+        time: new Date().toLocaleTimeString('so-SO'),
+        timestamp: Date.now()
+      };
+      
+      purchaseHistory.push(purchase);
+      localStorage.setItem(historyKey, JSON.stringify(purchaseHistory));
+      
+      const tempMessage = document.createElement('div');
+      tempMessage.className = 'success-message';
+      tempMessage.textContent = `✓ Waxaad dirtay dalabkan: ${product.name}`;
+      tempMessage.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; min-width: 300px;';
+      document.body.appendChild(tempMessage);
+      
+      setTimeout(() => {
+        document.body.removeChild(tempMessage);
+      }, 3000);
+      
+      const message = `Waxaan rabaa inan dalbo:%0A%0A📦 *${product.name}*%0A💰 Qiimaha: ${product.price}%0A%0AMahadsanid!`;
+      const whatsappUrl = `https://wa.me/618877686?text=${message}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    }
+
+    document.getElementById('dalboForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('dalboName').value;
+      const number = document.getElementById('dalboNumber').value;
+      const address = document.getElementById('dalboAddress').value;
+      const description = document.getElementById('dalboDescription').value;
+      
+      document.getElementById('dalboButtonText').classList.add('hidden');
+      document.getElementById('dalboLoading').classList.remove('hidden');
+      document.querySelector('#dalboForm button').disabled = true;
+      
+      const message = `Magaca: ${name}%0ALambarka: ${number}%0ACinwaanka: ${address}%0AFaahfaahin: ${description}`;
+      const whatsappUrl = `https://wa.me/618877686?text=${message}`;
+      
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        
+        document.getElementById('dalboButtonText').classList.remove('hidden');
+        document.getElementById('dalboLoading').classList.add('hidden');
+        document.querySelector('#dalboForm button').disabled = false;
+        
+        document.getElementById('dalboMessage').textContent = '✓ Dalabkaaga waad gudbisay!';
+        document.getElementById('dalboMessage').classList.remove('hidden');
+        document.getElementById('dalboForm').reset();
+        
+        setTimeout(() => {
+          document.getElementById('dalboMessage').classList.add('hidden');
+        }, 5000);
+      }, 1000);
+    });
+
+    document.getElementById('ussdForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const money = document.getElementById('ussdMoney').value;
+      
+      document.getElementById('ussdButtonText').classList.add('hidden');
+      document.getElementById('ussdLoading').classList.remove('hidden');
+      document.querySelector('#ussdForm button').disabled = true;
+      
+      const ussdCode = `*712*618877686*${money}#`;
+      const telUrl = `tel:${encodeURIComponent(ussdCode)}`;
+      
+      setTimeout(() => {
+        window.open(telUrl, '_self');
+        
+        document.getElementById('ussdButtonText').classList.remove('hidden');
+        document.getElementById('ussdLoading').classList.add('hidden');
+        document.querySelector('#ussdForm button').disabled = false;
+        
+        document.getElementById('ussdMessage').textContent = `✓ Waxaad dirtay $${money}`;
+        document.getElementById('ussdMessage').classList.remove('hidden');
+        document.getElementById('ussdForm').reset();
+        
+        setTimeout(() => {
+          document.getElementById('ussdMessage').classList.add('hidden');
+        }, 5000);
+      }, 1000);
+    });
+
+    document.getElementById('whatsappForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('whatsappName').value;
+      const number = document.getElementById('whatsappNumber').value;
+      const description = document.getElementById('whatsappDescription').value;
+      
+      document.getElementById('whatsappButtonText').classList.add('hidden');
+      document.getElementById('whatsappLoading').classList.remove('hidden');
+      document.querySelector('#whatsappForm button').disabled = true;
+      
+      const message = `Magaca: ${name}%0ALambarka: ${number}%0AFaahfaahin: ${description}`;
+      const whatsappUrl = `https://wa.me/618877686?text=${message}`;
+      
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        
+        document.getElementById('whatsappButtonText').classList.remove('hidden');
+        document.getElementById('whatsappLoading').classList.add('hidden');
+        document.querySelector('#whatsappForm button').disabled = false;
+        
+        document.getElementById('whatsappMessage').textContent = '✓ Fariintaada waa la diray!';
+        document.getElementById('whatsappMessage').classList.remove('hidden');
+        document.getElementById('whatsappForm').reset();
+        
+        setTimeout(() => {
+          document.getElementById('whatsappMessage').classList.add('hidden');
+        }, 5000);
+      }, 1000);
+    });
+
+    function loadHistori() {
+      const historiList = document.getElementById('historiList');
+      const historyKey = getUserHistoryKey();
+      if (!historyKey) return;
+      
+      const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+      
+      if (history.length === 0) {
+        historiList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">Wax histori ah ma jiraan</p>';
+        return;
+      }
+      
+      historiList.innerHTML = '';
+      history.reverse().forEach(item => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background: #f9fafb; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem;';
+        
+        card.innerHTML = `
+          <img src="${item.productIcon}" alt="${item.productName}" style="width: 80px; height: 80px; object-fit: contain; border-radius: 8px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <div style="font-size: 3rem; display: none;">📦</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">${item.productName}</div>
+            <div style="font-size: 0.9rem; color: #6b7280;">${item.date} - ${item.time}</div>
+          </div>
+          <div style="font-weight: 700; color: #059669; font-size: 1.1rem;">${item.price}</div>
+        `;
+        
+        historiList.appendChild(card);
+      });
+    }
+
+    function showSignup() {
+      hideAllScreens();
+      document.getElementById('signupScreen').classList.remove('hidden');
+    }
+
+    function showLogin() {
+      hideAllScreens();
+      document.getElementById('loginScreen').classList.remove('hidden');
+    }
+
+    function showDashboard() {
+      hideAllScreens();
+      document.getElementById('dashboardScreen').classList.remove('hidden');
+      if (currentUser) {
+        document.getElementById('userPhone').textContent = currentUser.phone_number;
+      }
+      loadBalances();
+    }
+
+    function showIibso() {
+      hideAllScreens();
+      document.getElementById('iibsoScreen').classList.remove('hidden');
+      loadProducts();
+    }
+
+    function showDalbo() {
+      hideAllScreens();
+      document.getElementById('dalboScreen').classList.remove('hidden');
+    }
+
+    function showUSSD() {
+      hideAllScreens();
+      document.getElementById('ussdScreen').classList.remove('hidden');
+    }
+
+    function showWhatsApp() {
+      hideAllScreens();
+      document.getElementById('whatsappScreen').classList.remove('hidden');
+    }
+
+    function showHistori() {
+      hideAllScreens();
+      document.getElementById('historiScreen').classList.remove('hidden');
+      loadHistori();
+    }
+
+    function showMarketHRSD() {
+      hideAllScreens();
+      document.getElementById('marketHRSDScreen').classList.remove('hidden');
+      loadBalances();
+    }
+
+    function showDeposit() {
+      hideAllScreens();
+      document.getElementById('depositScreen').classList.remove('hidden');
+    }
+
+    function showWithdrawal() {
+      hideAllScreens();
+      document.getElementById('withdrawalScreen').classList.remove('hidden');
+    }
+
+    function showMarketUSSD() {
+      hideAllScreens();
+      document.getElementById('marketUSSDScreen').classList.remove('hidden');
+    }
+
+    function showRobot() {
+      hideAllScreens();
+      document.getElementById('robotScreen').classList.remove('hidden');
+      
+      const minedKey = getUserMinedKey();
+      if (minedKey) {
+        const totalMined = parseFloat(localStorage.getItem(minedKey) || '0');
+        document.getElementById('totalMinedHRSD').textContent = totalMined.toFixed(4);
+      }
+      
+      const miningKey = getUserMiningKey();
+      if (miningKey && localStorage.getItem(miningKey) === 'active') {
+        document.getElementById('robotStatus').textContent = 'Active 🟢';
+        document.getElementById('tredeButton').style.display = 'block';
+        document.getElementById('robotImageTop').style.display = 'block';
+      }
+    }
+
+    function showTrade() {
+      hideAllScreens();
+      document.getElementById('tradeScreen').classList.remove('hidden');
+      initializeLivePriceChart();
+      startLiveTradersSimulation();
+    }
+
+    function showSwap() {
+      hideAllScreens();
+      document.getElementById('swapScreen').classList.remove('hidden');
+    }
+
+    function showExchange() {
+      hideAllScreens();
+      document.getElementById('exchangeScreen').classList.remove('hidden');
+      updateExchangeBalanceDisplay();
+      startLiveCryptoPrices();
+    }
+
+    function updateExchangeBalanceDisplay() {
+      const exchangeUsdEl = document.getElementById('exchangeUsdBalance');
+      const exchangeHrsdEl = document.getElementById('exchangeHrsdBalance');
+      const exchangeBtcEl = document.getElementById('exchangeBtcBalance');
+      const exchangeRobotEl = document.getElementById('exchangeRobotBalance');
+      
+      if (exchangeUsdEl) exchangeUsdEl.textContent = userBalances.usd.toFixed(2);
+      if (exchangeHrsdEl) exchangeHrsdEl.textContent = userBalances.hrsd.toFixed(3);
+      if (exchangeBtcEl) exchangeBtcEl.textContent = userBalances.btc.toFixed(8);
+      if (exchangeRobotEl) exchangeRobotEl.textContent = userBalances.robot.toFixed(2);
+    }
+
+    let currentExchangeCrypto = null;
+
+    function showExchangeBuyModal(cryptoSymbol, cryptoName, cryptoIcon) {
+      currentExchangeCrypto = cryptoSymbol;
+      
+      document.getElementById('modalCryptoName').textContent = cryptoName;
+      document.getElementById('modalCryptoIcon').textContent = cryptoIcon;
+      document.getElementById('modalCryptoPrice').textContent = cryptoPrices[cryptoSymbol].current.toFixed(cryptoSymbol === 'BTC' ? 2 : (cryptoSymbol === 'SHIB' || cryptoSymbol === 'PEPE' ? 8 : 2));
+      document.getElementById('exchangeCryptoSymbol').textContent = cryptoSymbol;
+      
+      document.getElementById('exchangeBuyModal').classList.remove('hidden');
+      document.getElementById('exchangeBuyForm').reset();
+      document.getElementById('exchangeCryptoPreview').textContent = '0.000';
+    }
+
+    function closeExchangeModal() {
+      document.getElementById('exchangeBuyModal').classList.add('hidden');
+      document.getElementById('exchangeModalError').classList.add('hidden');
+      document.getElementById('exchangeModalSuccess').classList.add('hidden');
+      currentExchangeCrypto = null;
+    }
+
+    function updateExchangePreview() {
+      if (!currentExchangeCrypto) return;
+      
+      const usdAmount = parseFloat(document.getElementById('exchangeBuyUsdAmount').value) || 0;
+      const cryptoPrice = cryptoPrices[currentExchangeCrypto].current;
+      const cryptoAmount = usdAmount / cryptoPrice;
+      
+      let decimals = 3;
+      if (currentExchangeCrypto === 'BTC') decimals = 8;
+      else if (currentExchangeCrypto === 'SHIB' || currentExchangeCrypto === 'PEPE') decimals = 0;
+      
+      document.getElementById('exchangeCryptoPreview').textContent = cryptoAmount.toFixed(decimals);
+    }
+
+    document.getElementById('exchangeBuyForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      if (!currentExchangeCrypto) return;
+      
+      const usdAmount = parseFloat(document.getElementById('exchangeBuyUsdAmount').value);
+      
+      document.getElementById('exchangeModalError').classList.add('hidden');
+      document.getElementById('exchangeModalSuccess').classList.add('hidden');
+      
+      if (usdAmount > userBalances.usd) {
+        document.getElementById('exchangeModalError').textContent = 'USD Balance kugu filna ma jiro!';
+        document.getElementById('exchangeModalError').classList.remove('hidden');
+        return;
+      }
+      
+      document.getElementById('exchangeBuyButtonText').classList.add('hidden');
+      document.getElementById('exchangeBuyLoading').classList.remove('hidden');
+      
+      setTimeout(() => {
+        const cryptoPrice = cryptoPrices[currentExchangeCrypto].current;
+        const cryptoAmount = usdAmount / cryptoPrice;
+        
+        userBalances.usd -= usdAmount;
+        
+        if (currentExchangeCrypto === 'HRSD') {
+          userBalances.hrsd += cryptoAmount;
+        } else if (currentExchangeCrypto === 'BTC') {
+          userBalances.btc += cryptoAmount;
+        }
+        
+        saveBalances();
+        updateExchangeBalanceDisplay();
+        
+        document.getElementById('exchangeBuyButtonText').classList.remove('hidden');
+        document.getElementById('exchangeBuyLoading').classList.add('hidden');
+        
+        let decimals = 3;
+        if (currentExchangeCrypto === 'BTC') decimals = 8;
+        
+        document.getElementById('exchangeModalSuccess').textContent = `✓ Waxaad iibsatay ${cryptoAmount.toFixed(decimals)} ${currentExchangeCrypto}!`;
+        document.getElementById('exchangeModalSuccess').classList.remove('hidden');
+        
+        // Send WhatsApp notification
+        const cryptoName = document.getElementById('modalCryptoName').textContent;
+        const message = `Exchange - Iibsi Cusub%0A%0A💱 Waxaan iibsaday:%0A${cryptoAmount.toFixed(decimals)} ${cryptoName}%0A%0A💰 Qiimaha: $${usdAmount.toFixed(2)} USD%0A📊 Qiimaha Live: $${cryptoPrice.toFixed(decimals === 8 ? 8 : 2)}%0A%0AMagaca: ${currentUser ? currentUser.phone_number : 'N/A'}`;
+        window.open(`https://wa.me/618877686?text=${message}`, '_blank', 'noopener,noreferrer');
+        
+        setTimeout(() => {
+          closeExchangeModal();
+        }, 2000);
+      }, 1000);
+    });
+
+    let cryptoPriceInterval = null;
+    const cryptoPrices = {
+      HRSD: { base: 1.00, current: 1.00 },
+      BTC: { base: 55555.00, current: 55555.00 },
+      ETH: { base: 2777.00, current: 2777.00 },
+      TRX: { base: 0.192, current: 0.192 },
+      XRP: { base: 0.606, current: 0.606 },
+      BNB: { base: 416.00, current: 416.00 },
+      TON: { base: 2.38, current: 2.38 },
+      SOL: { base: 119.00, current: 119.00 },
+      DOGE: { base: 0.140, current: 0.140 },
+      SHIB: { base: 0.00001818, current: 0.00001818 },
+      PEPE: { base: 0.00000909, current: 0.00000909 },
+      ADA: { base: 0.540, current: 0.540 },
+      AVAX: { base: 31.25, current: 31.25 },
+      DOT: { base: 5.26, current: 5.26 },
+      MATIC: { base: 0.675, current: 0.675 },
+      LTC: { base: 83.33, current: 83.33 },
+      UNI: { base: 7.14, current: 7.14 },
+      ATOM: { base: 6.67, current: 6.67 },
+      LINK: { base: 14.08, current: 14.08 },
+      XLM: { base: 0.120, current: 0.120 }
+    };
+
+    function startLiveCryptoPrices() {
+      if (cryptoPriceInterval) clearInterval(cryptoPriceInterval);
+      
+      cryptoPriceInterval = setInterval(() => {
+        Object.keys(cryptoPrices).forEach(crypto => {
+          const data = cryptoPrices[crypto];
+          const changePercent = (Math.random() - 0.5) * 0.06;
+          const previousPrice = data.current;
+          data.current = data.base * (1 + changePercent);
+          
+          const priceElement = document.querySelector(`.crypto-price[data-crypto="${crypto}"]`);
+          const changeElement = document.querySelector(`.crypto-change[data-crypto="${crypto}"]`);
+          const cardElement = document.querySelector(`.crypto-card[data-crypto="${crypto}"]`);
+          
+          if (priceElement && changeElement) {
+            let decimals = 2;
+            if (crypto === 'SHIB' || crypto === 'PEPE') decimals = 8;
+            else if (crypto === 'BTC') decimals = 2;
+            else if (crypto === 'ETH') decimals = 2;
+            
+            priceElement.textContent = data.current.toFixed(decimals);
+            
+            const totalChangePercent = ((data.current - data.base) / data.base * 100);
+            const changeText = totalChangePercent >= 0 ? 
+              `+${totalChangePercent.toFixed(2)}%` : 
+              `${totalChangePercent.toFixed(2)}%`;
+            
+            changeElement.textContent = changeText;
+            changeElement.style.color = totalChangePercent >= 0 ? '#10b981' : '#ef4444';
+            
+            if (cardElement) {
+              if (data.current > previousPrice) {
+                cardElement.style.boxShadow = '0 8px 30px rgba(16, 185, 129, 0.5)';
+                setTimeout(() => {
+                  cardElement.style.boxShadow = cardElement.style.boxShadow.replace('0.5', '0.3');
+                }, 300);
+              } else if (data.current < previousPrice) {
+                cardElement.style.boxShadow = '0 8px 30px rgba(239, 68, 68, 0.5)';
+                setTimeout(() => {
+                  cardElement.style.boxShadow = cardElement.style.boxShadow.replace('0.5', '0.3');
+                }, 300);
+              }
+            }
+          }
+        });
+      }, 2000);
+    }
+
+    function showMarketWhatsApp() {
+      hideAllScreens();
+      document.getElementById('marketWhatsAppScreen').classList.remove('hidden');
+    }
+
+    function showCalculator() {
+      hideAllScreens();
+      document.getElementById('calculatorScreen').classList.remove('hidden');
+    }
+
+    function hideAllScreens() {
+      document.getElementById('signupScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboardScreen').classList.add('hidden');
+      document.getElementById('iibsoScreen').classList.add('hidden');
+      document.getElementById('dalboScreen').classList.add('hidden');
+      document.getElementById('ussdScreen').classList.add('hidden');
+      document.getElementById('whatsappScreen').classList.add('hidden');
+      document.getElementById('historiScreen').classList.add('hidden');
+      document.getElementById('marketHRSDScreen').classList.add('hidden');
+      document.getElementById('depositScreen').classList.add('hidden');
+      document.getElementById('withdrawalScreen').classList.add('hidden');
+      document.getElementById('marketUSSDScreen').classList.add('hidden');
+      document.getElementById('robotScreen').classList.add('hidden');
+      document.getElementById('tradeScreen').classList.add('hidden');
+      document.getElementById('swapScreen').classList.add('hidden');
+      document.getElementById('exchangeScreen').classList.add('hidden');
+      document.getElementById('marketWhatsAppScreen').classList.add('hidden');
+      document.getElementById('calculatorScreen').classList.add('hidden');
+      document.getElementById('exchangeBuyModal').classList.add('hidden');
+    }
+
+    // Deposit, Withdrawal, Trade, Swap, Exchange implementations
+    document.getElementById('depositForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('depositAmount').value);
+      const phoneNumber = document.getElementById('depositNumber').value;
+      
+      document.getElementById('depositButtonText').classList.add('hidden');
+      document.getElementById('depositLoading').classList.remove('hidden');
+      document.querySelector('#depositForm button').disabled = true;
+      
+      setTimeout(() => {
+        userBalances.usd += amount;
+        saveBalances();
+        
+        const newBalance = userBalances.usd.toFixed(2);
+        const message = `Deposit USD%0A%0AWaxaan kushubtay: $${amount.toFixed(2)}%0AWaxaan kasoo diray: ${phoneNumber}%0ABalance Cusub: $${newBalance}`;
+        window.open(`https://wa.me/618877686?text=${message}`, '_blank', 'noopener,noreferrer');
+        
+        document.getElementById('depositButtonText').classList.remove('hidden');
+        document.getElementById('depositLoading').classList.add('hidden');
+        document.querySelector('#depositForm button').disabled = false;
+        
+        document.getElementById('depositMessage').textContent = `✓ Waxaa lagu daray $${amount.toFixed(2)}!`;
+        document.getElementById('depositMessage').classList.remove('hidden');
+        document.getElementById('depositForm').reset();
+        
+        setTimeout(() => {
+          showMarketHRSD();
+        }, 2000);
+      }, 1000);
+    });
+
+    document.getElementById('withdrawalForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('withdrawalAmount').value);
+      const phoneNumber = document.getElementById('withdrawalNumber').value;
+      
+      if (amount > userBalances.usd) {
+        document.getElementById('withdrawalError').textContent = 'Balance kugu filna ma jiro!';
+        document.getElementById('withdrawalError').classList.remove('hidden');
+        return;
+      }
+      
+      document.getElementById('withdrawalButtonText').classList.add('hidden');
+      document.getElementById('withdrawalLoading').classList.remove('hidden');
+      document.querySelector('#withdrawalForm button').disabled = true;
+      
+      setTimeout(() => {
+        userBalances.usd -= amount;
+        saveBalances();
+        
+        const newBalance = userBalances.usd.toFixed(2);
+        const message = `Withdrawal USD%0A%0AWaxaan labaxay: $${amount.toFixed(2)}%0AEe iigusoodir: ${phoneNumber}%0ABalance Hadha: $${newBalance}`;
+        window.open(`https://wa.me/618877686?text=${message}`, '_blank', 'noopener,noreferrer');
+        
+        document.getElementById('withdrawalButtonText').classList.remove('hidden');
+        document.getElementById('withdrawalLoading').classList.add('hidden');
+        document.querySelector('#withdrawalForm button').disabled = false;
+        
+        document.getElementById('withdrawalMessage').textContent = `✓ Waxaa laga jaray $${amount.toFixed(2)}!`;
+        document.getElementById('withdrawalMessage').classList.remove('hidden');
+        document.getElementById('withdrawalForm').reset();
+        
+        setTimeout(() => {
+          showMarketHRSD();
+        }, 2000);
+      }, 1000);
+    });
+
+    document.getElementById('marketUSSDForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('marketUSSDAmount').value);
+      
+      document.getElementById('marketUSSDButtonText').classList.add('hidden');
+      document.getElementById('marketUSSDLoading').classList.remove('hidden');
+      
+      const ussdCode = `*712*618877686*${amount}#`;
+      
+      setTimeout(() => {
+        window.open(`tel:${encodeURIComponent(ussdCode)}`, '_self');
+        
+        document.getElementById('marketUSSDButtonText').classList.remove('hidden');
+        document.getElementById('marketUSSDLoading').classList.add('hidden');
+        
+        document.getElementById('marketUSSDMessage').textContent = '✓ Waa la ansixiyey!';
+        document.getElementById('marketUSSDMessage').classList.remove('hidden');
+        document.getElementById('marketUSSDForm').reset();
+      }, 1000);
+    });
+
+    // Robot Trading
+    let robotMiningInterval = null;
+
+    document.getElementById('robotForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('robotAmount').value);
+      
+      if (amount > userBalances.usd) {
+        document.getElementById('robotError').textContent = 'USD Balance kugu filna ma jiro!';
+        document.getElementById('robotError').classList.remove('hidden');
+        return;
+      }
+      
+      document.getElementById('robotButtonText').classList.add('hidden');
+      document.getElementById('robotLoading').classList.remove('hidden');
+      
+      setTimeout(() => {
+        userBalances.usd -= amount;
+        userBalances.robot += amount;
+        saveBalances();
+        
+        document.getElementById('robotImageTop').style.display = 'block';
+        document.getElementById('tredeButton').style.display = 'block';
+        
+        document.getElementById('robotButtonText').classList.remove('hidden');
+        document.getElementById('robotLoading').classList.add('hidden');
+        
+        document.getElementById('robotMessage').textContent = `✓ Robot Investment: $${amount.toFixed(2)}!`;
+        document.getElementById('robotMessage').classList.remove('hidden');
+        document.getElementById('robotForm').reset();
+      }, 1000);
+    });
+
+    function startTrede() {
+      document.getElementById('tredeButtonText').classList.add('hidden');
+      document.getElementById('tredeLoading').classList.remove('hidden');
+      
+      setTimeout(() => {
+        document.getElementById('tredeArea').classList.remove('hidden');
+        document.getElementById('robotStatus').textContent = 'Active 🟢';
+        
+        document.getElementById('tredeButtonText').classList.remove('hidden');
+        document.getElementById('tredeLoading').classList.add('hidden');
+        
+        startTokensAnimation();
+        startRobotMining();
+        
+        const tempMessage = document.createElement('div');
+        tempMessage.className = 'success-message';
+        tempMessage.textContent = '🤖 Robot Mining waa bilaabmay!';
+        tempMessage.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;';
+        document.body.appendChild(tempMessage);
+        
+        setTimeout(() => {
+          document.body.removeChild(tempMessage);
+        }, 3000);
+      }, 1000);
+    }
+
+    function startTokensAnimation() {
+      const container = document.getElementById('tokensContainer');
+      for (let i = 0; i < 6; i++) {
+        createTokenColumn(container, i);
+      }
+    }
+
+    function createTokenColumn(container, columnIndex) {
+      setInterval(() => {
+        const token = document.createElement('img');
+        token.src = 'https://i.postimg.cc/ZKX8xknn/photo-..jpg';
+        token.alt = 'HRSD Token';
+        token.style.cssText = `
+          position: absolute;
+          width: 40px;
+          height: 40px;
+          object-fit: contain;
+          left: ${15 + columnIndex * 15}%;
+          bottom: -40px;
+          animation: floatUp 3s ease-in-out;
+          pointer-events: none;
+          border-radius: 50%;
+          box-shadow: 0 4px 8px rgba(245, 158, 11, 0.5);
+        `;
+        token.onerror = function() {
+          this.style.display = 'none';
+        };
+        
+        if (!document.getElementById('floatUpAnimation')) {
+          const style = document.createElement('style');
+          style.id = 'floatUpAnimation';
+          style.textContent = `
+            @keyframes floatUp {
+              0% { bottom: -40px; opacity: 1; transform: translateY(0) scale(1); }
+              50% { opacity: 0.8; transform: translateY(-75px) scale(1.1); }
+              100% { bottom: 150px; opacity: 0; transform: translateY(-150px) scale(0.8); }
+            }
+          `;
+          document.head.appendChild(style);
+        }
+        
+        container.appendChild(token);
+        
+        setTimeout(() => {
+          if (token.parentNode) {
+            token.parentNode.removeChild(token);
+          }
+        }, 3000);
+      }, 500 + columnIndex * 100);
+    }
+
+    function startRobotMining() {
+      if (robotMiningInterval) clearInterval(robotMiningInterval);
+      
+      const miningKey = getUserMiningKey();
+      const minedKey = getUserMinedKey();
+      const startKey = getUserMiningStartKey();
+      
+      if (!miningKey || !minedKey || !startKey) return;
+      
+      robotMiningInterval = setInterval(() => {
+        userBalances.hrsd += 0.0005;
+        saveBalances();
+        
+        const currentMined = parseFloat(document.getElementById('totalMinedHRSD').textContent);
+        const newMined = currentMined + 0.0005;
+        document.getElementById('totalMinedHRSD').textContent = newMined.toFixed(4);
+        
+        localStorage.setItem(minedKey, newMined.toFixed(4));
+      }, 60000);
+      
+      localStorage.setItem(miningKey, 'active');
+      localStorage.setItem(startKey, Date.now().toString());
+    }
+
+    function checkRobotMiningStatus() {
+      const miningKey = getUserMiningKey();
+      const startKey = getUserMiningStartKey();
+      const minedKey = getUserMinedKey();
+      
+      if (!miningKey || !startKey || !minedKey) return;
+      
+      const miningStatus = localStorage.getItem(miningKey);
+      const startTime = localStorage.getItem(startKey);
+      
+      if (miningStatus === 'active' && startTime) {
+        const elapsed = Date.now() - parseInt(startTime);
+        const minutesPassed = Math.floor(elapsed / 60000);
+        
+        if (minutesPassed > 0) {
+          const hrsdToAdd = minutesPassed * 0.0005;
+          userBalances.hrsd += hrsdToAdd;
+          saveBalances();
+          
+          const totalMined = parseFloat(localStorage.getItem(minedKey) || '0');
+          localStorage.setItem(minedKey, (totalMined + hrsdToAdd).toFixed(4));
+          localStorage.setItem(startKey, Date.now().toString());
+        }
+        
+        startRobotMining();
+      }
+    }
+
+    // Trading
+    let livePriceInterval = null;
+    let currentPrice = 1.00;
+    let priceHistory = [];
+
+    function initializeLivePriceChart() {
+      if (livePriceInterval) clearInterval(livePriceInterval);
+      
+      priceHistory = [];
+      for (let i = 0; i < 20; i++) {
+        priceHistory.push(50 + Math.random() * 50);
+      }
+      
+      updatePriceChart();
+      
+      livePriceInterval = setInterval(() => {
+        updateLivePrice();
+        updatePriceChart();
+      }, 3000);
+    }
+
+    function updateLivePrice() {
+      const change = (Math.random() - 0.5) * 0.1;
+      currentPrice = Math.max(0.50, Math.min(2.00, currentPrice + change));
+      
+      const priceValue = document.getElementById('livePriceValue');
+      const priceChange = document.getElementById('priceChange');
+      
+      if (priceValue) {
+        priceValue.textContent = currentPrice.toFixed(2);
+        
+        const changePercent = (change / currentPrice * 100).toFixed(2);
+        const changeText = change >= 0 ? `+${change.toFixed(2)} (+${changePercent}%)` : `${change.toFixed(2)} (${changePercent}%)`;
+        
+        priceChange.textContent = changeText;
+        priceChange.className = change >= 0 ? 'price-change up' : 'price-change down';
+      }
+    }
+
+    function updatePriceChart() {
+      const chartContainer = document.getElementById('priceChart');
+      if (!chartContainer) return;
+      
+      priceHistory.push(50 + Math.random() * 50);
+      if (priceHistory.length > 20) priceHistory.shift();
+      
+      chartContainer.innerHTML = '';
+      
+      priceHistory.forEach((height, index) => {
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        bar.style.height = `${height}%`;
+        
+        if (index > 0) {
+          const isUp = priceHistory[index] > priceHistory[index - 1];
+          bar.style.background = isUp ? 
+            'linear-gradient(to top, #10b981, #34d399)' : 
+            'linear-gradient(to top, #ef4444, #f87171)';
+        }
+        
+        chartContainer.appendChild(bar);
+      });
+    }
+
+    const traderNames = ['Mohamed Ali', 'Fatima Hassan', 'Ahmed Omar', 'Khadija Abdi', 'Halima Ibrahim'];
+    let liveTraderInterval = null;
+
+    function startLiveTradersSimulation() {
+      if (liveTraderInterval) clearInterval(liveTraderInterval);
+      
+      const tradersList = document.getElementById('liveTradersList');
+      tradersList.innerHTML = '';
+      
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => addLiveTrader(), i * 500);
+      }
+      
+      liveTraderInterval = setInterval(addLiveTrader, Math.random() * 3000 + 2000);
+    }
+
+    function addLiveTrader() {
+      const tradersList = document.getElementById('liveTradersList');
+      if (!tradersList) return;
+      
+      const name = traderNames[Math.floor(Math.random() * traderNames.length)];
+      const amount = (Math.random() * 200 + 200).toFixed(0);
+      const isBuy = Math.random() > 0.5;
+      
+      const tradeItem = document.createElement('div');
+      tradeItem.className = 'trade-item';
+      
+      const avatarUrl = `https://i.pravatar.cc/100?u=${Math.random()}`;
+      
+      tradeItem.innerHTML = `
+        <div class="trade-avatar">
+          <img src="${avatarUrl}" alt="${name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2745%27 fill=%27%23059669%27/%3E%3Ctext x=%2750%27 y=%2765%27 font-size=%2750%27 text-anchor=%27middle%27 fill=%27white%27%3E👤%3C/text%3E%3C/svg%3E';">
+        </div>
+        <div class="trade-details">
+          <div class="trade-name">${name}</div>
+          <div class="trade-action">${isBuy ? 'Iibsaday' : 'Iibiyey'} HRSD.COIN</div>
+        </div>
+        <div class="trade-amount ${isBuy ? 'buy' : 'sell'}">
+          ${amount}
+          <img src="https://i.postimg.cc/ZKX8xknn/photo-..jpg" alt="HRSD" class="trade-coin-icon" onerror="this.style.display='none';">
+        </div>
+      `;
+      
+      tradersList.insertBefore(tradeItem, tradersList.firstChild);
+      
+      while (tradersList.children.length > 100) {
+        tradersList.removeChild(tradersList.lastChild);
+      }
+    }
+
+    function showBuyForm() {
+      document.getElementById('buyTab').style.background = '#10b981';
+      document.getElementById('buyTab').style.color = 'white';
+      document.getElementById('sellTab').style.background = '#e5e7eb';
+      document.getElementById('sellTab').style.color = '#6b7280';
+      document.getElementById('buyForm').classList.remove('hidden');
+      document.getElementById('sellForm').classList.add('hidden');
+      document.getElementById('sellTabImg').style.display = 'none';
+    }
+
+    function showSellForm() {
+      document.getElementById('sellTab').style.background = '#ef4444';
+      document.getElementById('sellTab').style.color = 'white';
+      document.getElementById('buyTab').style.background = '#e5e7eb';
+      document.getElementById('buyTab').style.color = '#6b7280';
+      document.getElementById('sellForm').classList.remove('hidden');
+      document.getElementById('buyForm').classList.add('hidden');
+      document.getElementById('sellTabImg').style.display = 'inline';
+    }
+
+    document.getElementById('buyForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const hrsdAmount = parseFloat(document.getElementById('buyAmount').value);
+      const totalCost = hrsdAmount * currentPrice;
+      
+      if (totalCost > userBalances.usd) {
+        document.getElementById('tradeError').textContent = `USD Balance kugu filna ma jiro!`;
+        document.getElementById('tradeError').classList.remove('hidden');
+        return;
+      }
+      
+      userBalances.usd -= totalCost;
+      userBalances.hrsd += hrsdAmount;
+      saveBalances();
+      
+      document.getElementById('tradeMessage').textContent = `✓ Waxaad iibsatay ${hrsdAmount.toFixed(2)} HRSD!`;
+      document.getElementById('tradeMessage').classList.remove('hidden');
+      document.getElementById('buyForm').reset();
+      
+      setTimeout(() => {
+        document.getElementById('tradeMessage').classList.add('hidden');
+      }, 5000);
+    });
+
+    document.getElementById('sellForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const hrsdAmount = parseFloat(document.getElementById('sellAmount').value);
+      
+      if (hrsdAmount > userBalances.hrsd) {
+        document.getElementById('tradeError').textContent = `HRSD Balance kugu filna ma jiro!`;
+        document.getElementById('tradeError').classList.remove('hidden');
+        return;
+      }
+      
+      const totalEarned = hrsdAmount * currentPrice;
+      userBalances.hrsd -= hrsdAmount;
+      userBalances.usd += totalEarned;
+      saveBalances();
+      
+      document.getElementById('tradeMessage').textContent = `✓ Waxaad iibisay ${hrsdAmount.toFixed(2)} HRSD!`;
+      document.getElementById('tradeMessage').classList.remove('hidden');
+      document.getElementById('sellForm').reset();
+      
+      setTimeout(() => {
+        document.getElementById('tradeMessage').classList.add('hidden');
+      }, 5000);
+    });
+
+    // Swap Functions
+    function showUsdToHrsd() {
+      document.getElementById('usdToHrsdTab').style.background = '#06b6d4';
+      document.getElementById('usdToHrsdTab').style.color = 'white';
+      document.getElementById('hrsdToUsdTab').style.background = '#e5e7eb';
+      document.getElementById('hrsdToUsdTab').style.color = '#6b7280';
+      document.getElementById('usdToBtcTab').style.background = '#e5e7eb';
+      document.getElementById('usdToBtcTab').style.color = '#6b7280';
+      document.getElementById('usdToHrsdForm').classList.remove('hidden');
+      document.getElementById('hrsdToUsdForm').classList.add('hidden');
+      document.getElementById('usdToBtcForm').classList.add('hidden');
+    }
+
+    function showHrsdToUsd() {
+      document.getElementById('hrsdToUsdTab').style.background = '#06b6d4';
+      document.getElementById('hrsdToUsdTab').style.color = 'white';
+      document.getElementById('usdToHrsdTab').style.background = '#e5e7eb';
+      document.getElementById('usdToHrsdTab').style.color = '#6b7280';
+      document.getElementById('usdToBtcTab').style.background = '#e5e7eb';
+      document.getElementById('usdToBtcTab').style.color = '#6b7280';
+      document.getElementById('hrsdToUsdForm').classList.remove('hidden');
+      document.getElementById('usdToHrsdForm').classList.add('hidden');
+      document.getElementById('usdToBtcForm').classList.add('hidden');
+    }
+
+    function showUsdToBtc() {
+      document.getElementById('usdToBtcTab').style.background = '#06b6d4';
+      document.getElementById('usdToBtcTab').style.color = 'white';
+      document.getElementById('usdToHrsdTab').style.background = '#e5e7eb';
+      document.getElementById('usdToHrsdTab').style.color = '#6b7280';
+      document.getElementById('hrsdToUsdTab').style.background = '#e5e7eb';
+      document.getElementById('hrsdToUsdTab').style.color = '#6b7280';
+      document.getElementById('usdToBtcForm').classList.remove('hidden');
+      document.getElementById('usdToHrsdForm').classList.add('hidden');
+      document.getElementById('hrsdToUsdForm').classList.add('hidden');
+    }
+
+    function updateSwapPreview(type) {
+      if (type === 'usd-hrsd') {
+        const amount = parseFloat(document.getElementById('usdToHrsdAmount').value) || 0;
+        document.getElementById('usdToHrsdPreview').textContent = amount.toFixed(3);
+      } else if (type === 'hrsd-usd') {
+        const amount = parseFloat(document.getElementById('hrsdToUsdAmount').value) || 0;
+        document.getElementById('hrsdToUsdPreview').textContent = amount.toFixed(2);
+      } else if (type === 'usd-btc') {
+        const amount = parseFloat(document.getElementById('usdToBtcAmount').value) || 0;
+        const btcAmount = amount / 50000;
+        document.getElementById('usdToBtcPreview').textContent = btcAmount.toFixed(8);
+      }
+    }
+
+    document.getElementById('usdToHrsdForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const usdAmount = parseFloat(document.getElementById('usdToHrsdAmount').value);
+      
+      if (usdAmount > userBalances.usd) {
+        document.getElementById('swapError').textContent = 'USD Balance kugu filna ma jiro!';
+        document.getElementById('swapError').classList.remove('hidden');
+        return;
+      }
+      
+      userBalances.usd -= usdAmount;
+      userBalances.hrsd += usdAmount;
+      saveBalances();
+      
+      document.getElementById('swapMessage').textContent = `✓ Waxaad bedeshatay $${usdAmount.toFixed(2)} USD → ${usdAmount.toFixed(3)} HRSD!`;
+      document.getElementById('swapMessage').classList.remove('hidden');
+      document.getElementById('usdToHrsdForm').reset();
+      document.getElementById('usdToHrsdPreview').textContent = '0.000';
+    });
+
+    document.getElementById('hrsdToUsdForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const hrsdAmount = parseFloat(document.getElementById('hrsdToUsdAmount').value);
+      
+      if (hrsdAmount > userBalances.hrsd) {
+        document.getElementById('swapError').textContent = 'HRSD Balance kugu filna ma jiro!';
+        document.getElementById('swapError').classList.remove('hidden');
+        return;
+      }
+      
+      userBalances.hrsd -= hrsdAmount;
+      userBalances.usd += hrsdAmount;
+      saveBalances();
+      
+      document.getElementById('swapMessage').textContent = `✓ Waxaad bedeshatay ${hrsdAmount.toFixed(3)} HRSD → $${hrsdAmount.toFixed(2)} USD!`;
+      document.getElementById('swapMessage').classList.remove('hidden');
+      document.getElementById('hrsdToUsdForm').reset();
+      document.getElementById('hrsdToUsdPreview').textContent = '0.00';
+    });
+
+    document.getElementById('usdToBtcForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const usdAmount = parseFloat(document.getElementById('usdToBtcAmount').value);
+      const btcAmount = usdAmount / 50000;
+      
+      if (usdAmount > userBalances.usd) {
+        document.getElementById('swapError').textContent = 'USD Balance kugu filna ma jiro!';
+        document.getElementById('swapError').classList.remove('hidden');
+        return;
+      }
+      
+      userBalances.usd -= usdAmount;
+      userBalances.btc += btcAmount;
+      saveBalances();
+      
+      document.getElementById('swapMessage').textContent = `✓ Waxaad bedeshatay $${usdAmount.toFixed(2)} USD → ${btcAmount.toFixed(8)} BTC!`;
+      document.getElementById('swapMessage').classList.remove('hidden');
+      document.getElementById('usdToBtcForm').reset();
+      document.getElementById('usdToBtcPreview').textContent = '0.00000000';
+    });
+
+
+
+    document.getElementById('marketWhatsAppForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('marketWhatsAppName').value;
+      const description = document.getElementById('marketWhatsAppDescription').value;
+      
+      document.getElementById('marketWhatsAppButtonText').classList.add('hidden');
+      document.getElementById('marketWhatsAppLoading').classList.remove('hidden');
+      document.querySelector('#marketWhatsAppForm button').disabled = true;
+      
+      setTimeout(() => {
+        const message = `HRSD.COIN Market Support%0A%0AMagaca: ${name}%0AFaahfaahin: ${description}`;
+        window.open(`https://wa.me/618877686?text=${message}`, '_blank', 'noopener,noreferrer');
+        
+        document.getElementById('marketWhatsAppButtonText').classList.remove('hidden');
+        document.getElementById('marketWhatsAppLoading').classList.add('hidden');
+        document.querySelector('#marketWhatsAppForm button').disabled = false;
+        
+        document.getElementById('marketWhatsAppMessage').textContent = '✓ Fariintaada waa la diray!';
+        document.getElementById('marketWhatsAppMessage').classList.remove('hidden');
+        document.getElementById('marketWhatsAppForm').reset();
+        
+        setTimeout(() => {
+          document.getElementById('marketWhatsAppMessage').classList.add('hidden');
+        }, 5000);
+      }, 1000);
+    });
+
+    // Calculator
+    let calcExpression = '0';
+    let calcDisplay = document.getElementById('calcDisplay');
+
+    function updateCalcDisplay() {
+      if (calcDisplay) calcDisplay.textContent = calcExpression;
+    }
+
+    function appendCalc(value) {
+      if (calcExpression === '0' && value !== '.') {
+        calcExpression = value;
+      } else {
+        calcExpression += value;
+      }
+      updateCalcDisplay();
+    }
+
+    function clearCalc() {
+      calcExpression = '0';
+      updateCalcDisplay();
+    }
+
+    function deleteCalc() {
+      if (calcExpression.length > 1) {
+        calcExpression = calcExpression.slice(0, -1);
+      } else {
+        calcExpression = '0';
+      }
+      updateCalcDisplay();
+    }
+
+    function calculateCalc() {
+      try {
+        const result = eval(calcExpression);
+        calcExpression = result.toString();
+        updateCalcDisplay();
+      } catch (error) {
+        calcExpression = 'Error';
+        updateCalcDisplay();
+        setTimeout(() => {
+          calcExpression = '0';
+          updateCalcDisplay();
+        }, 1500);
+      }
+    }
+
+    initializeApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b7bcad5c2c1b0f0',t:'MTc2NzM3MzAxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
