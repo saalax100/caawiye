@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="so" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HORSEED</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes checkmark {
+      0% { transform: scale(0) rotate(45deg); }
+      100% { transform: scale(1) rotate(45deg); }
+    }
+    
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+    
+    .checkmark {
+      animation: checkmark 0.4s ease-in-out;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full"></div>
+  <script>
+    const defaultConfig = {
+      app_title: "HORSEED",
+      success_message: "Waad ku guuleysatay!",
+      signup_title: "Isdiiwaangelin",
+      login_title: "Gal Akoonkaaga",
+      primary_color: "#10b981",
+      secondary_color: "#ffffff",
+      text_color: "#1f2937",
+      button_color: "#3b82f6",
+      button_text_color: "#ffffff",
+      font_family: "Inter",
+      font_size: 16
+    };
+
+    let currentUser = null;
+    let allUsers = [];
+    let currentView = 'signup';
+    let isInitialized = false;
+
+    const dataHandler = {
+      onDataChanged(data) {
+        allUsers = data;
+        if (currentUser) {
+          const updatedUser = allUsers.find(u => u.user_id === currentUser.user_id);
+          if (updatedUser) {
+            currentUser = updatedUser;
+            if (currentView === 'dashboard' && isInitialized) {
+              renderView();
+            }
+          }
+        }
+      }
+    };
+
+    function generateUserId() {
+      const existingIds = allUsers.map(u => parseInt(u.user_id.replace('ID', '')));
+      let newId = 45678;
+      while (existingIds.includes(newId)) {
+        newId++;
+      }
+      return `ID${newId}`;
+    }
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('signup-name').value.trim();
+      const number = document.getElementById('signup-number').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const confirmPassword = document.getElementById('signup-confirm').value;
+
+      if (!name || !number || !password || !confirmPassword) {
+        showMessage('Fadlan buuxi dhammaan goobaha', 'error');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage('Erayada sirta ah ma isku mid aha', 'error');
+        return;
+      }
+
+      if (allUsers.length >= 10000000) {
+        showMessage('Waa la gaadhay xaddiga ugu badan ee isticmaalayaasha', 'error');
+        return;
+      }
+
+      const existingUser = allUsers.find(u => u.name === name || u.number === number);
+      if (existingUser) {
+        showMessage('Magaca ama nambarkan horay ayaa loo isticmaalay', 'error');
+        return;
+      }
+
+      const submitBtn = document.getElementById('signup-submit');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="spinner w-5 h-5 border-2 border-white border-t-transparent rounded-full mx-auto"></div>';
+
+      const newUser = {
+        user_id: generateUserId(),
+        name: name,
+        number: number,
+        password: password,
+        usdt_balance: 0,
+        hrsd_balance: 0,
+        bitcoin_balance: 0,
+        created_at: new Date().toISOString()
+      };
+
+      const result = await window.dataSdk.create(newUser);
+
+      if (result.isOk) {
+        showMessage('Waad isdiiwaangalisay', 'success');
+        setTimeout(() => {
+          currentView = 'login';
+          renderView();
+        }, 2000);
+      } else {
+        showMessage('Qalad ayaa dhacay, fadlan mar kale isku day', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Isdiiwaangeli';
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('login-name').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!name || !password) {
+        showMessage('Fadlan buuxi magaca iyo password-ka', 'error');
+        return;
+      }
+
+      const user = allUsers.find(u => u.name === name && u.password === password);
+      
+      if (!user) {
+        showMessage('Magaca ama password-ku qalad ayuu ka yahay', 'error');
+        return;
+      }
+
+      const submitBtn = document.getElementById('login-submit');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="spinner w-5 h-5 border-2 border-white border-t-transparent rounded-full mx-auto"></div>';
+
+      currentUser = user;
+      
+      const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+      showMessage(config.success_message || defaultConfig.success_message, 'success');
+      
+      setTimeout(() => {
+        currentView = 'dashboard';
+        renderView();
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Gal';
+      }, 1500);
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      currentView = 'login';
+      renderView();
+    }
+
+    function showMessage(text, type) {
+      const messageDiv = document.getElementById('message-container');
+      if (!messageDiv) return;
+      
+      const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+      const icon = type === 'success' 
+        ? '<div class="checkmark w-5 h-5 border-2 border-white" style="border-left: 0; border-top: 0; height: 20px; width: 10px; transform: rotate(45deg);"></div>'
+        : '<div class="text-white text-xl font-bold">✕</div>';
+      
+      messageDiv.innerHTML = `
+        <div class="fade-in ${bgColor} text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 max-w-md mx-auto">
+          ${icon}
+          <span class="font-medium">${text}</span>
+        </div>
+      `;
+      messageDiv.classList.remove('hidden');
+      
+      setTimeout(() => {
+        messageDiv.classList.add('hidden');
+      }, 3000);
+    }
+
+    function renderSignup() {
+      const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const buttonColor = config.button_color || defaultConfig.button_color;
+      const buttonTextColor = config.button_text_color || defaultConfig.button_text_color;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      const appTitle = config.app_title || defaultConfig.app_title;
+      const signupTitle = config.signup_title || defaultConfig.signup_title;
+
+      return `
+        <div class="min-h-full flex items-center justify-center p-4" style="background: ${primaryColor}; font-family: '${fontFamily}', sans-serif;">
+          <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+              <h1 class="font-bold mb-2" style="color: ${secondaryColor}; font-size: ${fontSize * 2.5}px;">${appTitle}</h1>
+              <p class="font-medium" style="color: ${secondaryColor}; font-size: ${fontSize * 1.25}px; opacity: 0.9;">${signupTitle}</p>
+            </div>
+            
+            <div class="rounded-2xl shadow-2xl p-8" style="background: ${secondaryColor};">
+              <form id="signup-form" class="space-y-6">
+                <div>
+                  <label for="signup-name" class="block font-medium mb-2" style="color: ${textColor}; font-size: ${fontSize}px;">Magaca</label>
+                  <input type="text" id="signup-name" required
+                    class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none transition-colors"
+                    style="font-size: ${fontSize}px;"
+                    placeholder="Geli magacaaga">
+                </div>
+                
+                <div>
+                  <label for="signup-number" class="block font-medium mb-2" style="color: ${textColor}; font-size: ${fontSize}px;">Lambarka Telefoonka</label>
+                  <input type="tel" id="signup-number" required
+                    class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none transition-colors"
+                    style="font-size: ${fontSize}px;"
+                    placeholder="Geli lambarka">
+                </div>
+                
+                <div>
+                  <label for="signup-password" class="block font-medium mb-2" style="color: ${textColor}; font-size: ${fontSize}px;">Erayga Sirta ah</label>
+                  <input type="password" id="signup-password" required
+                    class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none transition-colors"
+                    style="font-size: ${fontSize}px;"
+                    placeholder="Samee password">
+                </div>
+                
+                <div>
+                  <label for="signup-confirm" class="block font-medium mb-2" style="color: ${textColor}; font-size: ${fontSize}px;">Xaqiiji Password-ka</label>
+                  <input type="password" id="signup-confirm" required
+                    class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none transition-colors"
+                    style="font-size: ${fontSize}px;"
+                    placeholder="Ku celi password-ka">
+                </div>
+                
+                <button type="submit" id="signup-submit"
+                  class="w-full py-4 rounded-lg font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                  style="background: ${buttonColor}; color: ${buttonTextColor}; font-size: ${fontSize * 1.125}px;">
+                  Isdiiwaangeli
+                </button>
+              </form>
+              
+              <div class="mt-6 text-center">
+                <button id="goto-login" class="font-medium hover:underline" style="color: ${buttonColor}; font-size: ${fontSize * 0.875}px;">
+                  Miyaad leedahay akoon? Halkaan ka gal
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderLogin() {
+      const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const buttonColor = config.button_color || defaultConfig.button_color;
+      const buttonTextColor = config.button_text_color || defaultConfig.button_text_color;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      const appTitle = config.app_title || defaultConfig.app_title;
+      const loginTitle = config.login_title || defaultConfig.login_title;
+
+      return `
+        <div class="min-h-full flex items-center justify-center p-4" style="background: ${primaryColor}; font-family: '${fontFamily}', sans-serif;">
+          <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+              <h1 class="font-bold mb-2" style="color: ${secondaryColor}; font-size: ${fontSize * 2.5}px;">${appTitle}</h1>
+              <p class="font-medium" style="color: ${secondaryColor}; font-size: ${fontSize * 1.25}px; opacity: 0.9;">${loginTitle}</p>
+            </div>
+            
+            <div class="rounded-2xl shadow-2xl p-8" style="background: ${secondaryColor};">
+              <form id="login-form" class="space-y-6">
+                <div>
+                  <label for="login-name" class="block font-medium mb-2" style="color: ${textColor}; font-size: ${fontSize}px;">Magaca</label>
+                  <input type="text" id="login-name" required
+                    class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none transition-colors"
+                    style="font-size: ${fontSize}px;"
+                    placeholder="Geli magacaaga">
+                </div>
+                
+                <div>
+                  <label for="login-password" class="block font-medium mb-2" style="color: ${textColor}; font-size: ${fontSize}px;">Password-ka</label>
+                  <input type="password" id="login-password" required
+                    class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none transition-colors"
+                    style="font-size: ${fontSize}px;"
+                    placeholder="Geli password-ka">
+                </div>
+                
+                <button type="submit" id="login-submit"
+                  class="w-full py-4 rounded-lg font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                  style="background: ${buttonColor}; color: ${buttonTextColor}; font-size: ${fontSize * 1.125}px;">
+                  Gal
+                </button>
+              </form>
+              
+              <div class="mt-6 text-center">
+                <button id="goto-signup" class="font-medium hover:underline" style="color: ${buttonColor}; font-size: ${fontSize * 0.875}px;">
+                  Ma lihid akoon? Halkan ka sameyso
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDashboard() {
+      const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const buttonColor = config.button_color || defaultConfig.button_color;
+      const buttonTextColor = config.button_text_color || defaultConfig.button_text_color;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      const appTitle = config.app_title || defaultConfig.app_title;
+
+      const buttons = [
+        { id: 'deposit', label: 'Deposit', icon: '💵' },
+        { id: 'withdraw', label: 'Withdraw', icon: '💸' },
+        { id: 'ussd', label: 'USSD', icon: '📱' },
+        { id: 'trade', label: 'Trade', icon: '📊' },
+        { id: 'swap', label: 'Swap', icon: '🔄' },
+        { id: 'exchange', label: 'Exchange', icon: '💱' },
+        { id: 'whatsapp', label: 'WhatsApp', icon: '💬' },
+        { id: 'robot', label: 'Robot', icon: '🤖' },
+        { id: 'logout', label: 'Logout', icon: '🚪' }
+      ];
+
+      return `
+        <div class="min-h-full overflow-auto" style="background: ${primaryColor}; font-family: '${fontFamily}', sans-serif;">
+          <div class="p-4 md:p-6 max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+              <h1 class="font-bold" style="color: ${secondaryColor}; font-size: ${fontSize * 2}px;">${appTitle}</h1>
+              <div class="text-right">
+                <div class="font-bold mb-1" style="color: ${secondaryColor}; font-size: ${fontSize * 1.125}px;">${currentUser.user_id}</div>
+                <div class="font-medium" style="color: ${secondaryColor}; font-size: ${fontSize * 0.875}px; opacity: 0.8;">${currentUser.name}</div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div class="rounded-xl shadow-lg p-6" style="background: ${secondaryColor};">
+                <div class="flex items-center gap-3 mb-3">
+                  <img src="https://i.postimg.cc/MHRsF2V2/images-(2).png" alt="USDT" class="w-10 h-10 rounded-full" onerror="this.src=''; this.alt='USDT'; this.style.display='none';">
+                  <div>
+                    <div class="font-bold" style="color: ${textColor}; font-size: ${fontSize}px;">USDT Balance</div>
+                    <div class="font-bold" style="color: ${primaryColor}; font-size: ${fontSize * 1.5}px;">${currentUser.usdt_balance.toFixed(2)}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rounded-xl shadow-lg p-6" style="background: ${secondaryColor};">
+                <div class="flex items-center gap-3 mb-3">
+                  <img src="https://i.postimg.cc/Hs8HTV40/IMG-. -497.jpg" alt="HRSD" class="w-10 h-10 rounded-full" onerror="this.src=''; this.alt='HRSD'; this.style.display='none';">
+                  <div>
+                    <div class="font-bold" style="color: ${textColor}; font-size: ${fontSize}px;">HRSD.COIN Balance</div>
+                    <div class="font-bold" style="color: ${primaryColor}; font-size: ${fontSize * 1.5}px;">${currentUser.hrsd_balance.toFixed(3)}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rounded-xl shadow-lg p-6" style="background: ${secondaryColor};">
+                <div class="flex items-center gap-3 mb-3">
+                  <img src="https://i.postimg.cc/4d44VSWt/images-(1).png" alt="Bitcoin" class="w-10 h-10 rounded-full" onerror="this.src=''; this.alt='Bitcoin'; this.style.display='none';">
+                  <div>
+                    <div class="font-bold" style="color: ${textColor}; font-size: ${fontSize}px;">Bitcoin Balance</div>
+                    <div class="font-bold" style="color: ${primaryColor}; font-size: ${fontSize * 1.5}px;">${currentUser.bitcoin_balance.toFixed(5)}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+              ${buttons.map(btn => `
+                <button id="btn-${btn.id}" 
+                  class="rounded-xl shadow-lg p-6 font-bold transition-all transform hover:scale-105 hover:shadow-xl flex flex-col items-center gap-3"
+                  style="background: ${btn.id === 'logout' ? '#ef4444' : secondaryColor}; color: ${btn.id === 'logout' ? buttonTextColor : textColor};">
+                  <span style="font-size: ${fontSize * 2}px;">${btn.icon}</span>
+                  <span style="font-size: ${fontSize * 1.125}px;">${btn.label}</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderView() {
+      const app = document.getElementById('app');
+      
+      if (currentView === 'signup') {
+        app.innerHTML = renderSignup();
+        document.getElementById('signup-form').addEventListener('submit', handleSignup);
+        document.getElementById('goto-login').addEventListener('click', () => {
+          currentView = 'login';
+          renderView();
+        });
+      } else if (currentView === 'login') {
+        app.innerHTML = renderLogin();
+        document.getElementById('login-form').addEventListener('submit', handleLogin);
+        document.getElementById('goto-signup').addEventListener('click', () => {
+          currentView = 'signup';
+          renderView();
+        });
+      } else if (currentView === 'dashboard') {
+        app.innerHTML = renderDashboard();
+        document.getElementById('btn-logout').addEventListener('click', handleLogout);
+        
+        ['deposit', 'withdraw', 'ussd', 'trade', 'swap', 'exchange', 'whatsapp', 'robot'].forEach(id => {
+          document.getElementById(`btn-${id}`).addEventListener('click', () => {
+            showMessage(`${id.charAt(0).toUpperCase() + id.slice(1)} feature wali la ma hawl gelin`, 'error');
+          });
+        });
+      }
+    }
+
+    async function onConfigChange(config) {
+      if (isInitialized) {
+        renderView();
+      }
+    }
+
+    async function init() {
+      const app = document.getElementById('app');
+      
+      // Create message container
+      const messageContainer = document.createElement('div');
+      messageContainer.id = 'message-container';
+      messageContainer.className = 'hidden fixed top-4 left-0 right-0 z-50 px-4';
+      document.body.insertBefore(messageContainer, app);
+      
+      // Show loading briefly
+      app.innerHTML = `
+        <div class="min-h-full flex items-center justify-center" style="background: ${defaultConfig.primary_color};">
+          <div class="text-center">
+            <div class="spinner w-12 h-12 border-4 border-white border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p style="color: ${defaultConfig.secondary_color}; font-size: 18px;">Soo Furayaa...</p>
+          </div>
+        </div>
+      `;
+
+      try {
+        // Initialize Data SDK
+        if (window.dataSdk) {
+          const dataResult = await window.dataSdk.init(dataHandler);
+          if (!dataResult.isOk) {
+            throw new Error('Data SDK ma soo bilaabin karo');
+          }
+        }
+
+        // Initialize Element SDK
+        if (window.elementSdk) {
+          await window.elementSdk.init({
+            defaultConfig,
+            onConfigChange,
+            mapToCapabilities: (config) => ({
+              recolorables: [
+                {
+                  get: () => config.primary_color || defaultConfig.primary_color,
+                  set: (value) => {
+                    config.primary_color = value;
+                    window.elementSdk.setConfig({ primary_color: value });
+                  }
+                },
+                {
+                  get: () => config.secondary_color || defaultConfig.secondary_color,
+                  set: (value) => {
+                    config.secondary_color = value;
+                    window.elementSdk.setConfig({ secondary_color: value });
+                  }
+                },
+                {
+                  get: () => config.text_color || defaultConfig.text_color,
+                  set: (value) => {
+                    config.text_color = value;
+                    window.elementSdk.setConfig({ text_color: value });
+                  }
+                },
+                {
+                  get: () => config.button_color || defaultConfig.button_color,
+                  set: (value) => {
+                    config.button_color = value;
+                    window.elementSdk.setConfig({ button_color: value });
+                  }
+                },
+                {
+                  get: () => config.button_text_color || defaultConfig.button_text_color,
+                  set: (value) => {
+                    config.button_text_color = value;
+                    window.elementSdk.setConfig({ button_text_color: value });
+                  }
+                }
+              ],
+              borderables: [],
+              fontEditable: {
+                get: () => config.font_family || defaultConfig.font_family,
+                set: (value) => {
+                  config.font_family = value;
+                  window.elementSdk.setConfig({ font_family: value });
+                }
+              },
+              fontSizeable: {
+                get: () => config.font_size || defaultConfig.font_size,
+                set: (value) => {
+                  config.font_size = value;
+                  window.elementSdk.setConfig({ font_size: value });
+                }
+              }
+            }),
+            mapToEditPanelValues: (config) => new Map([
+              ["app_title", config.app_title || defaultConfig.app_title],
+              ["success_message", config.success_message || defaultConfig.success_message],
+              ["signup_title", config.signup_title || defaultConfig.signup_title],
+              ["login_title", config.login_title || defaultConfig.login_title]
+            ])
+          });
+        }
+
+        isInitialized = true;
+        renderView();
+      } catch (error) {
+        app.innerHTML = `<div class="min-h-full flex items-center justify-center bg-red-500 text-white text-xl p-8">Qalad: ${error.message}</div>`;
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b889e43409ce191',t:'MTc2NzUwNzUwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
