@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="so" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HORSEED Exchange</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    .app-container {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      width: 100%;
+      overflow-y: auto;
+    }
+    
+    .form-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      width: 100%;
+      max-width: 450px;
+    }
+    
+    .dashboard-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 30px;
+      width: 100%;
+      max-width: 1200px;
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      margin-bottom: 16px;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-primary:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .balance-box {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: 16px;
+      padding: 20px;
+      color: white;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .balance-icon {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: white;
+      padding: 5px;
+    }
+    
+    .action-btn {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-weight: 600;
+      font-size: 16px;
+      color: #2d3748;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-color: #667eea;
+    }
+    
+    .message-box {
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .message-success {
+      background: #d4edda;
+      color: #155724;
+      border: 2px solid #c3e6cb;
+    }
+    
+    .message-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 2px solid #f5c6cb;
+    }
+    
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .user-id-badge {
+      background: #667eea;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .grid-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 30px;
+    }
+    
+    @media (max-width: 768px) {
+      .form-card, .dashboard-card {
+        padding: 24px;
+      }
+      
+      .grid-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      
+      .action-btn {
+        padding: 16px 12px;
+        font-size: 14px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .grid-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .link-text {
+      color: #667eea;
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    
+    .link-text:hover {
+      color: #5568d3;
+    }
+    
+    .hidden {
+      display: none;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full">
+  <main class="app-container h-full w-full flex items-center justify-center p-6"><!-- Signup Screen -->
+   <div id="signupScreen" class="form-card">
+    <h1 id="appTitle" class="text-4xl font-bold text-center mb-2" style="color: #2d3748;">HORSEED</h1>
+    <p id="welcomeMsg" class="text-center text-gray-600 mb-8">Isdiiwaangalinta Cusub</p>
+    <div id="signupMessage"></div>
+    <form id="signupForm" onsubmit="handleSignup(event)"><label for="signupName" class="block text-sm font-semibold mb-2" style="color: #4a5568;">Magaca</label> <input type="text" id="signupName" class="input-field" placeholder="Gali magacaaga" required> <label for="signupNumber" class="block text-sm font-semibold mb-2" style="color: #4a5568;">Lambarka Telefoonka</label> <input type="tel" id="signupNumber" class="input-field" placeholder="Gali lambarkaaga" required> <label for="signupPassword" class="block text-sm font-semibold mb-2" style="color: #4a5568;">Furaha Sirta ah</label> <input type="password" id="signupPassword" class="input-field" placeholder="Gali furaha sirta ah" required minlength="6"> <label for="signupConfirmPassword" class="block text-sm font-semibold mb-2" style="color: #4a5568;">Xaqiiji Furaha Sirta ah</label> <input type="password" id="signupConfirmPassword" class="input-field" placeholder="Ku celi furaha sirta ah" required minlength="6"> <button type="submit" id="signupBtn" class="btn-primary">Isdiiwaangali</button>
+    </form>
+    <p class="text-center mt-6" style="color: #718096;">Ma haysataa akoon? <span class="link-text" onclick="showLogin()">Login Samee</span></p>
+   </div><!-- Login Screen -->
+   <div id="loginScreen" class="form-card hidden">
+    <h1 class="text-4xl font-bold text-center mb-2" style="color: #2d3748;">HORSEED</h1>
+    <p class="text-center text-gray-600 mb-8">Galitaanka</p>
+    <div id="loginMessage"></div>
+    <form id="loginForm" onsubmit="handleLogin(event)"><label for="loginName" class="block text-sm font-semibold mb-2" style="color: #4a5568;">Magaca</label> <input type="text" id="loginName" class="input-field" placeholder="Gali magacaaga" required> <label for="loginPassword" class="block text-sm font-semibold mb-2" style="color: #4a5568;">Furaha Sirta ah</label> <input type="password" id="loginPassword" class="input-field" placeholder="Gali furaha sirta ah" required> <button type="submit" id="loginBtn" class="btn-primary">Gal</button>
+    </form>
+    <p class="text-center mt-6" style="color: #718096;">Ma haysatid akoon? <span class="link-text" onclick="showSignup()">Isdiiwaangali</span></p>
+   </div><!-- Dashboard Screen -->
+   <div id="dashboardScreen" class="dashboard-card hidden">
+    <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+     <h1 class="text-3xl font-bold" style="color: #2d3748;">Dashboard</h1>
+     <div class="user-id-badge" id="userIdBadge">
+      ID: 000000
+     </div>
+    </div>
+    <div id="dashboardMessage"></div><!-- Balances -->
+    <div class="space-y-4 mb-6">
+     <div class="balance-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      <div>
+       <div class="text-sm opacity-90">
+        USDT Balance
+       </div>
+       <div class="text-3xl font-bold" id="usdtBalance">
+        0.00
+       </div>
+      </div><img src="https://i.postimg.cc/MHRsF2V2/images-(2).png" alt="USDT" class="balance-icon" onerror="this.style.display='none'">
+     </div>
+     <div class="balance-box" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+      <div>
+       <div class="text-sm opacity-90">
+        HRSD.COIN Balance
+       </div>
+       <div class="text-3xl font-bold" id="hrsdBalance">
+        0.000
+       </div>
+      </div><img src="https://i.postimg.cc/Hs8HTV40/IMG-.-497.jpg" alt="HRSD" class="balance-icon" onerror="this.style.display='none'">
+     </div>
+     <div class="balance-box" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+      <div>
+       <div class="text-sm opacity-90">
+        Bitcoin Balance
+       </div>
+       <div class="text-3xl font-bold" id="bitcoinBalance">
+        0.00000
+       </div>
+      </div><img src="https://i.postimg.cc/4d44VSWt/images-(1).png" alt="BTC" class="balance-icon" onerror="this.style.display='none'">
+     </div>
+    </div><!-- Action Buttons -->
+    <div class="grid-buttons"><button class="action-btn" onclick="handleAction('Deposit')"> <span style="font-size: 32px;">💰</span> <span>Deposit</span> </button> <button class="action-btn" onclick="handleAction('Withdrawal')"> <span style="font-size: 32px;">💸</span> <span>Withdrawal</span> </button> <button class="action-btn" onclick="handleAction('USSD')"> <span style="font-size: 32px;">📱</span> <span>USSD</span> </button> <button class="action-btn" onclick="handleAction('Trade')"> <span style="font-size: 32px;">📊</span> <span>Trade</span> </button> <button class="action-btn" onclick="handleAction('Swap')"> <span style="font-size: 32px;">🔄</span> <span>Swap</span> </button> <button class="action-btn" onclick="handleAction('Exchange')"> <span style="font-size: 32px;">💱</span> <span>Exchange</span> </button> <button class="action-btn" onclick="handleAction('WhatsApp')"> <span style="font-size: 32px;">💬</span> <span>WhatsApp</span> </button> <button class="action-btn" onclick="handleAction('Robot')"> <span style="font-size: 32px;">🤖</span> <span>Robot</span> </button> <button class="action-btn" onclick="handleLogout()" style="border-color: #fc8181; color: #c53030;"> <span style="font-size: 32px;">🚪</span> <span>Logout</span> </button>
+    </div>
+   </div>
+  </main>
+  <script>
+    let allUsers = [];
+    let currentUser = null;
+    let userIdCounter = 45678;
+    
+    const defaultConfig = {
+      app_title: "HORSEED",
+      welcome_message: "Welcome to HORSEED Exchange",
+      primary_color: "#667eea",
+      secondary_color: "#764ba2",
+      text_color: "#2d3748"
+    };
+    
+    const dataHandler = {
+      onDataChanged(data) {
+        allUsers = data;
+        if (allUsers.length > 0 && !currentUser) {
+          userIdCounter = 45678 + allUsers.length;
+        }
+      }
+    };
+    
+    async function initApp() {
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error("Data SDK initialization failed");
+        }
+      }
+    }
+    
+    function generateUserId() {
+      const newId = userIdCounter;
+      userIdCounter++;
+      return `ID${newId}`;
+    }
+    
+    function showMessage(elementId, message, isSuccess) {
+      const messageEl = document.getElementById(elementId);
+      messageEl.innerHTML = `
+        <div class="message-box ${isSuccess ? 'message-success' : 'message-error'}">
+          <span style="font-size: 20px;">${isSuccess ? '✓' : '✗'}</span>
+          <span>${message}</span>
+        </div>
+      `;
+      setTimeout(() => {
+        messageEl.innerHTML = '';
+      }, 5000);
+    }
+    
+    function showLoading(buttonId, isLoading) {
+      const btn = document.getElementById(buttonId);
+      if (isLoading) {
+        btn.disabled = true;
+        btn.innerHTML = '<div class="spinner"></div>';
+      } else {
+        btn.disabled = false;
+        btn.textContent = buttonId === 'signupBtn' ? 'Isdiiwaangali' : 'Gal';
+      }
+    }
+    
+    async function handleSignup(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById('signupName').value.trim();
+      const number = document.getElementById('signupNumber').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupConfirmPassword').value;
+      
+      if (password !== confirmPassword) {
+        showMessage('signupMessage', 'Furaha sirta ah ma isku mid aha!', false);
+        return;
+      }
+      
+      if (allUsers.length >= 10000000) {
+        showMessage('signupMessage', 'Xadka isticmaalayaasha waa la gaaray!', false);
+        return;
+      }
+      
+      const existingUser = allUsers.find(u => u.name === name || u.number === number);
+      if (existingUser) {
+        showMessage('signupMessage', 'Magaca ama lambarka horay ayaa loo isticmaalay!', false);
+        return;
+      }
+      
+      showLoading('signupBtn', true);
+      
+      const userId = generateUserId();
+      const newUser = {
+        user_id: userId,
+        name: name,
+        number: number,
+        password: password,
+        usdt_balance: 0,
+        hrsd_balance: 0,
+        bitcoin_balance: 0,
+        created_at: new Date().toISOString()
+      };
+      
+      const result = await window.dataSdk.create(newUser);
+      showLoading('signupBtn', false);
+      
+      if (result.isOk) {
+        showMessage('signupMessage', '✓ Waad isdiiwaangalisay!', true);
+        setTimeout(() => {
+          document.getElementById('signupForm').reset();
+          showLogin();
+        }, 2000);
+      } else {
+        showMessage('signupMessage', 'Qalad ayaa dhacay. Fadlan isku day mar kale!', false);
+      }
+    }
+    
+    async function handleLogin(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById('loginName').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      
+      showLoading('loginBtn', true);
+      
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const user = allUsers.find(u => u.name === name && u.password === password);
+      
+      showLoading('loginBtn', false);
+      
+      if (user) {
+        currentUser = user;
+        showMessage('loginMessage', '✓ Waad ku guuleysatay!', true);
+        setTimeout(() => {
+          showDashboard();
+        }, 1500);
+      } else {
+        showMessage('loginMessage', 'Magaca ama furaha sirta ah waa qalad!', false);
+      }
+    }
+    
+    function showSignup() {
+      document.getElementById('signupScreen').classList.remove('hidden');
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboardScreen').classList.add('hidden');
+    }
+    
+    function showLogin() {
+      document.getElementById('signupScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('dashboardScreen').classList.add('hidden');
+    }
+    
+    function showDashboard() {
+      document.getElementById('signupScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboardScreen').classList.remove('hidden');
+      
+      document.getElementById('userIdBadge').textContent = currentUser.user_id;
+      document.getElementById('usdtBalance').textContent = currentUser.usdt_balance.toFixed(2);
+      document.getElementById('hrsdBalance').textContent = currentUser.hrsd_balance.toFixed(3);
+      document.getElementById('bitcoinBalance').textContent = currentUser.bitcoin_balance.toFixed(5);
+    }
+    
+    function handleAction(action) {
+      showMessage('dashboardMessage', `${action} waa la furay...`, true);
+    }
+    
+    function handleLogout() {
+      currentUser = null;
+      document.getElementById('loginForm').reset();
+      showLogin();
+      showMessage('loginMessage', 'Waad ka baxday!', true);
+    }
+    
+    async function onConfigChange(config) {
+      const appTitleEls = document.querySelectorAll('#appTitle');
+      const welcomeMsgEl = document.getElementById('welcomeMsg');
+      
+      appTitleEls.forEach(el => {
+        if (el) el.textContent = config.app_title || defaultConfig.app_title;
+      });
+      
+      if (welcomeMsgEl) {
+        welcomeMsgEl.textContent = config.welcome_message || defaultConfig.welcome_message;
+      }
+    }
+    
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["welcome_message", config.welcome_message || defaultConfig.welcome_message]
+        ])
+      });
+    }
+    
+    initApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b8841bf445e406b',t:'MTc2NzUwMzcxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
