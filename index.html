@@ -1,0 +1,1940 @@
+<!doctype html>
+<html lang="so" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HRSD.COIN</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .balance-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .btn-action {
+      transition: all 0.3s ease;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .success-animation {
+      animation: scaleIn 0.5s ease-out;
+    }
+
+    @keyframes scaleIn {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .spinner {
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .crypto-icon {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .robot-active-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #10b981, #059669);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .price-chart {
+      position: relative;
+      height: 200px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .price-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      stroke: #10b981;
+      stroke-width: 2;
+      fill: none;
+      animation: drawLine 2s ease-in-out infinite;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full w-full overflow-auto">
+  <div id="app" class="min-h-full w-full bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900"></div>
+  <script>
+    const defaultConfig = {
+      app_title: "HRSD.COIN",
+      signup_title: "Isdiiwaangalin",
+      login_title: "Soo Gal",
+      dashboard_title: "Dashboard",
+      primary_color: "#3b82f6",
+      secondary_color: "#8b5cf6",
+      success_color: "#10b981",
+      text_color: "#ffffff",
+      button_color: "#6366f1"
+    };
+
+    let currentUser = null;
+    let allUsers = [];
+    let userIdCounter = 30304;
+    let liveTradesInterval = null;
+    let miningInterval = null;
+    let miningAmount = 0;
+    let robotCheckInterval = null;
+    let selectedExchangeCurrencies = [];
+    let priceFluctuationInterval = null;
+    let currentHrsdPrice = 0.12;
+    let isTrading = false;
+
+    const ROBOT_REWARDS = [
+      { price: 400, reward: 8.0 },
+      { price: 350, reward: 7.5 },
+      { price: 320, reward: 7.2 },
+      { price: 290, reward: 5.8 },
+      { price: 260, reward: 4.6 },
+      { price: 230, reward: 4.3 },
+      { price: 210, reward: 4.1 },
+      { price: 190, reward: 2.9 },
+      { price: 160, reward: 2.6 },
+      { price: 140, reward: 2.4 },
+      { price: 130, reward: 2.3 },
+      { price: 120, reward: 2.2 },
+      { price: 110, reward: 2.1 },
+      { price: 105, reward: 2.05 },
+      { price: 70,  reward: 1.3 },
+      { price: 60,  reward: 1.15 },
+      { price: 50,  reward: 1.05 },
+      { price: 40,  reward: 1.00 },
+      { price: 30,  reward: 0.35 },
+      { price: 20,  reward: 0.25 },
+      { price: 10,  reward: 0.2 },
+      { price: 5,   reward: 0.17 },
+      { price: 3,   reward: 0.15 },
+      { price: 2,   reward: 0.1 },
+      { price: 1,   reward: 0.05 }
+    ];
+
+    // LocalStorage Functions
+    function saveToLocalStorage() {
+      localStorage.setItem('daacad_users', JSON.stringify(allUsers));
+      localStorage.setItem('daacad_counter', userIdCounter.toString());
+    }
+
+    function loadFromLocalStorage() {
+      const usersData = localStorage.getItem('daacad_users');
+      const counterData = localStorage.getItem('daacad_counter');
+      
+      if (usersData) {
+        allUsers = JSON.parse(usersData);
+      }
+      
+      if (counterData) {
+        userIdCounter = parseInt(counterData);
+      }
+    }
+
+    async function onConfigChange(config) {
+      document.getElementById('app-title-signup').textContent = config.app_title || defaultConfig.app_title;
+      document.getElementById('app-title-login').textContent = config.app_title || defaultConfig.app_title;
+      document.getElementById('app-title-dashboard').textContent = config.app_title || defaultConfig.app_title;
+      document.getElementById('signup-heading').textContent = config.signup_title || defaultConfig.signup_title;
+      document.getElementById('login-heading').textContent = config.login_title || defaultConfig.login_title;
+      document.getElementById('dashboard-heading').textContent = config.dashboard_title || defaultConfig.dashboard_title;
+
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const successColor = config.success_color || defaultConfig.success_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const buttonColor = config.button_color || defaultConfig.button_color;
+
+      document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.style.backgroundColor = buttonColor;
+      });
+
+      document.querySelectorAll('.text-primary').forEach(el => {
+        el.style.color = primaryColor;
+      });
+
+      document.querySelectorAll('.success-check').forEach(el => {
+        el.style.color = successColor;
+      });
+    }
+
+    async function init() {
+      loadFromLocalStorage();
+
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities: (config) => ({
+            recolorables: [
+              {
+                get: () => config.primary_color || defaultConfig.primary_color,
+                set: (value) => {
+                  window.elementSdk.config.primary_color = value;
+                  window.elementSdk.setConfig({ primary_color: value });
+                }
+              },
+              {
+                get: () => config.secondary_color || defaultConfig.secondary_color,
+                set: (value) => {
+                  window.elementSdk.config.secondary_color = value;
+                  window.elementSdk.setConfig({ secondary_color: value });
+                }
+              },
+              {
+                get: () => config.success_color || defaultConfig.success_color,
+                set: (value) => {
+                  window.elementSdk.config.success_color = value;
+                  window.elementSdk.setConfig({ success_color: value });
+                }
+              },
+              {
+                get: () => config.text_color || defaultConfig.text_color,
+                set: (value) => {
+                  window.elementSdk.config.text_color = value;
+                  window.elementSdk.setConfig({ text_color: value });
+                }
+              },
+              {
+                get: () => config.button_color || defaultConfig.button_color,
+                set: (value) => {
+                  window.elementSdk.config.button_color = value;
+                  window.elementSdk.setConfig({ button_color: value });
+                }
+              }
+            ],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ["app_title", config.app_title || defaultConfig.app_title],
+            ["signup_title", config.signup_title || defaultConfig.signup_title],
+            ["login_title", config.login_title || defaultConfig.login_title],
+            ["dashboard_title", config.dashboard_title || defaultConfig.dashboard_title]
+          ])
+        });
+      }
+
+      renderApp();
+      startRobotChecker();
+    }
+
+    function renderApp() {
+      const app = document.getElementById('app');
+      const config = window.elementSdk?.config || defaultConfig;
+      
+      app.innerHTML = `
+        <!-- Signup View -->
+        <div id="signup-view" class="min-h-full w-full flex items-center justify-center p-4">
+          <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+              <h1 id="app-title-signup" class="text-4xl font-bold text-white mb-2">${config.app_title || defaultConfig.app_title}</h1>
+              <h2 id="signup-heading" class="text-2xl text-blue-200">${config.signup_title || defaultConfig.signup_title}</h2>
+            </div>
+            
+            <form id="signup-form" class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+              <div class="mb-6">
+                <label class="block text-white text-sm font-semibold mb-2">Magaca</label>
+                <input type="text" id="signup-name" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali magacaaga">
+              </div>
+              
+              <div class="mb-6">
+                <label class="block text-white text-sm font-semibold mb-2">Nambarka</label>
+                <input type="text" id="signup-number" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali nambarkaaga">
+              </div>
+              
+              <div class="mb-6">
+                <label class="block text-white text-sm font-semibold mb-2">Password</label>
+                <input type="password" id="signup-password" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali password">
+              </div>
+              
+              <div class="mb-6">
+                <label class="block text-white text-sm font-semibold mb-2">Xaqiiji Password</label>
+                <input type="password" id="signup-confirm" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Ku celi password">
+              </div>
+
+              <div id="signup-error" class="mb-4 text-red-300 text-sm hidden"></div>
+              
+              <button type="submit" class="btn-primary btn-action w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 flex items-center justify-center">
+                <span id="signup-btn-text">Isdiiwaangali</span>
+                <div id="signup-spinner" class="spinner hidden ml-2"></div>
+              </button>
+
+              <div class="mt-4 text-center">
+                <button type="button" id="go-to-login" class="text-blue-200 hover:text-white text-sm">Akoon ma leedahay? Soo gal</button>
+              </div>
+            </form>
+
+            <div id="signup-success" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div class="bg-white rounded-2xl p-8 text-center success-animation">
+                <div class="text-green-500 text-6xl mb-4 success-check">✓</div>
+                <p class="text-xl font-semibold text-gray-800">Waad isdiiwaangalisay!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login View -->
+        <div id="login-view" class="hidden min-h-full w-full flex items-center justify-center p-4">
+          <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+              <h1 id="app-title-login" class="text-4xl font-bold text-white mb-2">${config.app_title || defaultConfig.app_title}</h1>
+              <h2 id="login-heading" class="text-2xl text-blue-200">${config.login_title || defaultConfig.login_title}</h2>
+            </div>
+            
+            <form id="login-form" class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+              <div class="mb-6">
+                <label class="block text-white text-sm font-semibold mb-2">Magaca</label>
+                <input type="text" id="login-name" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali magacaaga">
+              </div>
+              
+              <div class="mb-6">
+                <label class="block text-white text-sm font-semibold mb-2">Password</label>
+                <input type="password" id="login-password" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali password">
+              </div>
+
+              <div id="login-error" class="mb-4 text-red-300 text-sm hidden"></div>
+              
+              <button type="submit" class="btn-primary btn-action w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 flex items-center justify-center">
+                <span id="login-btn-text">Soo Gal</span>
+                <div id="login-spinner" class="spinner hidden ml-2"></div>
+              </button>
+
+              <div class="mt-4 text-center">
+                <button type="button" id="go-to-signup" class="text-blue-200 hover:text-white text-sm">Akoon ma lihid? Isdiiwaangali</button>
+              </div>
+            </form>
+
+            <div id="login-success" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div class="bg-white rounded-2xl p-8 text-center success-animation">
+                <div class="text-green-500 text-6xl mb-4 success-check">✓</div>
+                <p class="text-xl font-semibold text-gray-800">Waadku guuleysatay!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="hidden min-h-full w-full overflow-auto">
+          <div class="w-full">
+            <!-- Header Section -->
+            <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 px-4 py-6 shadow-lg">
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <h1 id="app-title-dashboard" class="text-2xl font-bold text-white mb-1">${config.app_title || defaultConfig.app_title}</h1>
+                  <p class="text-white text-opacity-90 text-sm">ID: <span id="user-id-display"></span></p>
+                </div>
+                <div class="text-right">
+                  <p class="text-white font-semibold text-lg" id="user-name-display"></p>
+                  <div id="robot-status-badge" class="hidden mt-1">
+                    <span class="inline-block bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold">🤖 ACTIVE</span>
+                  </div>
+                </div>
+              </div>
+              
+
+            </div>
+
+            <!-- Balance Cards Grid -->
+            <div class="px-4 py-6">
+              <h2 id="dashboard-heading" class="text-white text-lg font-bold mb-4">${config.dashboard_title || defaultConfig.dashboard_title}</h2>
+              
+              <div class="grid grid-cols-1 gap-4 mb-6">
+                <!-- USDT Card -->
+                <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-3 shadow-lg">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <div class="bg-white bg-opacity-30 rounded-full p-1.5">
+                        <img src="https://i.postimg.cc/MHRsF2V2/images-(2).png" alt="USDT" class="w-6 h-6" onerror="this.src=''; this.style.display='none';">
+                      </div>
+                      <div>
+                        <p class="text-white text-opacity-90 text-xs font-medium">USDT</p>
+                        <p class="text-white text-opacity-70 text-xs">Tether USD</p>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-white text-lg font-bold" id="balance-usdt">0.00</p>
+                      <p class="text-white text-opacity-80 text-xs">USD</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- HRSD Card -->
+                <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-3 shadow-lg">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <div class="bg-white bg-opacity-30 rounded-full p-1.5">
+                        <img src="https://i.postimg.cc/Hs8HTV40/IMG-.-497.jpg" alt="HRSD" class="w-6 h-6" onerror="this.src=''; this.style.display='none';">
+                      </div>
+                      <div>
+                        <p class="text-white text-opacity-90 text-xs font-medium">HRSD.COIN</p>
+                        <p class="text-white text-opacity-70 text-xs">HRSD.Coin</p>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-white text-lg font-bold" id="balance-hrsd">0.000</p>
+                      <p class="text-white text-opacity-80 text-xs">HRSD</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bitcoin Card -->
+                <div class="bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl p-3 shadow-lg">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <div class="bg-white bg-opacity-30 rounded-full p-1.5">
+                        <img src="https://i.postimg.cc/4d44VSWt/images-(1).png" alt="Bitcoin" class="w-6 h-6" onerror="this.src=''; this.style.display='none';">
+                      </div>
+                      <div>
+                        <p class="text-white text-opacity-90 text-xs font-medium">BITCOIN</p>
+                        <p class="text-white text-opacity-70 text-xs">BTC</p>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-white text-lg font-bold" id="balance-bitcoin">0.00000</p>
+                      <p class="text-white text-opacity-80 text-xs">BTC</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Actions Title -->
+              <h3 class="text-white text-lg font-bold mb-4">macamiil ilaalso lambarsireedkaada oo cidna hala wadaagin ah</h3>
+
+              <!-- Action Buttons Grid -->
+              <div class="grid grid-cols-3 gap-2 mb-4">
+                <button id="deposit-btn" class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-3 flex flex-col items-center gap-1 hover:bg-opacity-20 transition-all">
+                  <div class="w-10 h-10 bg-green-500 bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-xl">💰</span>
+                  </div>
+                  <span class="text-white text-xs font-semibold">Deposit</span>
+                </button>
+
+                <button id="withdrawal-btn" class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-3 flex flex-col items-center gap-1 hover:bg-opacity-20 transition-all">
+                  <div class="w-10 h-10 bg-red-500 bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-xl">💸</span>
+                  </div>
+                  <span class="text-white text-xs font-semibold">Withdraw</span>
+                </button>
+
+                <button id="trade-btn" class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-3 flex flex-col items-center gap-1 hover:bg-opacity-20 transition-all">
+                  <div class="w-10 h-10 bg-blue-500 bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-xl">📈</span>
+                  </div>
+                  <span class="text-white text-xs font-semibold">Trade</span>
+                </button>
+
+                <button id="swap-btn" class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-3 flex flex-col items-center gap-1 hover:bg-opacity-20 transition-all">
+                  <div class="w-10 h-10 bg-purple-500 bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-xl">🔄</span>
+                  </div>
+                  <span class="text-white text-xs font-semibold">Swap</span>
+                </button>
+
+                <button id="exchange-btn" class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-3 flex flex-col items-center gap-1 hover:bg-opacity-20 transition-all">
+                  <div class="w-10 h-10 bg-indigo-500 bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-xl">💱</span>
+                  </div>
+                  <span class="text-white text-xs font-semibold">Exchange</span>
+                </button>
+
+                <button id="robot-btn" class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-3 flex flex-col items-center gap-1 hover:bg-opacity-20 transition-all">
+                  <div class="w-10 h-10 bg-pink-500 bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-xl">🤖</span>
+                  </div>
+                  <span class="text-white text-xs font-semibold">Robot</span>
+                </button>
+              </div>
+
+              <!-- Other Actions -->
+              <h3 class="text-white text-base font-bold mb-3">Kale</h3>
+              
+              <div class="grid grid-cols-1 gap-2 mb-6">
+                <button id="ussd-btn" class="bg-gradient-to-r from-teal-500 to-cyan-600 rounded-xl p-3 flex items-center justify-between hover:shadow-lg transition-all">
+                  <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                      <span class="text-xl">📱</span>
+                    </div>
+                    <div class="text-left">
+                      <p class="text-white font-bold text-sm">USSD</p>
+                      <p class="text-white text-opacity-80 text-xs">Payment via USSD</p>
+                    </div>
+                  </div>
+                  <span class="text-white text-xl">→</span>
+                </button>
+
+                <button id="whatsapp-btn" class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-3 flex items-center justify-between hover:shadow-lg transition-all">
+                  <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                      <span class="text-xl">💬</span>
+                    </div>
+                    <div class="text-left">
+                      <p class="text-white font-bold text-sm">WhatsApp Support</p>
+                      <p class="text-white text-opacity-80 text-xs">La xidhiidh taageerada</p>
+                    </div>
+                  </div>
+                  <span class="text-white text-xl">→</span>
+                </button>
+
+                <button id="logout-btn" class="bg-gradient-to-r from-red-500 to-rose-600 rounded-xl p-3 flex items-center justify-between hover:shadow-lg transition-all">
+                  <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                      <span class="text-xl">🚪</span>
+                    </div>
+                    <div class="text-left">
+                      <p class="text-white font-bold text-sm">Logout</p>
+                      <p class="text-white text-opacity-80 text-xs">Ka bax akoonkaaga</p>
+                    </div>
+                  </div>
+                  <span class="text-white text-xl">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+            <!-- Deposit Modal -->
+            <div id="deposit-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-6 md:p-8 w-full max-w-md">
+                <h3 class="text-2xl font-bold text-white mb-6">Deposit</h3>
+                
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">Dooro Qaabka</label>
+                  <div class="flex gap-4">
+                    <button type="button" class="payment-method flex-1 bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-4 hover:border-blue-400" data-method="evcplus">
+                      <img src="https://i.postimg.cc/3N7XX7PC/images.png" alt="EVC Plus" class="w-16 h-16 mx-auto mb-2" onerror="this.src=''; this.alt='EVC Plus'; this.style.fontSize='12px';">
+                      <p class="text-white text-sm font-semibold">EVC Plus</p>
+                    </button>
+                    <button type="button" class="payment-method flex-1 bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-4 hover:border-blue-400" data-method="bitcoin">
+                      <img src="https://i.postimg.cc/4d44VSWt/images-(1).png" alt="Bitcoin" class="w-16 h-16 mx-auto mb-2" onerror="this.src=''; this.alt='Bitcoin'; this.style.fontSize='12px';">
+                      <p class="text-white text-sm font-semibold">Bitcoin</p>
+                    </button>
+                  </div>
+                </div>
+
+                <div id="deposit-payment-logo" class="mb-6 text-center hidden">
+                  <img id="deposit-logo-img" src="" alt="" class="w-24 h-24 mx-auto">
+                </div>
+
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">Amount ($)</label>
+                  <input type="number" id="deposit-amount" step="0.01" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali qadarka">
+                </div>
+
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">Nambarka</label>
+                  <input type="text" id="deposit-number" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali nambarkaaga">
+                </div>
+
+                <div class="flex gap-3">
+                  <button id="deposit-send" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700">
+                    Send
+                  </button>
+                  <button id="deposit-back" class="flex-1 bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700">
+                    Back
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Withdrawal Modal -->
+            <div id="withdrawal-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-6 md:p-8 w-full max-w-md">
+                <h3 class="text-2xl font-bold text-white mb-6">Withdrawal</h3>
+                
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">Dooro Qaabka</label>
+                  <div class="flex gap-4">
+                    <button type="button" class="withdrawal-method flex-1 bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-4 hover:border-blue-400" data-method="evcplus">
+                      <img src="https://i.postimg.cc/3N7XX7PC/images.png" alt="EVC Plus" class="w-16 h-16 mx-auto mb-2" onerror="this.src=''; this.alt='EVC Plus'; this.style.fontSize='12px';">
+                      <p class="text-white text-sm font-semibold">EVC Plus</p>
+                    </button>
+                    <button type="button" class="withdrawal-method flex-1 bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-4 hover:border-blue-400" data-method="bitcoin">
+                      <img src="https://i.postimg.cc/4d44VSWt/images-(1).png" alt="Bitcoin" class="w-16 h-16 mx-auto mb-2" onerror="this.src=''; this.alt='Bitcoin'; this.style.fontSize='12px';">
+                      <p class="text-white text-sm font-semibold">Bitcoin</p>
+                    </button>
+                  </div>
+                </div>
+
+                <div id="withdrawal-payment-logo" class="mb-6 text-center hidden">
+                  <img id="withdrawal-logo-img" src="" alt="" class="w-24 h-24 mx-auto">
+                </div>
+
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">Amount ($)</label>
+                  <input type="number" id="withdrawal-amount" step="0.01" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali qadarka">
+                </div>
+
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">Nambarka</label>
+                  <input type="text" id="withdrawal-number" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali nambarkaaga">
+                </div>
+
+                <div class="flex gap-3">
+                  <button id="withdrawal-send" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700">
+                    Send
+                  </button>
+                  <button id="withdrawal-back" class="flex-1 bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700">
+                    Back
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- USSD Modal -->
+            <div id="ussd-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-6 md:p-8 w-full max-w-md">
+                <h3 class="text-2xl font-bold text-white mb-6">USSD</h3>
+
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">Amount ($)</label>
+                  <input type="number" id="ussd-amount" step="0.01" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali qadarka">
+                </div>
+
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">Nambarka</label>
+                  <input type="text" id="ussd-number" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali nambarkaaga">
+                </div>
+
+                <div id="ussd-processing" class="hidden mb-6 text-center">
+                  <div class="spinner mx-auto mb-3"></div>
+                  <p class="text-white">Processing...</p>
+                </div>
+
+                <div id="ussd-success" class="hidden mb-6 text-center">
+                  <div class="text-green-500 text-6xl mb-3">✓</div>
+                  <p class="text-white font-semibold">Payment Successful!</p>
+                </div>
+
+                <div class="flex gap-3">
+                  <button id="ussd-send" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700">
+                    Send
+                  </button>
+                  <button id="ussd-back" class="flex-1 bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700">
+                    Back
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trade Modal -->
+            <div id="trade-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+              <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-6 md:p-8 w-full max-w-4xl my-8">
+                <div class="flex justify-between items-center mb-6">
+                  <h3 class="text-2xl font-bold text-white">Live Trade</h3>
+                  <button id="trade-close" class="text-white text-2xl hover:text-red-400">&times;</button>
+                </div>
+
+                <!-- Current Price Display -->
+                <div class="bg-black bg-opacity-30 rounded-xl p-4 mb-4">
+                  <div class="flex justify-between items-center">
+                    <div>
+                      <p class="text-gray-400 text-sm">Qiimaha HRSD.COIN</p>
+                      <p class="text-white text-2xl font-bold" id="current-price">$0.12</p>
+                    </div>
+                    <div class="text-right">
+                      <p id="price-change" class="text-green-400 font-bold">+0.00%</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Buy Form -->
+                <div id="buy-form" class="bg-white bg-opacity-10 rounded-xl p-4 mb-4">
+                  <h4 class="text-white font-bold mb-3">Iibso HRSD.COIN</h4>
+                  <div class="mb-3">
+                    <label class="block text-white text-sm mb-2">Amount ($)</label>
+                    <input type="number" id="buy-amount" step="0.01" class="w-full px-4 py-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali qadarka">
+                  </div>
+                  <p class="text-gray-300 text-sm mb-3">Balance: $<span id="buy-balance">0.00</span> USDT</p>
+                  <button id="buy-btn" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-green-700">
+                    BUY
+                  </button>
+                </div>
+
+                <!-- Live Trading Feed -->
+                <div class="bg-black bg-opacity-30 rounded-xl p-4 mb-6 max-h-64 overflow-y-auto" id="live-trades">
+                  <!-- Live trades will be populated here -->
+                </div>
+
+                <!-- Active Trading Status -->
+                <div id="trading-status" class="hidden mb-4">
+                  <div class="bg-gradient-to-r from-green-500 to-blue-500 bg-opacity-20 rounded-xl p-4">
+                    <div class="flex justify-between items-center mb-2">
+                      <p class="text-white font-bold">⚡ Waxaad haysaa:</p>
+                      <p class="text-yellow-400 font-bold text-xl" id="hrsd-holdings">0.000 HRSD</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <p class="text-gray-300 text-sm">Qiimaha hadda:</p>
+                      <p class="text-white font-bold" id="current-value-usd">$0.00</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sell Button -->
+                <button id="sell-btn" class="w-full bg-red-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-red-700 mb-4">
+                  SELL (iska iibi)
+                </button>
+
+                <button id="trade-back" class="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700">
+                  Back
+                </button>
+              </div>
+            </div>
+
+            <!-- Exchange Modal -->
+            <div id="exchange-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+              <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-6 md:p-8 w-full max-w-2xl my-8">
+                <div class="flex justify-between items-center mb-6">
+                  <h3 class="text-2xl font-bold text-white">Exchange</h3>
+                  <button id="exchange-close" class="text-white text-2xl hover:text-red-400">&times;</button>
+                </div>
+
+                <!-- Currency Selection Grid -->
+                <div id="currency-grid" class="grid grid-cols-3 md:grid-cols-4 gap-3 mb-6">
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="bitcoin" data-img="https://i.postimg.cc/4d44VSWt/images-(1).png">
+                    <img src="https://i.postimg.cc/4d44VSWt/images-(1).png" alt="Bitcoin" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">Bitcoin</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="usdt" data-img="https://i.postimg.cc/MHRsF2V2/images-(2).png">
+                    <img src="https://i.postimg.cc/MHRsF2V2/images-(2).png" alt="USDT" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">USDT</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="hrsd" data-img="https://i.postimg.cc/Hs8HTV40/IMG-.-497.jpg">
+                    <img src="https://i.postimg.cc/Hs8HTV40/IMG-.-497.jpg" alt="HRSD" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">HRSD.COIN</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="tron" data-img="https://i.postimg.cc/3R6H07nH/images-(3).png">
+                    <img src="https://i.postimg.cc/3R6H07nH/images-(3).png" alt="Tron" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">TRX</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="doge" data-img="https://i.postimg.cc/SK1KdBDk/images.jpg">
+                    <img src="https://i.postimg.cc/SK1KdBDk/images.jpg" alt="Doge" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">DOGE</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="ton" data-img="https://i.postimg.cc/Wzgb2hjX/images-(4).png">
+                    <img src="https://i.postimg.cc/Wzgb2hjX/images-(4).png" alt="TON" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">TON</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="xrp" data-img="https://i.postimg.cc/QCGhnh5Z/images-(1).jpg">
+                    <img src="https://i.postimg.cc/QCGhnh5Z/images-(1).jpg" alt="XRP" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">XRP</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="solana" data-img="https://i.postimg.cc/QCGhnh5Z/images-(1).jpg">
+                    <img src="https://i.postimg.cc/QCGhnh5Z/images-(1).jpg" alt="Solana" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">Solana</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="sui" data-img="https://i.postimg.cc/6Q4ssFBp/images-(8).png">
+                    <img src="https://i.postimg.cc/6Q4ssFBp/images-(8).png" alt="SUI" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">SUI</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="shiba" data-img="https://i.postimg.cc/hP2NXKjP/images-(9).png">
+                    <img src="https://i.postimg.cc/hP2NXKjP/images-(9).png" alt="Shiba" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">SHIBA</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="pepe" data-img="https://i.postimg.cc/9MPnChKW/images-(10).png">
+                    <img src="https://i.postimg.cc/9MPnChKW/images-(10).png" alt="Pepe" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">PEPE</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="cardano" data-img="https://i.postimg.cc/T1JM7mfQ/images-(7).png">
+                    <img src="https://i.postimg.cc/T1JM7mfQ/images-(7).png" alt="Cardano" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">Cardano</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="pnp" data-img="https://i.postimg.cc/g2YkWz7h/images-(5).png">
+                    <img src="https://i.postimg.cc/g2YkWz7h/images-(5).png" alt="PNP" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">PNP</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="evcplus" data-img="https://i.postimg.cc/2y6FMND3/images-11-removebg-preview.png">
+                    <img src="https://i.postimg.cc/2y6FMND3/images-11-removebg-preview.png" alt="EVC Plus" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">EVC Plus</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="edahab" data-img="https://i.postimg.cc/25rWgNQK/images-(2).jpg">
+                    <img src="https://i.postimg.cc/25rWgNQK/images-(2).jpg" alt="Edahab" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">Edahab</p>
+                  </button>
+                  <button class="exchange-currency bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-lg p-3 hover:border-blue-400" data-currency="jeep" data-img="https://i.postimg.cc/Gm1Tsn5h/images-(3).jpg">
+                    <img src="https://i.postimg.cc/Gm1Tsn5h/images-(3).jpg" alt="Jeep" class="w-10 h-10 mx-auto mb-1" onerror="this.style.display='none';">
+                    <p class="text-white text-xs font-semibold">Jeep</p>
+                  </button>
+                </div>
+
+                <!-- Exchange Form (Hidden initially) -->
+                <div id="exchange-form" class="hidden">
+                  <div class="flex items-center justify-center gap-4 mb-6">
+                    <div class="text-center">
+                      <img id="exchange-from-img" src="" alt="" class="w-10 h-10 mx-auto mb-2">
+                      <p id="exchange-from-name" class="text-white font-semibold"></p>
+                    </div>
+                    <div class="text-white text-2xl">⇄</div>
+                    <div class="text-center">
+                      <img id="exchange-to-img" src="" alt="" class="w-10 h-10 mx-auto mb-2">
+                      <p id="exchange-to-name" class="text-white font-semibold"></p>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="block text-white text-sm font-semibold mb-2">Amount ($)</label>
+                    <input type="number" id="exchange-amount" step="0.01" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali qadarka">
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="block text-white text-sm font-semibold mb-2">Number</label>
+                    <input type="text" id="exchange-number" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali nambarkaaga">
+                  </div>
+
+                  <div class="mb-6">
+                    <label class="block text-white text-sm font-semibold mb-2">Wallet Address</label>
+                    <input type="text" id="exchange-wallet" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali wallet address-ka">
+                  </div>
+
+                  <div class="flex gap-3">
+                    <button id="exchange-send" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700">
+                      Send
+                    </button>
+                    <button id="exchange-back-form" class="flex-1 bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700">
+                      Back
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- WhatsApp Modal -->
+            <div id="whatsapp-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-6 md:p-8 w-full max-w-md">
+                <div class="mb-6 text-center">
+                  <img src="https://i.postimg.cc/wMZbgQgX/file-000000002f7071f48cce1b6303dd2a4b.png" alt="WhatsApp Support" class="w-20 h-20 mx-auto mb-4" onerror="this.style.display='none';">
+                  <h3 class="text-2xl font-bold text-white">WhatsApp Support</h3>
+                </div>
+
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">Magacaaga</label>
+                  <input type="text" id="whatsapp-name" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali magacaaga">
+                </div>
+
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">Geli Codsigaaga</label>
+                  <textarea id="whatsapp-message" rows="4" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Qor waxaad rabto..."></textarea>
+                </div>
+
+                <div class="flex gap-3">
+                  <button id="whatsapp-send" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700">
+                    Send
+                  </button>
+                  <button id="whatsapp-back" class="flex-1 bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700">
+                    Back
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Robot Modal -->
+            <div id="robot-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+              <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-6 md:p-8 w-full max-w-md my-8">
+                <h3 class="text-2xl font-bold text-white mb-6 text-center">🤖 Robot Trading</h3>
+
+                <!-- Robot Form -->
+                <div id="robot-form">
+                  <div class="mb-6">
+                    <label class="block text-white text-sm font-semibold mb-2">Amount ($)</label>
+                    <input type="number" id="robot-amount-input" step="0.01" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Gali qadarka">
+                  </div>
+
+                  <div class="mb-6">
+                    <label class="block text-white text-sm font-semibold mb-2">Geli ID Code</label>
+                    <input type="text" id="robot-id-input" required class="w-full px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-blue-400" placeholder="Tusaale: ID30304">
+                  </div>
+
+                  <div id="robot-form-error" class="mb-4 text-red-300 text-sm text-center hidden"></div>
+
+                  <div class="flex gap-3">
+                    <button id="robot-send-btn" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 flex items-center justify-center">
+                      <span id="robot-send-text">Send</span>
+                      <div id="robot-send-spinner" class="spinner hidden ml-2"></div>
+                    </button>
+                    <button id="robot-form-back" class="flex-1 bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700">
+                      Back
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Robot Active Display -->
+                <div id="robot-active-display" class="hidden">
+                  <div class="text-center mb-6">
+                    <div class="text-6xl mb-3">🤖</div>
+                    <div class="robot-active-badge text-white mb-3">ACTIVE</div>
+                    <h4 class="text-xl font-bold text-white mb-2">Robot Shaqeynaya...</h4>
+                    <p class="text-green-400 font-bold text-2xl mb-2" id="robot-timer-display">23:59:59</p>
+                    <p class="text-white text-sm" id="robot-date-display"></p>
+                  </div>
+
+                  <div class="bg-black bg-opacity-30 rounded-xl p-4 mb-4">
+                    <div class="flex justify-between mb-2">
+                      <span class="text-white">Qadarka lacagta lagu maalgaliyey:</span>
+                      <span class="text-white font-bold" id="robot-investment-display">$0.00</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                      <span class="text-white">qiimaha sarakaca suuqa hada waa :</span>
+                      <span class="text-green-400 font-bold" id="robot-reward-display">$0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-white">macamiil ogow waxaa dhici karo i lahelo faaido iyo in laqasaaro :</span>
+                      <span class="text-yellow-400 font-bold" id="robot-total-return">$0.00</span>
+                    </div>
+                  </div>
+
+                  <button id="robot-active-back" class="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700">
+                    Back
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Swap Modal -->
+            <div id="swap-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-6 md:p-8 w-full max-w-md">
+                <div class="flex justify-between items-center mb-6">
+                  <h3 class="text-2xl font-bold text-white">Swap</h3>
+                  <button id="swap-close" class="text-white text-2xl hover:text-red-400">&times;</button>
+                </div>
+
+                <!-- From Currency -->
+                <div class="mb-4">
+                  <label class="block text-white text-sm font-semibold mb-2">From</label>
+                  <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <div class="flex items-center gap-2 mb-2">
+                      <img id="swap-from-icon" src="https://i.postimg.cc/MHRsF2V2/images-(2).png" alt="USDT" class="w-10 h-10" onerror="this.style.display='none';">
+                      <select id="swap-from" class="flex-1 bg-transparent text-white text-lg font-semibold focus:outline-none">
+                        <option value="usdt">USDT</option>
+                        <option value="bitcoin">Bitcoin</option>
+                        <option value="hrsd">HRSD.COIN</option>
+                      </select>
+                    </div>
+                    <input type="number" id="swap-from-amount" step="0.01" class="w-full bg-transparent text-white text-2xl font-bold focus:outline-none" placeholder="0.00">
+                  </div>
+                </div>
+
+                <!-- Swap Icon -->
+                <div class="text-center mb-4">
+                  <div class="text-3xl text-white">⇅</div>
+                </div>
+
+                <!-- To Currency -->
+                <div class="mb-6">
+                  <label class="block text-white text-sm font-semibold mb-2">To</label>
+                  <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                    <div class="flex items-center gap-2 mb-2">
+                      <img id="swap-to-icon" src="https://i.postimg.cc/4d44VSWt/images-(1).png" alt="Bitcoin" class="w-10 h-10" onerror="this.style.display='none';">
+                      <select id="swap-to" class="flex-1 bg-transparent text-white text-lg font-semibold focus:outline-none">
+                        <option value="bitcoin">Bitcoin</option>
+                        <option value="usdt">USDT</option>
+                        <option value="hrsd">HRSD.COIN</option>
+                      </select>
+                    </div>
+                    <div id="swap-to-amount" class="text-white text-2xl font-bold">0.00</div>
+                  </div>
+                </div>
+
+                <div id="swap-message" class="mb-4 text-center text-green-300 text-sm hidden"></div>
+
+                <div class="flex gap-3">
+                  <button id="swap-execute" class="flex-1 bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700">
+                    Swap Now
+                  </button>
+                  <button id="swap-back" class="flex-1 bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700">
+                    Back
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      setupEventListeners();
+    }
+
+    function setupEventListeners() {
+      document.getElementById('signup-form').addEventListener('submit', handleSignup);
+      document.getElementById('login-form').addEventListener('submit', handleLogin);
+      document.getElementById('go-to-login').addEventListener('click', showLogin);
+      document.getElementById('go-to-signup').addEventListener('click', showSignup);
+      
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+      }
+
+      const depositBtn = document.getElementById('deposit-btn');
+      if (depositBtn) {
+        depositBtn.addEventListener('click', () => {
+          document.getElementById('deposit-modal').classList.remove('hidden');
+        });
+      }
+
+      const withdrawalBtn = document.getElementById('withdrawal-btn');
+      if (withdrawalBtn) {
+        withdrawalBtn.addEventListener('click', () => {
+          document.getElementById('withdrawal-modal').classList.remove('hidden');
+        });
+      }
+
+      const ussdBtn = document.getElementById('ussd-btn');
+      if (ussdBtn) {
+        ussdBtn.addEventListener('click', () => {
+          document.getElementById('ussd-modal').classList.remove('hidden');
+        });
+      }
+
+      const tradeBtn = document.getElementById('trade-btn');
+      if (tradeBtn) {
+        tradeBtn.addEventListener('click', () => {
+          document.getElementById('trade-modal').classList.remove('hidden');
+          document.getElementById('buy-balance').textContent = currentUser.balance_usdt.toFixed(2);
+          startLiveTrades();
+          startPriceFluctuation();
+          updateTradingStatus();
+        });
+      }
+
+      const swapBtn = document.getElementById('swap-btn');
+      if (swapBtn) {
+        swapBtn.addEventListener('click', () => {
+          document.getElementById('swap-modal').classList.remove('hidden');
+        });
+      }
+
+      const exchangeBtn = document.getElementById('exchange-btn');
+      if (exchangeBtn) {
+        exchangeBtn.addEventListener('click', () => {
+          document.getElementById('exchange-modal').classList.remove('hidden');
+          resetExchangeSelection();
+        });
+      }
+
+      const whatsappBtn = document.getElementById('whatsapp-btn');
+      if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', () => {
+          document.getElementById('whatsapp-modal').classList.remove('hidden');
+        });
+      }
+
+      const robotBtn = document.getElementById('robot-btn');
+      if (robotBtn) {
+        robotBtn.addEventListener('click', () => {
+          document.getElementById('robot-modal').classList.remove('hidden');
+          if (currentUser && currentUser.robot_active) {
+            showRobotActiveDisplay();
+          } else {
+            showRobotForm();
+          }
+        });
+      }
+
+      // Deposit modal handlers
+      document.querySelectorAll('.payment-method').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.payment-method').forEach(b => {
+            b.classList.remove('border-blue-400');
+            b.classList.add('border-white', 'border-opacity-30');
+          });
+          this.classList.remove('border-white', 'border-opacity-30');
+          this.classList.add('border-blue-400');
+          
+          const method = this.dataset.method;
+          const logoDiv = document.getElementById('deposit-payment-logo');
+          const logoImg = document.getElementById('deposit-logo-img');
+          
+          if (method === 'evcplus') {
+            logoImg.src = 'https://i.postimg.cc/3N7XX7PC/images.png';
+            logoImg.alt = 'EVC Plus';
+          } else {
+            logoImg.src = 'https://i.postimg.cc/4d44VSWt/images-(1).png';
+            logoImg.alt = 'Bitcoin';
+          }
+          logoDiv.classList.remove('hidden');
+        });
+      });
+
+      document.getElementById('deposit-send').addEventListener('click', handleDepositSend);
+      document.getElementById('deposit-back').addEventListener('click', () => {
+        document.getElementById('deposit-modal').classList.add('hidden');
+        document.getElementById('deposit-amount').value = '';
+        document.getElementById('deposit-number').value = '';
+        document.getElementById('deposit-payment-logo').classList.add('hidden');
+      });
+
+      // Withdrawal modal handlers
+      document.querySelectorAll('.withdrawal-method').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.withdrawal-method').forEach(b => {
+            b.classList.remove('border-blue-400');
+            b.classList.add('border-white', 'border-opacity-30');
+          });
+          this.classList.remove('border-white', 'border-opacity-30');
+          this.classList.add('border-blue-400');
+          
+          const method = this.dataset.method;
+          const logoDiv = document.getElementById('withdrawal-payment-logo');
+          const logoImg = document.getElementById('withdrawal-logo-img');
+          
+          if (method === 'evcplus') {
+            logoImg.src = 'https://i.postimg.cc/3N7XX7PC/images.png';
+            logoImg.alt = 'EVC Plus';
+          } else {
+            logoImg.src = 'https://i.postimg.cc/4d44VSWt/images-(1).png';
+            logoImg.alt = 'Bitcoin';
+          }
+          logoDiv.classList.remove('hidden');
+        });
+      });
+
+      document.getElementById('withdrawal-send').addEventListener('click', handleWithdrawalSend);
+      document.getElementById('withdrawal-back').addEventListener('click', () => {
+        document.getElementById('withdrawal-modal').classList.add('hidden');
+        document.getElementById('withdrawal-amount').value = '';
+        document.getElementById('withdrawal-number').value = '';
+        document.getElementById('withdrawal-payment-logo').classList.add('hidden');
+      });
+
+      // USSD modal handlers
+      document.getElementById('ussd-send').addEventListener('click', handleUSSDSend);
+      document.getElementById('ussd-back').addEventListener('click', () => {
+        document.getElementById('ussd-modal').classList.add('hidden');
+        document.getElementById('ussd-amount').value = '';
+        document.getElementById('ussd-number').value = '';
+        document.getElementById('ussd-processing').classList.add('hidden');
+        document.getElementById('ussd-success').classList.add('hidden');
+      });
+
+      // Trade modal handlers
+      document.getElementById('trade-close').addEventListener('click', () => {
+        document.getElementById('trade-modal').classList.add('hidden');
+        stopLiveTrades();
+        stopPriceFluctuation();
+      });
+
+      document.getElementById('trade-back').addEventListener('click', () => {
+        document.getElementById('trade-modal').classList.add('hidden');
+        stopLiveTrades();
+        stopPriceFluctuation();
+      });
+
+      document.getElementById('buy-btn').addEventListener('click', handleBuy);
+      document.getElementById('sell-btn').addEventListener('click', handleSell);
+
+      // Swap modal handlers
+      document.getElementById('swap-close').addEventListener('click', () => {
+        document.getElementById('swap-modal').classList.add('hidden');
+        document.getElementById('swap-from-amount').value = '';
+        document.getElementById('swap-to-amount').textContent = '0.00';
+        document.getElementById('swap-message').classList.add('hidden');
+      });
+
+      document.getElementById('swap-back').addEventListener('click', () => {
+        document.getElementById('swap-modal').classList.add('hidden');
+        document.getElementById('swap-from-amount').value = '';
+        document.getElementById('swap-to-amount').textContent = '0.00';
+        document.getElementById('swap-message').classList.add('hidden');
+      });
+
+      document.getElementById('swap-from-amount').addEventListener('input', calculateSwapAmount);
+      document.getElementById('swap-from').addEventListener('change', () => {
+        updateSwapIcon('from');
+        calculateSwapAmount();
+      });
+      document.getElementById('swap-to').addEventListener('change', () => {
+        updateSwapIcon('to');
+        calculateSwapAmount();
+      });
+      document.getElementById('swap-execute').addEventListener('click', handleSwap);
+
+      // Exchange modal handlers
+      document.querySelectorAll('.exchange-currency').forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (selectedExchangeCurrencies.length < 2 && !this.classList.contains('selected')) {
+            const currency = this.dataset.currency;
+            const currencyImg = this.dataset.img;
+            const currencyName = this.querySelector('p').textContent;
+            
+            this.classList.add('border-blue-400', 'selected');
+            this.style.opacity = '0.5';
+            
+            selectedExchangeCurrencies.push({
+              currency,
+              img: currencyImg,
+              name: currencyName
+            });
+            
+            if (selectedExchangeCurrencies.length === 2) {
+              showExchangeForm();
+            }
+          }
+        });
+      });
+
+      document.getElementById('exchange-close').addEventListener('click', () => {
+        resetExchangeModal();
+      });
+
+      document.getElementById('exchange-back-form').addEventListener('click', () => {
+        resetExchangeSelection();
+      });
+
+      document.getElementById('exchange-send').addEventListener('click', handleExchangeSend);
+
+      // WhatsApp modal handlers
+      document.getElementById('whatsapp-send').addEventListener('click', handleWhatsAppSend);
+      document.getElementById('whatsapp-back').addEventListener('click', () => {
+        document.getElementById('whatsapp-modal').classList.add('hidden');
+        document.getElementById('whatsapp-name').value = '';
+        document.getElementById('whatsapp-message').value = '';
+      });
+
+      // Robot modal handlers
+      document.getElementById('robot-send-btn').addEventListener('click', handleRobotSend);
+      document.getElementById('robot-form-back').addEventListener('click', () => {
+        document.getElementById('robot-modal').classList.add('hidden');
+        document.getElementById('robot-amount-input').value = '';
+        document.getElementById('robot-id-input').value = '';
+        document.getElementById('robot-form-error').classList.add('hidden');
+      });
+
+      document.getElementById('robot-active-back').addEventListener('click', () => {
+        document.getElementById('robot-modal').classList.add('hidden');
+      });
+    }
+
+    function resetExchangeSelection() {
+      document.getElementById('exchange-form').classList.add('hidden');
+      document.getElementById('currency-grid').classList.remove('hidden');
+      selectedExchangeCurrencies = [];
+      document.querySelectorAll('.exchange-currency').forEach(btn => {
+        btn.classList.remove('border-blue-400', 'selected');
+        btn.style.opacity = '1';
+      });
+      document.getElementById('exchange-amount').value = '';
+      document.getElementById('exchange-number').value = '';
+      document.getElementById('exchange-wallet').value = '';
+    }
+
+    function showExchangeForm() {
+      document.getElementById('currency-grid').classList.add('hidden');
+      document.getElementById('exchange-from-img').src = selectedExchangeCurrencies[0].img;
+      document.getElementById('exchange-from-name').textContent = selectedExchangeCurrencies[0].name;
+      document.getElementById('exchange-to-img').src = selectedExchangeCurrencies[1].img;
+      document.getElementById('exchange-to-name').textContent = selectedExchangeCurrencies[1].name;
+      document.getElementById('exchange-form').classList.remove('hidden');
+    }
+
+    function handleWhatsAppSend() {
+      const name = document.getElementById('whatsapp-name').value.trim();
+      const message = document.getElementById('whatsapp-message').value.trim();
+
+      if (!name || !message) {
+        return;
+      }
+
+      const fullMessage = `Waxaad dirtay codsigaaga\n\nMagaca: ${name}\nFariinta: ${message}\n\nWaxaa laguugu soo jawaabayaa sida ugu dhaqsiyaha badan`;
+      const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(fullMessage)}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
+      document.getElementById('whatsapp-modal').classList.add('hidden');
+      document.getElementById('whatsapp-name').value = '';
+      document.getElementById('whatsapp-message').value = '';
+    }
+
+    // Robot Functions
+    function showRobotForm() {
+      document.getElementById('robot-form').classList.remove('hidden');
+      document.getElementById('robot-active-display').classList.add('hidden');
+    }
+
+    function showRobotActiveDisplay() {
+      document.getElementById('robot-form').classList.add('hidden');
+      document.getElementById('robot-active-display').classList.remove('hidden');
+      updateRobotDisplay();
+    }
+
+    function handleRobotSend() {
+      const amountInput = parseFloat(document.getElementById('robot-amount-input').value);
+      const idInput = document.getElementById('robot-id-input').value.trim();
+      const errorEl = document.getElementById('robot-form-error');
+
+      if (!amountInput || !idInput) {
+        errorEl.textContent = 'Fadlan buuxi dhammaan qeybaha';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      if (idInput !== currentUser.user_id) {
+        errorEl.textContent = 'ID code-ka waa qalad';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      const rewardEntry = ROBOT_REWARDS.find(r => r.price === amountInput);
+      if (!rewardEntry) {
+        errorEl.textContent = 'Qadarka ma aha mid sax ah. Tusaale: $1, $5, $10, $20...';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      if (currentUser.balance_usdt < amountInput) {
+        errorEl.textContent = 'Balance kama filna';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      if (currentUser.robot_active) {
+        errorEl.textContent = 'Robot wuu shaqeynayaa. Sugayso ilaa 24 saac dhamaato';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      document.getElementById('robot-send-text').style.display = 'none';
+      document.getElementById('robot-send-spinner').classList.remove('hidden');
+
+      const startTime = new Date();
+      const endTime = new Date(startTime.getTime() + 24 * 60 * 60 * 1000);
+
+      currentUser.balance_usdt = parseFloat(currentUser.balance_usdt) - amountInput;
+      currentUser.robot_active = true;
+      currentUser.robot_amount = amountInput;
+      currentUser.robot_reward = rewardEntry.reward;
+      currentUser.robot_start_time = startTime.toISOString();
+      currentUser.robot_end_time = endTime.toISOString();
+
+      updateUserInLocalStorage(currentUser);
+      
+      document.getElementById('robot-send-text').style.display = 'inline';
+      document.getElementById('robot-send-spinner').classList.add('hidden');
+      
+      document.getElementById('robot-amount-input').value = '';
+      document.getElementById('robot-id-input').value = '';
+      errorEl.classList.add('hidden');
+      showRobotActiveDisplay();
+    }
+
+    function updateRobotDisplay() {
+      if (!currentUser || !currentUser.robot_active) return;
+
+      const now = new Date();
+      const endTime = new Date(currentUser.robot_end_time);
+      const remaining = endTime - now;
+
+      if (remaining <= 0) {
+        return;
+      }
+
+      const hours = Math.floor(remaining / (60 * 60 * 1000));
+      const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
+      const seconds = Math.floor((remaining % (60 * 1000)) / 1000);
+
+      document.getElementById('robot-timer-display').textContent = 
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+      document.getElementById('robot-date-display').textContent = now.toLocaleString('so-SO', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+
+      document.getElementById('robot-investment-display').textContent = `$${currentUser.robot_amount.toFixed(2)}`;
+      document.getElementById('robot-reward-display').textContent = `$${currentUser.robot_reward.toFixed(2)}`;
+      document.getElementById('robot-total-return').textContent = `$${(currentUser.robot_amount + currentUser.robot_reward).toFixed(2)}`;
+    }
+
+    function startRobotChecker() {
+      robotCheckInterval = setInterval(() => {
+        if (!currentUser || !currentUser.robot_active) return;
+
+        const now = new Date();
+        const endTime = new Date(currentUser.robot_end_time);
+
+        if (now >= endTime) {
+          const totalPayout = currentUser.robot_amount + currentUser.robot_reward;
+          
+          currentUser.balance_usdt = parseFloat(currentUser.balance_usdt) + totalPayout;
+          currentUser.robot_active = false;
+          currentUser.robot_amount = 0;
+          currentUser.robot_reward = 0;
+          currentUser.robot_start_time = '';
+          currentUser.robot_end_time = '';
+
+          updateUserInLocalStorage(currentUser);
+          renderDashboard();
+        }
+      }, 1000);
+
+      setInterval(() => {
+        if (currentUser && currentUser.robot_active) {
+          const modalVisible = !document.getElementById('robot-modal').classList.contains('hidden');
+          const activeDisplayVisible = !document.getElementById('robot-active-display').classList.contains('hidden');
+          
+          if (modalVisible && activeDisplayVisible) {
+            updateRobotDisplay();
+          }
+        }
+      }, 1000);
+    }
+
+    function checkRobotStatus() {
+      if (currentUser && currentUser.robot_active) {
+        document.getElementById('robot-status-badge').classList.remove('hidden');
+      } else {
+        document.getElementById('robot-status-badge').classList.add('hidden');
+      }
+    }
+
+    function resetExchangeModal() {
+      document.getElementById('exchange-modal').classList.add('hidden');
+      resetExchangeSelection();
+    }
+
+    function handleExchangeSend() {
+      const amount = document.getElementById('exchange-amount').value;
+      const number = document.getElementById('exchange-number').value;
+      const wallet = document.getElementById('exchange-wallet').value;
+
+      if (!amount || !number || !wallet) {
+        return;
+      }
+
+      const fromCurrency = selectedExchangeCurrencies[0].name;
+      const toCurrency = selectedExchangeCurrencies[1].name;
+
+      const message = `Waxaan isku badalanayaa ${fromCurrency} iyo ${toCurrency}\nQadarka lacagta: $${amount}\nLacagta aan rabo in loo badalo waa ${toCurrency}\nIigu soo dir: ${wallet}`;
+      
+      const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
+      resetExchangeModal();
+    }
+
+    function handleDepositSend() {
+      const amount = document.getElementById('deposit-amount').value;
+      const number = document.getElementById('deposit-number').value;
+
+      if (!amount || !number) {
+        return;
+      }
+
+      const message = `Waxaan kusoo shubtay $${amount} waxaana kasoo diray ${number}`;
+      const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
+      currentUser.balance_usdt = parseFloat(currentUser.balance_usdt) + parseFloat(amount);
+      updateUserInLocalStorage(currentUser);
+
+      document.getElementById('deposit-modal').classList.add('hidden');
+      document.getElementById('deposit-amount').value = '';
+      document.getElementById('deposit-number').value = '';
+      document.getElementById('deposit-payment-logo').classList.add('hidden');
+    }
+
+    function handleWithdrawalSend() {
+      const amount = document.getElementById('withdrawal-amount').value;
+      const number = document.getElementById('withdrawal-number').value;
+
+      if (!amount || !number) {
+        return;
+      }
+
+      if (parseFloat(amount) > currentUser.balance_usdt) {
+        return;
+      }
+
+      const message = `Waxaan la baxay $${amount} waxaana kula baxay ${number}`;
+      const whatsappUrl = `https://wa.me/618877686?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
+      currentUser.balance_usdt = parseFloat(currentUser.balance_usdt) - parseFloat(amount);
+      updateUserInLocalStorage(currentUser);
+
+      document.getElementById('withdrawal-modal').classList.add('hidden');
+      document.getElementById('withdrawal-amount').value = '';
+      document.getElementById('withdrawal-number').value = '';
+      document.getElementById('withdrawal-payment-logo').classList.add('hidden');
+    }
+
+    function handleUSSDSend() {
+      const amount = document.getElementById('ussd-amount').value;
+      const number = document.getElementById('ussd-number').value;
+
+      if (!amount || !number) {
+        return;
+      }
+
+      document.getElementById('ussd-processing').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('ussd-processing').classList.add('hidden');
+        document.getElementById('ussd-success').classList.remove('hidden');
+
+        setTimeout(() => {
+          const ussdCode = `*712*618877686*${amount}#`;
+          window.open(`tel:${ussdCode}`, '_self');
+
+          setTimeout(() => {
+            document.getElementById('ussd-modal').classList.add('hidden');
+            document.getElementById('ussd-amount').value = '';
+            document.getElementById('ussd-number').value = '';
+            document.getElementById('ussd-success').classList.add('hidden');
+          }, 1000);
+        }, 1000);
+      }, 1000);
+    }
+
+    function handleSignup(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('signup-name').value.trim();
+      const number = document.getElementById('signup-number').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const confirm = document.getElementById('signup-confirm').value;
+
+      if (password !== confirm) {
+        showError('signup', 'Passwords-isku mid kadhik');
+        return;
+      }
+
+      const existingUser = allUsers.find(u => u.name === name);
+      if (existingUser) {
+        showError('signup', 'Magacan waa la isticmaalay');
+        return;
+      }
+
+      showLoading('signup', true);
+      hideError('signup');
+
+      const userId = `ID${userIdCounter++}`;
+      const newUser = {
+        user_id: userId,
+        name,
+        number,
+        password,
+        balance_usdt: 0.00,
+        balance_hrsd: 0.000,
+        balance_bitcoin: 0.00000,
+        created_at: new Date().toISOString(),
+        robot_active: false,
+        robot_amount: 0,
+        robot_reward: 0,
+        robot_start_time: '',
+        robot_end_time: ''
+      };
+
+      allUsers.push(newUser);
+      saveToLocalStorage();
+
+      showLoading('signup', false);
+      document.getElementById('signup-success').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('signup-success').classList.add('hidden');
+        document.getElementById('signup-form').reset();
+        showLogin();
+      }, 2000);
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('login-name').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      const user = allUsers.find(u => u.name === name && u.password === password);
+
+      if (!user) {
+        showError('login', 'Magaca ama password-ka waa qalad');
+        return;
+      }
+
+      showLoading('login', true);
+      hideError('login');
+
+      setTimeout(() => {
+        showLoading('login', false);
+        document.getElementById('login-success').classList.remove('hidden');
+        
+        setTimeout(() => {
+          document.getElementById('login-success').classList.add('hidden');
+          currentUser = user;
+          showDashboard();
+        }, 2000);
+      }, 500);
+    }
+
+    function showDashboard() {
+      document.getElementById('signup-view').style.display = 'none';
+      document.getElementById('login-view').style.display = 'none';
+      document.getElementById('dashboard-view').style.display = 'block';
+      renderDashboard();
+      checkRobotStatus();
+    }
+
+    function renderDashboard() {
+      if (!currentUser) return;
+
+      document.getElementById('user-id-display').textContent = currentUser.user_id;
+      document.getElementById('user-name-display').textContent = currentUser.name;
+      document.getElementById('balance-usdt').textContent = currentUser.balance_usdt.toFixed(2);
+      document.getElementById('balance-hrsd').textContent = currentUser.balance_hrsd.toFixed(3);
+      document.getElementById('balance-bitcoin').textContent = currentUser.balance_bitcoin.toFixed(5);
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      document.getElementById('login-form').reset();
+      showLogin();
+    }
+
+    function showSignup() {
+      document.getElementById('login-view').classList.add('hidden');
+      document.getElementById('signup-view').classList.remove('hidden');
+      document.getElementById('dashboard-view').style.display = 'none';
+    }
+
+    function showLogin() {
+      document.getElementById('signup-view').classList.add('hidden');
+      document.getElementById('login-view').classList.remove('hidden');
+      document.getElementById('dashboard-view').style.display = 'none';
+    }
+
+    function showLoading(form, show) {
+      const btnText = document.getElementById(`${form}-btn-text`);
+      const spinner = document.getElementById(`${form}-spinner`);
+      
+      if (show) {
+        btnText.style.display = 'none';
+        spinner.classList.remove('hidden');
+      } else {
+        btnText.style.display = 'inline';
+        spinner.classList.add('hidden');
+      }
+    }
+
+    function showError(form, message) {
+      const errorEl = document.getElementById(`${form}-error`);
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+    }
+
+    function hideError(form) {
+      document.getElementById(`${form}-error`).classList.add('hidden');
+    }
+
+    function updateUserInLocalStorage(user) {
+      const userIndex = allUsers.findIndex(u => u.user_id === user.user_id);
+      if (userIndex !== -1) {
+        allUsers[userIndex] = user;
+        saveToLocalStorage();
+      }
+    }
+
+    // Live Trade Functions
+    function startLiveTrades() {
+      const liveTradesContainer = document.getElementById('live-trades');
+      const names = ['Ahmed', 'Fatima', 'Mohamed', 'Amina', 'Hassan', 'Zahra', 'Ali', 'Khadija', 'Omar', 'Aisha'];
+      
+      const trades = [];
+      for (let i = 0; i < 110; i++) {
+        trades.push(generateRandomTrade(names));
+      }
+      
+      trades.forEach(trade => {
+        liveTradesContainer.insertAdjacentHTML('afterbegin', trade);
+      });
+
+      liveTradesInterval = setInterval(() => {
+        const newTrade = generateRandomTrade(names);
+        liveTradesContainer.insertAdjacentHTML('afterbegin', newTrade);
+        
+        const allTrades = liveTradesContainer.children;
+        if (allTrades.length > 120) {
+          liveTradesContainer.removeChild(allTrades[allTrades.length - 1]);
+        }
+      }, 2000);
+    }
+
+    function generateRandomTrade(names) {
+      const name = names[Math.floor(Math.random() * names.length)];
+      const isUp = Math.random() > 0.5;
+      const amount = (Math.random() * 100 + 1).toFixed(3);
+      const price = currentHrsdPrice.toFixed(4);
+      const arrow = isUp ? '▲' : '▼';
+      const color = isUp ? 'text-green-400' : 'text-red-400';
+      
+      return `
+        <div class="flex items-center justify-between py-2 border-b border-white border-opacity-10">
+          <div class="flex items-center gap-2">
+            <img src="https://i.postimg.cc/MHRsF2V2/images-(2).png" alt="USDT" class="w-3 h-3" onerror="this.style.display='none';">
+            <img src="https://i.postimg.cc/Hs8HTV40/IMG-.-497.jpg" alt="HRSD" class="w-3 h-3" onerror="this.style.display='none';">
+            <span class="text-white text-sm">${name}</span>
+          </div>
+          <div class="text-right">
+            <p class="${color} text-sm font-bold">${arrow} ${amount} HRSD</p>
+            <p class="text-gray-400 text-xs">@ $${price}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function stopLiveTrades() {
+      if (liveTradesInterval) {
+        clearInterval(liveTradesInterval);
+        liveTradesInterval = null;
+      }
+      document.getElementById('live-trades').innerHTML = '';
+    }
+
+    // Price Fluctuation Functions
+    function startPriceFluctuation() {
+      updatePriceDisplay();
+      
+      priceFluctuationInterval = setInterval(() => {
+        const changePercent = (Math.random() * 4 - 2) / 100;
+        const oldPrice = currentHrsdPrice;
+        currentHrsdPrice = currentHrsdPrice * (1 + changePercent);
+        
+        if (currentHrsdPrice < 0.08) currentHrsdPrice = 0.08;
+        if (currentHrsdPrice > 0.20) currentHrsdPrice = 0.20;
+        
+        updatePriceDisplay();
+        
+        if (currentUser && currentUser.balance_hrsd > 0 && isTrading) {
+          const priceChange = currentHrsdPrice - oldPrice;
+          const percentChange = priceChange / oldPrice;
+          
+          if (priceChange > 0) {
+            const profit = currentUser.balance_hrsd * percentChange * 0.75;
+            currentUser.balance_hrsd = parseFloat(currentUser.balance_hrsd) + profit;
+            updateUserInLocalStorage(currentUser);
+            updateTradingStatus();
+          } else if (priceChange < 0) {
+            const loss = currentUser.balance_hrsd * Math.abs(percentChange) * 0.65;
+            currentUser.balance_hrsd = Math.max(0, parseFloat(currentUser.balance_hrsd) - loss);
+            updateUserInLocalStorage(currentUser);
+            updateTradingStatus();
+          }
+        }
+      }, 3000);
+    }
+
+    function stopPriceFluctuation() {
+      if (priceFluctuationInterval) {
+        clearInterval(priceFluctuationInterval);
+        priceFluctuationInterval = null;
+      }
+      isTrading = false;
+    }
+
+    function updatePriceDisplay() {
+      document.getElementById('current-price').textContent = `$${currentHrsdPrice.toFixed(4)}`;
+      
+      const percentChange = ((currentHrsdPrice - 0.12) / 0.12) * 100;
+      const priceChangeEl = document.getElementById('price-change');
+      
+      if (percentChange > 0) {
+        priceChangeEl.textContent = `+${percentChange.toFixed(2)}%`;
+        priceChangeEl.className = 'text-green-400 font-bold';
+      } else {
+        priceChangeEl.textContent = `${percentChange.toFixed(2)}%`;
+        priceChangeEl.className = 'text-red-400 font-bold';
+      }
+    }
+
+    function updateTradingStatus() {
+      if (currentUser && currentUser.balance_hrsd > 0) {
+        isTrading = true;
+        document.getElementById('trading-status').classList.remove('hidden');
+        document.getElementById('hrsd-holdings').textContent = currentUser.balance_hrsd.toFixed(3) + ' HRSD';
+        
+        const currentValue = currentUser.balance_hrsd * currentHrsdPrice;
+        document.getElementById('current-value-usd').textContent = '$' + currentValue.toFixed(2);
+      } else {
+        isTrading = false;
+        document.getElementById('trading-status').classList.add('hidden');
+      }
+    }
+
+    function handleBuy() {
+      const buyAmountInput = document.getElementById('buy-amount').value;
+      
+      if (!buyAmountInput || parseFloat(buyAmountInput) <= 0) {
+        return;
+      }
+
+      const buyAmount = parseFloat(buyAmountInput);
+      
+      if (buyAmount > currentUser.balance_usdt) {
+        return;
+      }
+
+      const hrsdAmount = buyAmount / currentHrsdPrice;
+      
+      currentUser.balance_usdt = parseFloat(currentUser.balance_usdt) - buyAmount;
+      currentUser.balance_hrsd = parseFloat(currentUser.balance_hrsd) + hrsdAmount;
+      
+      updateUserInLocalStorage(currentUser);
+      document.getElementById('buy-amount').value = '';
+      document.getElementById('buy-balance').textContent = currentUser.balance_usdt.toFixed(2);
+      updateTradingStatus();
+    }
+
+    function handleSell() {
+      if (!currentUser || currentUser.balance_hrsd <= 0) {
+        return;
+      }
+
+      const usdtAmount = currentUser.balance_hrsd * currentHrsdPrice;
+      
+      currentUser.balance_usdt = parseFloat(currentUser.balance_usdt) + usdtAmount;
+      currentUser.balance_hrsd = 0;
+      
+      updateUserInLocalStorage(currentUser);
+      document.getElementById('buy-balance').textContent = currentUser.balance_usdt.toFixed(2);
+      updateTradingStatus();
+      isTrading = false;
+    }
+
+    // Swap Functions
+    const swapRates = {
+      usdt: 1,
+      bitcoin: 45000,
+      hrsd: 0.12
+    };
+
+    const swapIcons = {
+      usdt: 'https://i.postimg.cc/MHRsF2V2/images-(2).png',
+      bitcoin: 'https://i.postimg.cc/4d44VSWt/images-(1).png',
+      hrsd: 'https://i.postimg.cc/Hs8HTV40/IMG-.-497.jpg'
+    };
+
+    function updateSwapIcon(type) {
+      const currency = document.getElementById(`swap-${type}`).value;
+      const icon = document.getElementById(`swap-${type}-icon`);
+      icon.src = swapIcons[currency];
+      icon.alt = getCurrencyName(currency);
+    }
+
+    function calculateSwapAmount() {
+      const fromCurrency = document.getElementById('swap-from').value;
+      const toCurrency = document.getElementById('swap-to').value;
+      const fromAmount = parseFloat(document.getElementById('swap-from-amount').value) || 0;
+      
+      if (fromAmount > 0) {
+        const usdValue = fromAmount * swapRates[fromCurrency];
+        const toAmount = usdValue / swapRates[toCurrency];
+        document.getElementById('swap-to-amount').textContent = toAmount.toFixed(5);
+      } else {
+        document.getElementById('swap-to-amount').textContent = '0.00';
+      }
+    }
+
+    function getCurrencyName(code) {
+      const names = {
+        usdt: 'USDT',
+        bitcoin: 'Bitcoin',
+        hrsd: 'HRSD.COIN'
+      };
+      return names[code];
+    }
+
+    function handleSwap() {
+      const fromCurrency = document.getElementById('swap-from').value;
+      const toCurrency = document.getElementById('swap-to').value;
+      const fromAmount = parseFloat(document.getElementById('swap-from-amount').value);
+      
+      if (!fromAmount || fromAmount <= 0) {
+        return;
+      }
+
+      let hasBalance = false;
+      if (fromCurrency === 'usdt' && currentUser.balance_usdt >= fromAmount) hasBalance = true;
+      if (fromCurrency === 'bitcoin' && currentUser.balance_bitcoin >= fromAmount) hasBalance = true;
+      if (fromCurrency === 'hrsd' && currentUser.balance_hrsd >= fromAmount) hasBalance = true;
+
+      if (!hasBalance) {
+        return;
+      }
+
+      const usdValue = fromAmount * swapRates[fromCurrency];
+      const toAmount = usdValue / swapRates[toCurrency];
+      
+      if (fromCurrency === 'usdt') currentUser.balance_usdt -= fromAmount;
+      if (fromCurrency === 'bitcoin') currentUser.balance_bitcoin -= fromAmount;
+      if (fromCurrency === 'hrsd') currentUser.balance_hrsd -= fromAmount;
+      
+      if (toCurrency === 'usdt') currentUser.balance_usdt += toAmount;
+      if (toCurrency === 'bitcoin') currentUser.balance_bitcoin += toAmount;
+      if (toCurrency === 'hrsd') currentUser.balance_hrsd += toAmount;
+      
+      updateUserInLocalStorage(currentUser);
+      
+      const fromName = getCurrencyName(fromCurrency);
+      const toName = getCurrencyName(toCurrency);
+      const message = `Waxaad kala badalatay ${fromAmount.toFixed(2)} ${fromName} iyo ${toAmount.toFixed(5)} ${toName}`;
+      
+      document.getElementById('swap-message').textContent = message;
+      document.getElementById('swap-message').classList.remove('hidden');
+      
+      setTimeout(() => {
+        document.getElementById('swap-modal').classList.add('hidden');
+        document.getElementById('swap-from-amount').value = '';
+        document.getElementById('swap-to-amount').textContent = '0.00';
+        document.getElementById('swap-message').classList.add('hidden');
+      }, 3000);
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ba072c6b757d821',t:'MTc2Nzc1NzM4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
