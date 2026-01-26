@@ -1,0 +1,6 @@
+
+{
+  "name": "Horseed Poultry Marketplace",
+  "description": "A premium digital marketplace for poultry products, featuring farm-fresh eggs, chicks, feed, and equipment with smart search capabilities.",
+  "requestFramePermissions": ["camera", "microphone"]
+}
