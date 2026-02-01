@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>horseed tool - Iibka & Cilad-bixinta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f8fafc;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #22c55e;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .scan-line {
+            height: 2px;
+            background: #22c55e;
+            position: absolute;
+            width: 100%;
+            animation: scanMove 2s infinite linear;
+        }
+
+        @keyframes scanMove {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Navigation -->
+    <nav class="bg-blue-700 text-white p-4 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-tighter cursor-pointer" onclick="showPage('home')">HORSEED.TOOL<span class="text-green-400">HUB</span></h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" onclick="showPage('home')" class="hover:text-green-300">Home</a>
+                <a href="#" onclick="showPage('about')" class="hover:text-green-300">About</a>
+                <a href="#" onclick="openWhatsApp()" class="hover:text-green-300">Contact</a>
+                <button onclick="showPage('signup')" class="bg-green-500 px-4 py-1 rounded-full hover:bg-green-600 transition">Sign Up</button>
+            </div>
+            <button class="md:hidden text-2xl" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <!-- Content Sections -->
+    <main id="main-content">
+        
+        <!-- Home Page -->
+        <section id="home" class="page-section">
+            <div class="relative h-[500px] flex items-center justify-center text-center text-white">
+                <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="absolute inset-0 w-full h-full object-cover brightness-50" alt="Banner">
+                <div class="relative z-10 px-4">
+                    <h2 class="text-5xl font-extrabold mb-4">Dayactirka & Iibka Mobile-lada</h2>
+                    <p class="text-xl mb-8 max-w-2xl mx-auto">Waxaan halkan kuu haynaa dhammaan adeegyada Apple, Samsung, Infinix, Tecno iyo qalab kasta oo mobile ah.</p>
+                    <div class="space-x-4">
+                        <button onclick="showPage('signup')" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold">Ku Biir Hadda</button>
+                        <button onclick="showPage('login')" class="bg-white text-blue-700 px-8 py-3 rounded-lg font-bold border-2 border-white hover:bg-transparent hover:text-white transition">Gali Akoonka</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="container mx-auto py-16 px-4">
+                <h3 class="text-3xl font-bold text-center mb-12">Maxaan Qabannaa?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-md text-center">
+                        <i class="fas fa-tools text-5xl text-blue-600 mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2">Hardware Repair</h4>
+                        <p class="text-gray-600">Beddelista shaashadaha, baytariyada, iyo ciladaha boorka.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md text-center">
+                        <i class="fas fa-code text-5xl text-blue-600 mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2">Software Solution</h4>
+                        <p class="text-gray-600">Furo qufulka, ku shubista system-ka, iyo ciladaha app-ka.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md text-center">
+                        <i class="fas fa-mobile-alt text-5xl text-blue-600 mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2">Mobile Sales</h4>
+                        <p class="text-gray-600">Iibka mobile-lo cusub iyo kuwo la isticmaalay oo tayo leh.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Page -->
+        <section id="about" class="page-section hidden py-20 px-4">
+            <div class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-xl">
+                <h2 class="text-4xl font-bold text-blue-700 mb-6 border-b-4 border-green-400 inline-block">Nagu Saabsan</h2>
+                <div class="space-y-6 text-gray-700 leading-relaxed text-lg">
+                    <p>
+                        Ku soo dhawaada <strong>MOBILE HUB</strong>, oo ah xarunta ugu horreysa ee adeegyada casriga ah ee talefannada gacanta. Waxaan nahay khubaro ku takhasustay iibinta iyo cilad-bixinta dhammaan noocyada kala duwan ee mobile-lada sida Apple, Samsung, Infinix, Tecno, Oppo, Redmi, LG, Nokia, iyo kuwo kale oo badan.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-8 mt-8">
+                        <div class="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-600">
+                            <h3 class="font-bold text-xl text-blue-800 mb-2">Cilad-bixinta Hardware</h3>
+                            <p>Waxaan kuu haysanaa qalabkii ugu dambeeyay ee lagu farsameeyo matoorada mobile-lada, beddelista shaashadaha (Screens), xallinta ciladaha korontada (IC), iyo dayactirka guud ee hardware-ka.</p>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-xl border-l-4 border-green-600">
+                            <h3 class="font-bold text-xl text-green-800 mb-2">Adeegyada Software</h3>
+                            <p>Khubaradayada software-ku waxay kuu qabanayaan ku shubista nidaamka (OS), furista qufulada (Unlocking), xallinta ciladaha system-ka, iyo cusboonaysiinta barnaamijyada.</p>
+                        </div>
+                    </div>
+
+                    <p class="mt-6">
+                        Hadafkayagu waa inaan macaamiishayada u soo bandhigno adeeg tayo sare leh, dammaanad buuxda leh, iyo qiimo macquul ah. Haddii aad u baahan tahay inaad iibsato mobile cusub ama aad midkaaga cilad-ka-saarto, MOBILE HUB waa doorashadaada koowaad.
+                    </p>
+                    
+                    <button onclick="openWhatsApp()" class="mt-4 bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 font-bold transition">Nala Soo Xidhiidh Hadda</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Signup Page -->
+        <section id="signup" class="page-section hidden py-20 px-4">
+            <div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-2xl">
+                <h2 class="text-3xl font-bold text-center mb-6 text-blue-700">Abuur Akoon Cusub</h2>
+                <div class="space-y-4">
+                    <input type="text" id="reg-user" placeholder="Username" class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400">
+                    <input type="email" id="reg-email" placeholder="Gmail" class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400">
+                    <input type="password" id="reg-pass" placeholder="Password" class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400">
+                    <button onclick="handleAuth('signup')" class="w-full bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700">Saxiix</button>
+                </div>
+                <p class="mt-4 text-center">Haddaad leedahay akoon? <a href="#" onclick="showPage('login')" class="text-blue-600">Soo gal</a></p>
+            </div>
+        </section>
+
+        <!-- Login Page -->
+        <section id="login" class="page-section hidden py-20 px-4">
+            <div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-2xl">
+                <h2 class="text-3xl font-bold text-center mb-6 text-blue-700">Soo Gali Akoonka</h2>
+                <div class="space-y-4">
+                    <input type="text" id="log-user" placeholder="Username" class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400">
+                    <input type="password" id="log-pass" placeholder="Password" class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400">
+                    <button onclick="handleAuth('login')" class="w-full bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700">Login</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="page-section hidden py-10 px-4">
+            <div class="container mx-auto">
+                <div class="bg-blue-800 text-white p-8 rounded-3xl mb-10 shadow-xl relative overflow-hidden">
+                    <h2 class="text-4xl font-bold relative z-10">Kusoo Dhawaaw Dashboard-ka!</h2>
+                    <p class="text-blue-200 mt-2 relative z-10">Dooro adeegga aad rabto inaad fuliso maanta.</p>
+                    <div class="absolute top-0 right-0 p-10 opacity-10"><i class="fas fa-user-cog text-9xl"></i></div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <button onclick="openMarket()" class="flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg hover:bg-blue-50 transition transform hover:-translate-y-1">
+                        <i class="fas fa-shopping-cart text-4xl text-blue-600 mb-4"></i>
+                        <span class="font-bold text-gray-700">MARKET</span>
+                    </button>
+                    <button onclick="showScan()" class="flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg hover:bg-green-50 transition transform hover:-translate-y-1">
+                        <i class="fas fa-search-plus text-4xl text-green-600 mb-4"></i>
+                        <span class="font-bold text-gray-700">SCAN</span>
+                    </button>
+                    <button onclick="openWhatsApp()" class="flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg hover:bg-orange-50 transition transform hover:-translate-y-1">
+                        <i class="fas fa-headset text-4xl text-orange-600 mb-4"></i>
+                        <span class="font-bold text-gray-700">SUPPORT</span>
+                    </button>
+                    <button onclick="logout()" class="flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg hover:bg-red-50 transition transform hover:-translate-y-1">
+                        <i class="fas fa-sign-out-alt text-4xl text-red-600 mb-4"></i>
+                        <span class="font-bold text-gray-700">LOGOUT</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Page -->
+        <section id="market" class="page-section hidden py-10 px-4">
+            <div class="container mx-auto">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-3xl font-bold">Market-ka Mobile-lada</h2>
+                    <button onclick="showPage('dashboard')" class="bg-gray-200 px-4 py-2 rounded-lg">Back</button>
+                </div>
+
+                <!-- Market Tabs -->
+                <div class="flex space-x-2 mb-8 overflow-x-auto pb-2">
+                    <button onclick="showSubMarket('mobiles')" class="bg-blue-600 text-white px-6 py-2 rounded-full whitespace-nowrap">Dalbo Mobile-lada</button>
+                    <button onclick="showSubMarket('software')" class="bg-purple-600 text-white px-6 py-2 rounded-full whitespace-nowrap">Dalbo Software</button>
+                    <button onclick="showSubMarket('hardware')" class="bg-orange-600 text-white px-6 py-2 rounded-full whitespace-nowrap">Dalbo Hardware</button>
+                    <button onclick="showSubMarket('accessories')" class="bg-green-600 text-white px-6 py-2 rounded-full whitespace-nowrap">Qalab Kale</button>
+                </div>
+
+                <!-- Sub Market Content -->
+                <div id="sub-market-content" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <!-- Dynamic content will load here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Scan Page -->
+        <section id="scan-page" class="page-section hidden py-10 px-4">
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-2xl text-center">
+                <h2 class="text-2xl font-bold mb-6">Scan Hub Tool</h2>
+                
+                <div id="scan-initial">
+                    <div class="relative w-48 h-48 mx-auto mb-6 bg-gray-100 rounded-lg overflow-hidden border-4 border-gray-300">
+                        <img src="https://i.postimg.cc/QtzD99jx/photo-2026-01-31-21-56-36.jpg" alt="USB Tool" class="w-full h-full object-cover p-2">
+                        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-[10px] p-1">50 PIX TOOL</div>
+                    </div>
+                    <p class="text-red-600 font-bold mb-6">GELI USB STEM.TOOL</p>
+                    <button onclick="startScanning()" class="bg-green-600 text-white px-10 py-3 rounded-full font-bold">SEND</button>
+                    <button onclick="showPage('dashboard')" class="block mx-auto mt-4 text-gray-500">Back</button>
+                </div>
+
+                <div id="scanning-process" class="hidden">
+                    <div class="relative w-full h-64 bg-black rounded-lg mb-4 overflow-hidden">
+                        <div class="scan-line"></div>
+                        <div id="scan-log" class="text-green-500 text-left p-4 text-xs font-mono h-full overflow-y-auto">
+                            <!-- Logs will appear here -->
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                        <div id="scan-progress" class="bg-green-600 h-2.5 rounded-full w-0 transition-all duration-500"></div>
+                    </div>
+                    <p id="timer-display" class="text-blue-600 font-bold text-xl">02:00</p>
+                </div>
+
+                <div id="scan-result" class="hidden">
+                    <div class="bg-yellow-50 border-2 border-yellow-200 p-6 rounded-xl text-left mb-6">
+                        <h3 class="text-xl font-bold text-yellow-800 mb-2">Scan Finished!</h3>
+                        <p class="text-lg mb-4">Falanqeyn lacageed: <span class="text-green-600 font-bold">$1.00</span></p>
+                        <button onclick="showPayment()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold">XAQUIIJI</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modals / Overlays -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-70 z-[100] hidden items-center justify-center">
+        <!-- Purchase Modal -->
+        <div id="purchase-modal" class="bg-white p-8 rounded-2xl max-w-sm w-full hidden">
+            <h3 class="text-2xl font-bold mb-4">Gali Faahfaahinta</h3>
+            <input type="text" id="p-name" placeholder="Magacaaga" class="w-full p-3 border rounded-lg mb-3">
+            <input type="number" id="p-money" placeholder="Lacagta" class="w-full p-3 border rounded-lg mb-3">
+            <input type="text" id="p-number" placeholder="Mobile Number" class="w-full p-3 border rounded-lg mb-4">
+            <div class="flex space-x-2">
+                <button onclick="closeModal()" class="flex-1 bg-gray-300 py-3 rounded-lg">Back</button>
+                <button onclick="confirmOrder()" class="flex-1 bg-green-600 text-white py-3 rounded-lg">Send</button>
+            </div>
+        </div>
+
+        <!-- Upload Modal (Hardware/Software) -->
+        <div id="upload-modal" class="bg-white p-8 rounded-2xl max-w-sm w-full hidden">
+            <h3 id="upload-title" class="text-2xl font-bold mb-4">Upload</h3>
+            <div class="border-2 border-dashed border-gray-300 p-6 text-center rounded-xl mb-4">
+                <i class="fas fa-cloud-upload-alt text-3xl text-gray-400"></i>
+                <p class="text-sm text-gray-500 mt-2">Upload Screenshot</p>
+                <input type="file" class="hidden" id="file-input">
+            </div>
+            <textarea id="upload-desc" placeholder="Faahfaahin ku qor..." class="w-full p-3 border rounded-lg h-32 mb-4"></textarea>
+            <div class="flex space-x-2">
+                <button onclick="closeModal()" class="flex-1 bg-gray-300 py-3 rounded-lg">Back</button>
+                <button onclick="confirmOrder('upload')" class="flex-1 bg-green-600 text-white py-3 rounded-lg">Send</button>
+            </div>
+        </div>
+
+        <!-- Loading Spinner Overlay -->
+        <div id="status-spinner" class="hidden flex-col items-center">
+            <div class="loader"></div>
+            <p class="text-white mt-4 font-bold">Fadlan sug...</p>
+        </div>
+    </div>
+
+    <!-- Final Payment Prompt -->
+    <div id="payment-prompt" class="fixed inset-0 bg-black bg-opacity-90 z-[200] hidden flex-col items-center justify-center p-6 text-white text-center">
+        <h2 class="text-3xl font-bold mb-4 text-green-400">LACAG BIXIN</h2>
+        <p class="mb-6">Gali inta lacag ee aad bixinayso ($1):</p>
+        <input type="number" id="final-amount" class="text-black p-3 rounded-lg w-full max-w-xs mb-4" placeholder="Amount">
+        <div class="flex space-x-4">
+            <button onclick="location.reload()" class="bg-gray-600 px-8 py-3 rounded-lg">Back</button>
+            <button onclick="triggerUSSD()" class="bg-green-600 px-8 py-3 rounded-lg font-bold">XAQUIIJI</button>
+        </div>
+    </div>
+
+    <script>
+        const WHATSAPP_NUM = "618877686";
+        let currentUser = null;
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function openWhatsApp() {
+            window.open(`https://wa.me/252${WHATSAPP_NUM}?text=Salaan Mobile Hub, waxaan rabaa inaan idinla soo xidhiidho oo aan wax idin waydiiyo.`, '_blank');
+        }
+
+        function handleAuth(type) {
+            const user = type === 'signup' ? document.getElementById('reg-user').value : document.getElementById('log-user').value;
+            const pass = type === 'signup' ? document.getElementById('reg-pass').value : document.getElementById('log-pass').value;
+
+            if(user && pass) {
+                currentUser = user;
+                showPage('dashboard');
+            } else {
+                alert("Fadlan buuxi meelaha bannaan");
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            showPage('home');
+        }
+
+        function openMarket() {
+            showPage('market');
+            showSubMarket('mobiles');
+        }
+
+        function showSubMarket(type) {
+            const container = document.getElementById('sub-market-content');
+            container.innerHTML = '';
+            
+            if(type === 'mobiles') {
+                for(let i=1; i<=100; i++) {
+                    const price = Math.floor(Math.random() * 500) + 100;
+                    const brands = ['iPhone', 'Samsung', 'Tecno', 'Infinix', 'Oppo', 'Redmi'];
+                    const brand = brands[Math.floor(Math.random() * brands.length)];
+                    container.innerHTML += `
+                        <div class="bg-white p-3 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer" onclick="openPurchaseModal('${brand} ${i}', ${price})">
+                            <img src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=300&h=400&fit=crop" class="rounded-lg mb-2" alt="phone">
+                            <h5 class="font-bold text-sm">${brand} Model-${i}</h5>
+                            <p class="text-green-600 font-bold">$${price}</p>
+                            <button class="w-full mt-2 bg-blue-100 text-blue-700 py-1 rounded text-xs">Dalbo</button>
+                        </div>
+                    `;
+                }
+            } else if(type === 'software' || type === 'hardware') {
+                document.getElementById('upload-title').innerText = `Dalbo ${type.toUpperCase()}`;
+                openUploadModal();
+            }
+        }
+
+        function openPurchaseModal(name, price) {
+            document.getElementById('overlay').classList.remove('hidden');
+            document.getElementById('overlay').classList.add('flex');
+            document.getElementById('purchase-modal').classList.remove('hidden');
+        }
+
+        function openUploadModal() {
+            document.getElementById('overlay').classList.remove('hidden');
+            document.getElementById('overlay').classList.add('flex');
+            document.getElementById('upload-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('overlay').classList.add('hidden');
+            document.getElementById('overlay').classList.remove('flex');
+            document.getElementById('purchase-modal').classList.add('hidden');
+            document.getElementById('upload-modal').classList.add('hidden');
+        }
+
+        function confirmOrder(type = 'purchase') {
+            document.getElementById('purchase-modal').classList.add('hidden');
+            document.getElementById('upload-modal').classList.add('hidden');
+            document.getElementById('status-spinner').classList.remove('hidden');
+            document.getElementById('status-spinner').classList.add('flex');
+
+            let delay = 3000;
+            if(type === 'upload' && document.getElementById('upload-title').innerText.includes('SOFTWARE')) {
+                delay = 5000;
+            }
+
+            setTimeout(() => {
+                document.getElementById('overlay').classList.add('hidden');
+                document.getElementById('status-spinner').classList.add('hidden');
+                window.open(`https://wa.me/252${WHATSAPP_NUM}?text=Salaan, waxaan rabaa inaan dalbado adeeg`, '_blank');
+            }, delay);
+        }
+
+        // Scan Logic
+        function showScan() {
+            showPage('scan-page');
+            document.getElementById('scan-initial').classList.remove('hidden');
+            document.getElementById('scanning-process').classList.add('hidden');
+            document.getElementById('scan-result').classList.add('hidden');
+        }
+
+        function startScanning() {
+            document.getElementById('scan-initial').classList.add('hidden');
+            document.getElementById('scanning-process').classList.remove('hidden');
+            
+            const log = document.getElementById('scan-log');
+            const progress = document.getElementById('scan-progress');
+            const timer = document.getElementById('timer-display');
+            
+            let time = 120; // 2 minutes
+            const messages = [
+                "1. Qalabka Muhiimka ah (Core Components)",
+                "Screen / Display (Shaashad) [LCD / OLED / AMOLED]",
+                "Glass (Gorilla Glass iwm)",
+                "Touch Screen (Taabashada)",
+                "Digitizer (taabashada dareema)",
+                "Battery (Baytari) [Li-ion ama Li-polymer]",
+                "Motherboard / Mainboard (Maskaxda taleefanka)",
+                "Processor / CPU [Qualcomm / MediaTek / Apple]",
+                "RAM (Xasuus ku meel gaar ah)",
+                "ROM / Storage (Xasuus Joogto ah)",
+                "2. Qalabka Isgaarsiinta",
+                "SIM Card Slot Check...",
+                "Network IC (2G / 3G / 4G / 5G)",
+                "Antenna Signal-ka qaabilsan",
+                "Wi-Fi & Bluetooth IC Testing...",
+                "GPS Module Initializing...",
+                "3. Qalabka Sawirka & Codka",
+                "Front & Back Camera Diagnostic...",
+                "Flash Light Testing...",
+                "Loudspeaker & Earpiece Speaker...",
+                "Microphone (Makarafoon) Codka hadalka",
+                "Audio IC Check...",
+                "4. Qalabka Korontada & Xakamaynta",
+                "Charging Port (Type-C / Lightning)...",
+                "Power IC Maamula korontada",
+                "Vibrator Motor Testing...",
+                "5. Qalabka Dareemayaasha (Sensors)",
+                "Fingerprint & Face ID Sensor...",
+                "Proximity & Light Sensor...",
+                "Accelerometer & Gyroscope...",
+                "6. Qalabka Jirka (Body Parts)",
+                "Back Cover / Frame / Chassis",
+                "Flex Cables (Fiilooyin Isku Xira)",
+                "Mobile-ku ma aha hal qalab, waa nidaam...",
+                "Dayactirku mararka qaar waa u adkaadaa."
+            ];
+
+            let msgIndex = 0;
+            const interval = setInterval(() => {
+                time--;
+                const min = Math.floor(time / 60);
+                const sec = time % 60;
+                timer.innerText = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+                
+                progress.style.width = `${((120 - time) / 120) * 100}%`;
+                
+                if(time % 3 === 0 && msgIndex < messages.length) {
+                    log.innerHTML += `> ${messages[msgIndex]}<br>`;
+                    log.scrollTop = log.scrollHeight;
+                    msgIndex++;
+                }
+
+                if(time <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('scanning-process').classList.add('hidden');
+                    document.getElementById('scan-result').classList.remove('hidden');
+                }
+            }, 1000);
+        }
+
+        function showPayment() {
+            document.getElementById('payment-prompt').classList.remove('hidden');
+            document.getElementById('payment-prompt').classList.add('flex');
+        }
+
+        function triggerUSSD() {
+            const amount = document.getElementById('final-amount').value || "1";
+            window.location.href = `tel:*712*${WHATSAPP_NUM}*${amount}#`;
+        }
+
+        function toggleMenu() {
+            showPage('home');
+        }
+    </script>
+</body>
+</html>
