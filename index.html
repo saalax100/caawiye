@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dukaanka Online - 876+ Alaabood</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #FFD700;
+            --dark-bg: #050505;
+            --card-bg: #121212;
+            --accent: #FF4500;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Modal logic - Hidden by default */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .payment-modal.active {
+            display: flex;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid #222;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(255, 215, 0, 0.1), transparent);
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .step-line::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #222;
+            z-index: -1;
+        }
+
+        .testimonial-card {
+            background: linear-gradient(145deg, #121212, #0a0a0a);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            border-color: var(--primary);
+            background: linear-gradient(145deg, #1a1a1a, #121212);
+        }
+    </style>
+</head>
+<body class="custom-scrollbar">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="text-3xl font-bold tracking-tighter text-yellow-500">876<span class="text-white">STORE</span></span>
+            </div>
+            
+            <div class="hidden md:flex gap-8 text-sm font-medium uppercase tracking-widest text-gray-400">
+                <a href="#home" class="hover:text-yellow-500 transition">Hoyga</a>
+                <a href="#shop" class="hover:text-yellow-500 transition">Dukaanka</a>
+                <a href="#services" class="hover:text-yellow-500 transition">Adeegyada</a>
+                <a href="#about" class="hover:text-yellow-500 transition">Naga Baro</a>
+                <a href="#faq" class="hover:text-yellow-500 transition">Su'aalo</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="relative p-2 text-white">
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    <span class="absolute top-0 right-0 bg-yellow-500 text-black text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">3</span>
+                </button>
+                <button class="md:hidden text-2xl text-yellow-500">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-32 pb-20 hero-gradient overflow-hidden">
+        <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center">
+            <div class="lg:w-1/2 mb-12 lg:mb-0">
+                <div class="inline-block px-4 py-1 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-500 text-xs font-bold uppercase tracking-tighter mb-6">
+                    Macaamiil in ka badan 10,000+
+                </div>
+                <h1 class="text-5xl md:text-8xl font-black leading-none mb-6">
+                    DOORO <br> <span class="text-yellow-500 italic">TAYADA</span> <br> UGU SAREEYSA
+                </h1>
+                <p class="text-gray-400 text-lg max-w-lg mb-10 leading-relaxed">
+                    Waxaan kuu haynaa in ka badan 876 agab oo kala duwan. Laga bilaabo Mobile-lada ilaa qalabka guryaha. Geyn deg deg ah iyo kalsooni buuxda.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#shop" class="bg-yellow-500 text-black px-10 py-4 rounded-full font-bold hover:bg-yellow-400 transition transform hover:scale-105">Bilow Iibiska</a>
+                    <a href="#services" class="border border-white/20 px-10 py-4 rounded-full font-bold hover:bg-white/5 transition">Adeegyada</a>
+                </div>
+            </div>
+            <div class="lg:w-1/2 relative">
+                <div class="animate-float">
+                    <img src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=800" alt="Agabka" class="rounded-3xl shadow-2xl shadow-yellow-500/20 border border-white/10">
+                </div>
+                <div class="absolute -bottom-10 -left-10 bg-black border border-white/10 p-6 rounded-2xl hidden md:block">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-yellow-500 w-12 h-12 rounded-full flex items-center justify-center text-black">
+                            <i class="fa-solid fa-bolt text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold">Geyn Deg-deg ah</p>
+                            <p class="text-xs text-gray-500">Saacad gudahood</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners / Trust -->
+    <div class="bg-black/40 py-10 border-y border-white/5">
+        <div class="container mx-auto px-6 flex flex-wrap justify-around items-center gap-10 opacity-30 grayscale">
+            <span class="text-2xl font-bold">SAMSUNG</span>
+            <span class="text-2xl font-bold">APPLE</span>
+            <span class="text-2xl font-bold">NIKE</span>
+            <span class="text-2xl font-bold">SONY</span>
+            <span class="text-2xl font-bold">DELL</span>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <section class="py-24 container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="group p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-yellow-500/50 transition">
+                <i class="fa-solid fa-shield-halved text-4xl text-yellow-500 mb-6 block group-hover:scale-110 transition"></i>
+                <h3 class="text-xl font-bold mb-4">Dammaanad 1 Sano</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Dhamaan agabka aan iibino waxay leeyihiin dammaanad buuxda. Haddii ay wax ka xumaadaan waan kuu bedelaynaa.</p>
+            </div>
+            <div class="group p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-yellow-500/50 transition">
+                <i class="fa-solid fa-truck-fast text-4xl text-yellow-500 mb-6 block group-hover:scale-110 transition"></i>
+                <h3 class="text-xl font-bold mb-4">Geyn Bilaash Ah</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Haddii aad iibsato alaab ka badan $100, geynta magaalada gudaheeda waa bilaash.</p>
+            </div>
+            <div class="group p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-yellow-500/50 transition">
+                <i class="fa-solid fa-headset text-4xl text-yellow-500 mb-6 block group-hover:scale-110 transition"></i>
+                <h3 class="text-xl font-bold mb-4">Taageero 24/7</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Shaqaalaheena taageerada macaamiisha waxay diyaar kuu yihiin saacad walba oo maalinta ah.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Section (876 Items Simulation) -->
+    <section id="shop" class="py-20 bg-black">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div>
+                    <h2 class="text-4xl font-bold mb-4">ALAABTA <span class="text-yellow-500">CUSUB</span></h2>
+                    <p class="text-gray-500 italic">Ka iibso tayada ugu dambeysa ee aduunka soo gashay.</p>
+                </div>
+                <div class="flex gap-4">
+                    <button class="bg-yellow-500 text-black px-6 py-2 rounded-lg font-bold text-xs uppercase">Dhamaan</button>
+                    <button class="bg-zinc-800 text-white px-6 py-2 rounded-lg font-bold text-xs uppercase hover:bg-zinc-700">Mobile-lada</button>
+                    <button class="bg-zinc-800 text-white px-6 py-2 rounded-lg font-bold text-xs uppercase hover:bg-zinc-700">Laptop-yada</button>
+                </div>
+            </div>
+
+            <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- Products will be injected by JavaScript -->
+            </div>
+
+            <div class="mt-20 text-center">
+                <button id="loadMore" class="bg-zinc-900 border border-white/10 px-12 py-5 rounded-full font-bold hover:bg-zinc-800 transition uppercase tracking-widest text-xs">
+                    Arag In Ka Badan 800+ Alaabood
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 container mx-auto px-6">
+        <div class="bg-zinc-900/30 rounded-[3rem] p-12 border border-white/5 flex flex-col lg:flex-row items-center gap-16">
+            <div class="lg:w-1/2">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800" alt="Kooxda" class="rounded-3xl">
+                    <div class="absolute inset-0 bg-yellow-500/20 rounded-3xl"></div>
+                </div>
+            </div>
+            <div class="lg:w-1/2">
+                <h2 class="text-4xl font-black mb-6 uppercase tracking-tight">KAYDKA <span class="text-yellow-500 italic">UGU WEYN</span> EE SOOMAALIYA</h2>
+                <p class="text-gray-400 mb-8 leading-relaxed">
+                    Tan iyo sanadkii 2018, 876STORE wuxuu hormuud u ahaa keenista agabka technology-ga ugu dambeeya. Hadafkeenu waa inaan macmiilka Soomaaliyeed u fududayno iibsashada online-ka isagoo dareemaya badbaado buuxda.
+                </p>
+                <div class="space-y-6">
+                    <div class="flex items-center gap-6">
+                        <div class="text-4xl font-bold text-yellow-500">99%</div>
+                        <div class="text-sm text-gray-500 uppercase font-medium">Ku qanacsanaanta macaamiisha</div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="text-4xl font-bold text-yellow-500">24h</div>
+                        <div class="text-sm text-gray-500 uppercase font-medium">Geynta dhamaan gobolada dalka</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Detailed -->
+    <section id="services" class="py-24 bg-zinc-950">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-20">
+                <h2 class="text-3xl font-bold mb-4">ADEEGYADA <span class="text-yellow-500">DHEERAADKA AH</span></h2>
+                <p class="text-gray-500">Ma nihin kaliya dukaan, waxaan sidoo kale bixinaa adeegyo muhiim u ah macmiilka.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Service 1 -->
+                <div class="bg-black p-8 rounded-2xl border border-white/5 hover:bg-yellow-500 group transition duration-500">
+                    <div class="w-16 h-16 bg-yellow-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition">
+                        <i class="fa-solid fa-tools text-2xl text-yellow-500 group-hover:text-white"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4 group-hover:text-black">Dayactir</h4>
+                    <p class="text-gray-500 group-hover:text-black/70 text-sm">Haddii uu kaa hallaabo Mobile ama Laptop, waxaan u haynaa farsamo yaqaano khibrad leh.</p>
+                </div>
+                <!-- Service 2 -->
+                <div class="bg-black p-8 rounded-2xl border border-white/5 hover:bg-yellow-500 group transition duration-500">
+                    <div class="w-16 h-16 bg-yellow-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition">
+                        <i class="fa-solid fa-arrows-rotate text-2xl text-yellow-500 group-hover:text-white"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4 group-hover:text-black">Bedelaad</h4>
+                    <p class="text-gray-500 group-hover:text-black/70 text-sm">Keen mid duug ah, qaado mid cusub. Waxaan samaynaa trade-in aad u fudud.</p>
+                </div>
+                <!-- Service 3 -->
+                <div class="bg-black p-8 rounded-2xl border border-white/5 hover:bg-yellow-500 group transition duration-500">
+                    <div class="w-16 h-16 bg-yellow-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition">
+                        <i class="fa-solid fa-coins text-2xl text-yellow-500 group-hover:text-white"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4 group-hover:text-black">Sarrifka Crypto</h4>
+                    <p class="text-gray-500 group-hover:text-black/70 text-sm">Waxaan iibinaa oo aan sarrifnaa USDT, BTC iyo dhamaan lacagaha dhijitaalka ah.</p>
+                </div>
+                <!-- Service 4 -->
+                <div class="bg-black p-8 rounded-2xl border border-white/5 hover:bg-yellow-500 group transition duration-500">
+                    <div class="w-16 h-16 bg-yellow-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition">
+                        <i class="fa-solid fa-boxes-packing text-2xl text-yellow-500 group-hover:text-white"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4 group-hover:text-black">Soo Dejin</h4>
+                    <p class="text-gray-500 group-hover:text-black/70 text-sm">Haddii aad rabto alaab gaar ah oo aan dalka oolin, annagaa kuu soo iibineyna aduunka.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-16 uppercase">Su'aalaha <span class="text-yellow-500">La Is weydiiyo</span></h2>
+        <div class="max-w-3xl mx-auto space-y-4">
+            <div class="bg-zinc-900/50 border border-white/5 rounded-2xl p-6">
+                <button class="flex justify-between items-center w-full font-bold text-left" onclick="toggleFaq(this)">
+                    Sidee u gashaa dalabkaaga?
+                    <i class="fa-solid fa-chevron-down text-yellow-500"></i>
+                </button>
+                <div class="hidden mt-4 text-gray-500 text-sm leading-relaxed">
+                    Waxaad kaliya dooranaysaa alaabta aad rabto, waxaad riixaysaa batoonka "Iibso Hadda", kadib waxaad ku bixinaysaa lacagta EVC Plus ama hab kasta oo kale.
+                </div>
+            </div>
+            <div class="bg-zinc-900/50 border border-white/5 rounded-2xl p-6">
+                <button class="flex justify-between items-center w-full font-bold text-left" onclick="toggleFaq(this)">
+                    Maka helayaa alaabta haddaan joogo gobolada?
+                    <i class="fa-solid fa-chevron-down text-yellow-500"></i>
+                </button>
+                <div class="hidden mt-4 text-gray-500 text-sm leading-relaxed">
+                    Haa, waxaan wax u dirnaa dhamaan gobolada Soomaaliya anagoo adeegsanayna diyaaradaha ama baabuurta xamuulka ah.
+                </div>
+            </div>
+            <div class="bg-zinc-900/50 border border-white/5 rounded-2xl p-6">
+                <button class="flex justify-between items-center w-full font-bold text-left" onclick="toggleFaq(this)">
+                    Ma jiraan dammaanad lacag celin ah?
+                    <i class="fa-solid fa-chevron-down text-yellow-500"></i>
+                </button>
+                <div class="hidden mt-4 text-gray-500 text-sm leading-relaxed">
+                    Haa, haddii alaabtu ay u muuqato mid ka duwan sidii aan kuu sheegnay ama ay cilad leedahay 24 saac gudahood waan kuu soo celinaynaa lacagtaada.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24 bg-zinc-950 overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-black uppercase tracking-widest">Macaamiisha <span class="text-yellow-500">Na Amaanaysa</span></h2>
+                <div class="w-20 h-1 bg-yellow-500 mx-auto mt-4"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Person 1 -->
+                <div class="testimonial-card p-8 rounded-3xl relative">
+                    <div class="flex text-yellow-500 mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-400 italic mb-6">"Adeegoodu waa mid aad u heer sareeya. Waxaan iibsaday iPhone 15 Pro, isla saacadii ayaana la ii keenay anigoo jooga gurigayga. Aad ayaan ugu qanacsanahay."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://i.pravatar.cc/150?u=axmed" alt="Axmed Maxamed" class="w-12 h-12 rounded-full border-2 border-yellow-500 object-cover">
+                        <div>
+                            <h4 class="font-bold text-sm">Axmed Maxamed</h4>
+                            <p class="text-[10px] text-gray-600 uppercase tracking-tighter">Ganacsade</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-quote-right absolute top-8 right-8 text-white/5 text-5xl"></i>
+                </div>
+                <!-- Person 2 -->
+                <div class="testimonial-card p-8 rounded-3xl relative">
+                    <div class="flex text-yellow-500 mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-400 italic mb-6">"876Store waa meesha kaliya ee aan ku kalsoonahay markay timaado qalabka technology-ga. Tayadoodu waa mid la hubiyay, qiimahooduna waa mid macquul ah."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://i.pravatar.cc/150?u=huda" alt="Huda Farax" class="w-12 h-12 rounded-full border-2 border-yellow-500 object-cover">
+                        <div>
+                            <h4 class="font-bold text-sm">Huda Farax</h4>
+                            <p class="text-[10px] text-gray-600 uppercase tracking-tighter">Designer</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-quote-right absolute top-8 right-8 text-white/5 text-5xl"></i>
+                </div>
+                <!-- Person 3 -->
+                <div class="testimonial-card p-8 rounded-3xl relative">
+                    <div class="flex text-yellow-500 mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-400 italic mb-6">"Waxaan ka dalbaday MacBook Pro anigoo jooga magaalada Garowe. Waxaa la ii soo mariyay diyaarad, waxayna igu soo gaartay si nabad ah. Aad ayaad u mahadsantihiin."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://i.pravatar.cc/150?u=yaasiin" alt="Yaasiin Kaafi" class="w-12 h-12 rounded-full border-2 border-yellow-500 object-cover">
+                        <div>
+                            <h4 class="font-bold text-sm">Yaasiin Kaafi</h4>
+                            <p class="text-[10px] text-gray-600 uppercase tracking-tighter">Student</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-quote-right absolute top-8 right-8 text-white/5 text-5xl"></i>
+                </div>
+                <!-- Person 4 -->
+                <div class="testimonial-card p-8 rounded-3xl relative">
+                    <div class="flex text-yellow-500 mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-400 italic mb-6">"Kalsooni buuxda! Lacagta ayaan horay u bixiyay anigoo walwalsan, laakiin isla markiiba waa la ii soo jawaabay oo alaabtiina waa la ii keenay. Waa dukaanka ugu aaminka badan."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://i.pravatar.cc/150?u=sahra" alt="Sahra Salaad" class="w-12 h-12 rounded-full border-2 border-yellow-500 object-cover">
+                        <div>
+                            <h4 class="font-bold text-sm">Sahra Salaad</h4>
+                            <p class="text-[10px] text-gray-600 uppercase tracking-tighter">Nurse</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-quote-right absolute top-8 right-8 text-white/5 text-5xl"></i>
+                </div>
+                <!-- Person 5 -->
+                <div class="testimonial-card p-8 rounded-3xl relative">
+                    <div class="flex text-yellow-500 mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-400 italic mb-6">"Dayactirkoodu waa mid heer sare ah. Waxaan u geeyay Mobile hallaabay, waxayna iigu soo celiyeen isagoo cusub. Farsamo yaqaano aad u xirfad leh."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://i.pravatar.cc/150?u=cali" alt="Cali Barre" class="w-12 h-12 rounded-full border-2 border-yellow-500 object-cover">
+                        <div>
+                            <h4 class="font-bold text-sm">Cali Barre</h4>
+                            <p class="text-[10px] text-gray-600 uppercase tracking-tighter">Engineer</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-quote-right absolute top-8 right-8 text-white/5 text-5xl"></i>
+                </div>
+                <!-- Person 6 -->
+                <div class="testimonial-card p-8 rounded-3xl relative">
+                    <div class="flex text-yellow-500 mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-400 italic mb-6">"Wax walba oo aad uga baahato technology halkaan ayaad ka helaysaa. Aad ayaan u jecelahay sida ay macaamiisha ula dhaqmaan. 5 star oo buuxda!"</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://i.pravatar.cc/150?u=muna" alt="Muna Warsame" class="w-12 h-12 rounded-full border-2 border-yellow-500 object-cover">
+                        <div>
+                            <h4 class="font-bold text-sm">Muna Warsame</h4>
+                            <p class="text-[10px] text-gray-600 uppercase tracking-tighter">Vlogger</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-quote-right absolute top-8 right-8 text-white/5 text-5xl"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-24 bg-black border-t border-white/5">
+        <div class="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <div>
+                <h2 class="text-5xl font-black mb-8">Nala <span class="text-yellow-500">Xiriir</span></h2>
+                <p class="text-gray-400 mb-12">Haddii aad hayso su'aal ama aad rabto inaad nala shaqeyso, fariin noogu soo dir halkan ama baraha bulshada.</p>
+                <div class="space-y-6">
+                    <div class="flex items-center gap-6">
+                        <div class="w-12 h-12 rounded-full border border-yellow-500/30 flex items-center justify-center text-yellow-500">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <span class="text-gray-300">Muqdisho, Wadada Maka Al-mukarama</span>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="w-12 h-12 rounded-full border border-yellow-500/30 flex items-center justify-center text-yellow-500">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <span class="text-gray-300">+252 61 8877686</span>
+                    </div>
+                </div>
+            </div>
+            <form class="space-y-4">
+                <input type="text" placeholder="Magacaaga" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl focus:border-yellow-500 outline-none">
+                <input type="email" placeholder="Email-kaaga" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl focus:border-yellow-500 outline-none">
+                <textarea placeholder="Fariintaada" rows="5" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl focus:border-yellow-500 outline-none"></textarea>
+                <button class="w-full bg-yellow-500 text-black font-bold py-4 rounded-xl hover:bg-yellow-400">DIR FARIINTA</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-20 border-t border-white/5">
+        <div class="container mx-auto px-6 text-center">
+            <span class="text-4xl font-black tracking-tighter text-yellow-500 mb-10 block">876<span class="text-white">STORE</span></span>
+            <div class="flex justify-center gap-8 mb-12 text-2xl">
+                <a href="#" class="text-gray-500 hover:text-yellow-500"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="text-gray-500 hover:text-yellow-500"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="text-gray-500 hover:text-yellow-500"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="text-gray-500 hover:text-yellow-500"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+            <p class="text-gray-600 text-xs uppercase tracking-widest">&copy; 2024 Dukaanka 876STORE. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Payment Modal (Hidden Initially) -->
+    <div id="paymentModal" class="payment-modal">
+        <div class="bg-zinc-900 border border-yellow-500 w-full max-w-lg rounded-3xl p-10 relative">
+            <button class="absolute top-6 right-6 text-gray-500 hover:text-white text-2xl" onclick="closeModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-black text-yellow-500 uppercase italic">LACAG BIXINTA</h3>
+                <p class="text-gray-500 text-sm mt-2">Fadlan dooro habka aad lacagta u bixinayso.</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4" id="modalButtons">
+                <button class="flex items-center justify-between p-6 bg-black border border-white/5 rounded-2xl hover:border-yellow-500 transition" onclick="showEvcInput()">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center font-bold italic">EVC</div>
+                        <div class="text-left">
+                            <p class="font-bold">EVC PLUS</p>
+                            <p class="text-[10px] text-gray-500">Mobile Money</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-yellow-500"></i>
+                </button>
+
+                <button class="flex items-center justify-between p-6 bg-black border border-white/5 rounded-2xl hover:border-yellow-500 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center font-bold italic text-xs">eMAAL</div>
+                        <div class="text-left">
+                            <p class="font-bold">eMAAL</p>
+                            <p class="text-[10px] text-gray-500">Somnet Money</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-yellow-500"></i>
+                </button>
+
+                <button class="flex items-center justify-between p-6 bg-black border border-white/5 rounded-2xl hover:border-yellow-500 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center text-black font-bold italic text-xs">CRYPTO</div>
+                        <div class="text-left">
+                            <p class="font-bold">USDT / BTC</p>
+                            <p class="text-[10px] text-gray-500">Binance / Crypto</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-yellow-500"></i>
+                </button>
+            </div>
+
+            <!-- EVC Input Area (Hidden initially) -->
+            <div id="evcInputArea" class="hidden animate-in slide-in-from-bottom duration-500">
+                <div class="bg-black p-6 rounded-2xl border border-yellow-500/30">
+                    <label class="block text-xs uppercase font-bold text-gray-500 mb-3">Qadarka Lacagta ($)</label>
+                    <input type="number" id="payAmount" placeholder="Tusaale: 120" class="w-full bg-transparent border-b-2 border-zinc-800 focus:border-yellow-500 outline-none text-2xl font-bold py-2 mb-6 text-white">
+                    <button class="w-full bg-yellow-500 text-black font-bold py-4 rounded-xl hover:bg-yellow-400 flex items-center justify-center gap-2" onclick="processPayment()">
+                        XAQIIJI DALABKA <i class="fa-solid fa-bolt"></i>
+                    </button>
+                </div>
+                <button class="mt-4 text-xs text-gray-500 underline uppercase" onclick="backToMethods()">Dib u noqo</button>
+            </div>
+
+            <!-- Loading Spinner (Hidden) -->
+            <div id="loadingOverlay" class="hidden absolute inset-0 bg-black/90 rounded-3xl flex flex-col items-center justify-center">
+                <div class="w-16 h-16 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+                <p class="mt-6 font-bold text-yellow-500 animate-pulse tracking-widest text-xs">MAAL GELINTA...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database simulation (Representing the 876+ products)
+        const products = [
+            { id: 1, name: "iPhone 15 Pro", price: 1199, img: "https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=400" },
+            { id: 2, name: "MacBook Pro M3", price: 2499, img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=400" },
+            { id: 3, name: "Nike Tech Fleece", price: 145, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=400" },
+            { id: 4, name: "PlayStation 5", price: 549, img: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&q=80&w=400" },
+            { id: 5, name: "Sony WH-1000XM5", price: 349, img: "https://images.unsplash.com/photo-1618366712214-8c075189d0ad?auto=format&fit=crop&q=80&w=400" },
+            { id: 6, name: "Apple Watch Ultra", price: 799, img: "https://images.unsplash.com/photo-1679040183182-4467c9c0228d?auto=format&fit=crop&q=80&w=400" },
+            { id: 7, name: "Samsung S24 Ultra", price: 1299, img: "https://images.unsplash.com/photo-1678911820864-e2c567c655d7?auto=format&fit=crop&q=80&w=400" },
+            { id: 8, name: "AirPods Pro 2", price: 249, img: "https://images.unsplash.com/photo-1603351154351-5e2d0600bb77?auto=format&fit=crop&q=80&w=400" }
+        ];
+
+        const grid = document.getElementById('productGrid');
+
+        function loadProducts(num) {
+            for (let i = 0; i < num; i++) {
+                const p = products[i % products.length];
+                const card = `
+                    <div class="product-card group rounded-2xl overflow-hidden p-4">
+                        <div class="relative mb-4 overflow-hidden rounded-xl h-48">
+                            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute top-2 right-2 bg-black/60 text-[10px] px-2 py-1 rounded-full backdrop-blur-sm">Cusub</div>
+                        </div>
+                        <h4 class="font-bold text-sm mb-1 text-gray-200">${p.name}</h4>
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="text-yellow-500 font-bold">$${p.price}</span>
+                            <button onclick="openModal()" class="bg-yellow-500/10 hover:bg-yellow-500 text-yellow-500 hover:text-black w-10 h-10 rounded-full transition flex items-center justify-center">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            }
+        }
+
+        // Initial Load
+        loadProducts(12);
+
+        document.getElementById('loadMore').addEventListener('click', function() {
+            this.innerText = "Xogta waa la rarayaa...";
+            setTimeout(() => {
+                loadProducts(8);
+                this.innerText = "Arag In Ka Badan 800+ Alaabood";
+            }, 800);
+        });
+
+        // Modal Logic
+        function openModal() {
+            document.getElementById('paymentModal').classList.add('active');
+            backToMethods(); // Reset view
+        }
+
+        function closeModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+        }
+
+        function showEvcInput() {
+            document.getElementById('modalButtons').classList.add('hidden');
+            document.getElementById('evcInputArea').classList.remove('hidden');
+        }
+
+        function backToMethods() {
+            document.getElementById('modalButtons').classList.remove('hidden');
+            document.getElementById('evcInputArea').classList.add('hidden');
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+
+        function processPayment() {
+            const amount = document.getElementById('payAmount').value;
+            if (!amount) return;
+            
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+            
+            setTimeout(() => {
+                // Success redirect simulation
+                window.location.href = `tel:*712*618877686*${amount}#`;
+                
+                // Also send whatsapp confirmation
+                setTimeout(() => {
+                    const waText = encodeURIComponent(`Nabad, waxaan hadda iibsaday alaab qiimaheedu yahay $${amount}. Fadlan ii xaqiiji.`);
+                    window.open(`https://wa.me/252618877686?text=${waText}`, '_blank');
+                    closeModal();
+                }, 2000);
+            }, 2500);
+        }
+
+        function toggleFaq(btn) {
+            const content = btn.nextElementSibling;
+            const icon = btn.querySelector('i');
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+    </script>
+</body>
+</html>
