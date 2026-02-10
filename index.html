@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doone - Naqshado Casri Ah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
+        .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .card-hover:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; overflow-y: auto; padding: 20px; }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .payment-option { border: 2px solid transparent; transition: all 0.2s; cursor: pointer; }
+        .payment-option.selected { border-color: #2563eb; background-color: #eff6ff; }
+        
+        /* Mobile Menu Styles */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        #mobile-menu.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <nav class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl md:text-3xl font-bold text-blue-700">DOONE</div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 font-semibold">
+                <a href="#" onclick="showPage('home')" class="hover:text-blue-600 transition">Home</a>
+                <a href="#" onclick="showPage('designs')" class="hover:text-blue-600 transition">Naqshadaha</a>
+                <a href="#" onclick="showPage('about')" class="hover:text-blue-600 transition">About</a>
+                <a href="#" onclick="showPage('contact')" class="hover:text-blue-600 transition">Nala Xiriir</a>
+            </div>
+            
+            <!-- Hamburger Icon -->
+            <button class="md:hidden text-2xl p-2 focus:outline-none" onclick="toggleMenu(true)">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Mobile Side Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white z-50 md:hidden flex flex-col p-8 space-y-6">
+        <div class="flex justify-between items-center mb-4">
+            <div class="text-2xl font-bold text-blue-700">DOONE</div>
+            <button class="text-3xl" onclick="toggleMenu(false)">&times;</button>
+        </div>
+        <a href="#" onclick="showPage('home'); toggleMenu(false)" class="text-xl font-semibold border-b pb-2">Home</a>
+        <a href="#" onclick="showPage('designs'); toggleMenu(false)" class="text-xl font-semibold border-b pb-2">Naqshadaha</a>
+        <a href="#" onclick="showPage('about'); toggleMenu(false)" class="text-xl font-semibold border-b pb-2">About</a>
+        <a href="#" onclick="showPage('contact'); toggleMenu(false)" class="text-xl font-semibold border-b pb-2">Nala Xiriir</a>
+    </div>
+
+    <!-- Page Content -->
+    <main id="main-content">
+        <!-- HOME PAGE -->
+        <section id="home" class="page-section">
+            <div class="gradient-bg text-white py-16 md:py-24 px-6 text-center">
+                <h1 class="text-3xl md:text-6xl font-bold mb-4">Ku Soo Dhawaaw Doone Design</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90">Adeegyo Naqshadayn oo heer sare ah: Boorar, Logos, TikTok/YouTube, iyo Sawirada Aroosyada.</p>
+                <button onclick="showPage('designs')" class="bg-yellow-400 text-blue-900 px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition shadow-lg w-full md:w-auto">Eeg Naqshadaha</button>
+            </div>
+
+            <!-- Features -->
+            <div class="container mx-auto py-12 px-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    <div class="p-6 bg-white rounded-xl shadow-lg text-center card-hover border-b-4 border-blue-600">
+                        <i class="fas fa-paint-brush text-4xl text-blue-600 mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Naqshado Tayo Leh</h3>
+                        <p class="text-gray-600 text-sm">Waxaan kuu haynaa dhamaan naacyada kala duwan ee design-ka.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-xl shadow-lg text-center card-hover border-b-4 border-blue-600">
+                        <i class="fas fa-bolt text-4xl text-blue-600 mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Lacag Bixin Toos ah</h3>
+                        <p class="text-gray-600 text-sm">Ku bixi EVC Plus, Salaam, eDahab ama Crypto si fudud.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-xl shadow-lg text-center card-hover border-b-4 border-blue-600">
+                        <i class="fas fa-users text-4xl text-blue-600 mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Taageero 24/7</h3>
+                        <p class="text-gray-600 text-sm">Nala soo xiriir wakhti kasta oo aad u baahato adeeg.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="bg-gray-100 py-16">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-3xl font-bold mb-12">Macaamiisheena Waxay Yiraahdeen</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="testimonials-grid">
+                        <!-- Macaamiisha halkan baa laga soo saarayaa JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DESIGNS PAGE -->
+        <section id="designs" class="page-section hidden py-12 px-4 md:px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-blue-800 uppercase tracking-widest">Gallery-ga Naqshadaha</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6" id="designs-grid">
+                <!-- 24 Sawir halkan baa JS ku shubaya -->
+            </div>
+        </section>
+
+        <!-- ABOUT PAGE -->
+        <section id="about" class="page-section hidden py-12 px-6">
+            <div class="container mx-auto max-w-4xl">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-blue-800">Ku saabsan Doone</h2>
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl leading-relaxed">
+                    <p class="mb-4">Doone Design waa meesha aad ka heli karto dhammaan baahiyahaaga naqshadaynta. Waxaan ku takhasusnay:</p>
+                    <ul class="list-disc ml-6 mb-4 space-y-2 text-gray-700">
+                        <li>Logo design iyo aqoonsiga sumadda (Brand Identity).</li>
+                        <li>Naqshadaha TikTok, YouTube (Thumbnail & Banner).</li>
+                        <li>Boorar, kaararka ganacsiga, iyo xaashiyaha xayaysiiska.</li>
+                        <li>Sawirada aroosyada iyo diyaarinta hadyadaha.</li>
+                    </ul>
+                    <p>Waxaan kuu ballan qaadaynaa adeeg hufan, tayo sare, iyo qiimo macquul ah.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT PAGE -->
+        <section id="contact" class="page-section hidden py-12 px-6">
+            <div class="container mx-auto max-w-lg">
+                <h2 class="text-3xl font-bold mb-8 text-center">Nala Soo Xiriir</h2>
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl">
+                    <div class="mb-4">
+                        <label class="block font-semibold mb-2 text-sm">Magacaaga</label>
+                        <input type="text" id="contact-name" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Gali magacaaga...">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block font-semibold mb-2 text-sm">Faahfaahinta Shaqada</label>
+                        <textarea id="contact-msg" class="w-full p-3 border rounded-lg h-32 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Noo sheeg waxaad u baahan tahay..."></textarea>
+                    </div>
+                    <button onclick="sendContact()" class="w-full bg-green-600 text-white py-4 rounded-lg font-bold hover:bg-green-700 transition flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-2 text-xl"></i> DIR FARIINTA
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-20">
+        <div class="container mx-auto px-6 text-center">
+            <div class="text-2xl font-bold mb-6 tracking-widest text-blue-500 uppercase">Doone Design</div>
+            
+            <!-- Social Media -->
+            <div class="flex justify-center space-x-6 md:space-x-8 mb-8 text-3xl">
+                <a href="https://www.youtube.com/@DooneDesign" target="_blank" class="hover:text-red-500 transition-transform hover:scale-110">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="https://www.tiktok.com/@doone_design" target="_blank" class="hover:text-pink-500 transition-transform hover:scale-110">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+                <a href="https://t.me/DooneDesign" target="_blank" class="hover:text-blue-400 transition-transform hover:scale-110">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://twitter.com/DooneDesign" target="_blank" class="hover:text-blue-300 transition-transform hover:scale-110">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-sm">
+                <p class="text-gray-400 mb-2">Email: info@doone.so | Tel: +252 61 8877686</p>
+                <p class="text-gray-500">&copy; 2026 Doone Design. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PURCHASE MODAL -->
+    <div id="purchase-modal" class="modal">
+        <div class="bg-white rounded-2xl p-6 md:p-8 max-w-md w-full relative shadow-2xl mx-4">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl text-gray-400 hover:text-black">&times;</button>
+            <h2 class="text-xl md:text-2xl font-bold mb-4 text-blue-800">Iibso Naqshadan</h2>
+            
+            <img id="modal-item-img" class="w-full h-40 object-cover rounded-xl mb-4 border" src="" alt="Selected Design">
+            
+            <div class="mb-4">
+                <label class="block font-semibold mb-1 text-xs uppercase text-gray-500">Gali Qadarka ($)</label>
+                <input type="number" id="pay-amount" class="w-full p-3 border-2 border-gray-100 rounded-lg text-xl font-bold focus:border-blue-500 outline-none">
+            </div>
+
+            <div class="mb-6">
+                <label class="block font-semibold mb-2 text-xs uppercase text-gray-500">Dooro Qaabka Lacagta</label>
+                <div class="grid grid-cols-3 gap-2" id="payment-methods-grid">
+                    <!-- JS Options -->
+                </div>
+            </div>
+            
+            <button id="next-btn" onclick="goToStepTwo()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 shadow-lg active:scale-95 transition">XAQIIJI OO SII WAD</button>
+        </div>
+    </div>
+
+    <!-- USSD CONFIRMATION -->
+    <div id="ussd-confirm-modal" class="modal">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full text-center mx-4">
+            <div id="ussd-icon" class="mb-4"></div>
+            <h3 class="text-xl font-bold mb-2">Ma hubtaa inaad iibsato?</h3>
+            <p id="ussd-desc" class="text-gray-600 mb-6 text-sm"></p>
+            
+            <div class="flex space-x-3">
+                <button onclick="closeModal()" class="flex-1 bg-gray-200 py-3 rounded-lg font-bold">KA NOQO</button>
+                <button onclick="executeUssd()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-bold uppercase">DIR (SEND)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FINAL WHATSAPP -->
+    <div id="final-confirm-modal" class="modal">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full text-center mx-4">
+            <i class="fas fa-check-circle text-6xl text-green-500 mb-4"></i>
+            <h3 class="text-2xl font-bold mb-4">Lacagta ma dirtay?</h3>
+            <p class="text-gray-600 mb-8 text-sm">Fadlan taabo badhanka "Xaqiiji" si aad noogu soo dirto faahfaahinta rasiidka WhatsApp ahaan si aan shaqada u bilowno.</p>
+            <button onclick="openWhatsAppFinal()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg">XAQIIJI (WhatsApp)</button>
+        </div>
+    </div>
+
+    <!-- CRYPTO CHOICE -->
+    <div id="crypto-choice-modal" class="modal">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold mb-6 text-center uppercase tracking-wide">Dooro Nooca Crypto</h3>
+            <div class="grid grid-cols-2 gap-4 mb-6" id="crypto-options-grid">
+                <!-- JS Crypto Options -->
+            </div>
+            <button onclick="closeModal()" class="w-full text-gray-400 font-bold text-sm">JOOJI</button>
+        </div>
+    </div>
+
+    <!-- CRYPTO DETAILS -->
+    <div id="crypto-pay-modal" class="modal">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full text-center mx-4">
+            <h3 id="crypto-pay-title" class="text-xl font-bold mb-4"></h3>
+            <img id="crypto-pay-qr" class="w-48 h-48 mx-auto mb-6 border-4 border-blue-50 p-2 rounded-lg" src="" alt="Crypto QR">
+            
+            <div class="bg-gray-50 p-4 rounded-lg text-xs break-all font-mono mb-6 border-dashed border-2 relative">
+                <span id="crypto-pay-address"></span>
+                <button onclick="copyAddress()" class="block w-full mt-2 text-blue-600 font-bold hover:underline">COPY WALLET</button>
+            </div>
+            
+            <button onclick="openWhatsAppFinal()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold">LACAGTA WAAN DIRAY</button>
+        </div>
+    </div>
+
+    <script>
+        const robotImages = {
+            400: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsGLRlqWh_vKgKLry_CYlJgBDNKQATpcA-w&s',
+            350: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0qBtMX5QvTRajn1fQkx9csJ56_iiZa5rnaw&s',
+            320: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJ0-BwMD4kc4FXCAi2ljaaWCdVbUeUUppKRg&s',
+            290: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDyjzYgo27sMA6i4J0kEcAm0qJhCWTn28t-A&s',
+            230: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNhgwy2XsjnGR7pUNy9T7tV_jsAlrSkYap2Q&s',
+            210: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2qq8-vcrChw9tpU5sq79QOmK80jpv3Xx02w&s',
+            190: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP4pWPhGZc29S5WkC-Ba3ZlzbGB0HTwHAFeQ&s',
+            160: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuxhV4QMeANzxwiMMEIkZp_c_3eajY8aoKg&s',
+            140: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyrMp_qbaJzcqtvBha1TLmSfEHwT0YAErmdA&s',
+            130: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXiHJ7uIcb2IlHaSHioslYh2GEV8Kpm_xCCg&s',
+            120: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaXp37ZLvnjE8Lcd-PyBPvmSCpEsi5_fdZSA&s',
+            110: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjXLa-oJLaL8tEspanl5oV5PD4IbtwkpL-Xw&s',
+            105: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStN5JDIuRaULTeEXtvtXUJrfbnWGHAErEkUA&s',
+            100: 'https://qviro.com/blog/wp-content/uploads/2024/05/How-Much-Does-a-Humanoid-Robot-Cost.webp',
+            70:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnQJFcuf1QeGS-NmYqXgI-CRrawwfYP40U5g&s',
+            60:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_bj-ltuzt62o9CxP91qNSVc9iheGY4nMfCg&s',
+            50:  'https://www.therobotreport.com/wp-content/uploads/2024/12/Apptronik-Apollo-3.jpg',
+            40:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUhHtnFq30Z-nkcY5Pvhq3MWwcQSzcfgrXkg&s',
+            30:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnsHUweaPvW6qTrQgew1-667hFAG1dK1-tGw&s',
+            20:  'https://cdn.sanity.io/images/f8lauh0h/production/6b6e8de8b893da63950e390334a9668d4440e3be-6000x4000.jpg',
+            10:  'https://news.mit.edu/sites/default/files/styles/news_article__image_gallery/public/images/202505/MIT-Differentiable-Interaction-01_0.gif?itok=OtGBTwHK',
+            5:   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsixzp9V9j0_lBI7wOB6w_DCP15bEUnxYsIg&s',
+            3:   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAigmUQKnJXk_u5IpyR3lTSBRUOCCJ5zcQ4g&s',
+            2:   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE5lKEPUJKB04S1g_yEJWCnKO3lNfRwvviGQ&s',
+            1:   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN6VSe-GVQNJnAaRtBq3MT1AdQm4_lk_nm8Q&s'
+        };
+
+        const paymentMethods = [
+            { id: 'salaam', name: 'Salaam', img: 'https://i.postimg.cc/VkwpW8yz/download.png', code: '*799*38419601*' },
+            { id: 'evc', name: 'EVC Plus', img: 'https://i.postimg.cc/XqwxrrYP/download-(1).png', code: '*712*618877686*' },
+            { id: 'edahab', name: 'eDahab', img: 'https://i.postimg.cc/DZGPNSLf/download-(2).png', code: '*712*628877686*' },
+            { id: 'jeeb', name: 'Jeeb', img: 'https://i.postimg.cc/pTKKZgMm/download-(3).png', code: '*812*688877686*' },
+            { id: 'crypto', name: 'Crypto', img: 'https://i.postimg.cc/YqCmG40F/download-(4).png' }
+        ];
+
+        const cryptoOptions = [
+            { id: 'usdt', name: 'USDT (TRC20)', addr: 'TEiEBMDVUPkrTPCjfmn2Kc9pzkZEJFypkf', img: 'https://i.postimg.cc/kgcSBxFq/download-(1).jpg', qr: 'https://i.postimg.cc/0ymt3Hsp/photo-2026-02-10-09-03-03.jpg' },
+            { id: 'tron', name: 'TRON (TRX)', addr: 'TEiEBMDVUPkrTPCjfmn2Kc9pzkZEJFypkf', img: 'https://i.postimg.cc/66ny8rtS/download-(5).png', qr: 'https://i.postimg.cc/TPKPw790/photo-2026-02-10-09-10-14.jpg' }
+        ];
+
+        let state = {
+            activePage: 'home',
+            selectedDesign: null,
+            paymentMethodId: null,
+            cryptoTypeId: null
+        };
+
+        window.onload = () => {
+            renderDesigns();
+            renderTestimonials();
+            renderPaymentMethods();
+        };
+
+        function toggleMenu(show) {
+            const menu = document.getElementById('mobile-menu');
+            if (show) menu.classList.add('active');
+            else menu.classList.remove('active');
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            state.activePage = id;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderDesigns() {
+            const grid = document.getElementById('designs-grid');
+            Object.keys(robotImages).sort((a,b) => b-a).forEach(price => {
+                const div = document.createElement('div');
+                div.className = "bg-white rounded-xl shadow-md overflow-hidden card-hover cursor-pointer border flex flex-col";
+                div.onclick = () => openPurchase(price, robotImages[price]);
+                div.innerHTML = `
+                    <div class="relative flex-1">
+                        <img src="${robotImages[price]}" class="w-full h-48 md:h-56 object-cover" loading="lazy">
+                        <div class="absolute bottom-2 right-2 bg-blue-600 text-white px-3 py-1 rounded-full font-bold shadow-lg">$${price}</div>
+                    </div>
+                    <div class="p-4 text-center">
+                        <h4 class="font-bold text-gray-700 text-sm mb-3">Naqshada #${price}</h4>
+                        <button class="w-full bg-blue-50 text-blue-600 py-2 rounded-lg font-bold border border-blue-200 active:bg-blue-600 active:text-white transition uppercase text-xs">Iibso Hada</button>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function renderTestimonials() {
+            const grid = document.getElementById('testimonials-grid');
+            const data = [
+                { n: "Cali Axmed", i: "https://i.pravatar.cc/100?u=11" },
+                { n: "Xaliimo Saciid", i: "https://i.pravatar.cc/100?u=22" },
+                { n: "Maxamed Nuur", i: "https://i.pravatar.cc/100?u=33" }
+            ];
+            data.forEach(u => {
+                grid.innerHTML += `
+                    <div class="bg-white p-6 rounded-2xl shadow-sm text-center border">
+                        <img src="${u.i}" class="w-16 h-16 rounded-full mx-auto mb-4 ring-2 ring-blue-100">
+                        <h4 class="font-bold">${u.n}</h4>
+                        <div class="text-yellow-400 my-2 text-xs"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="text-sm text-gray-500 italic leading-relaxed">"Aad baan ugu qancay adeegooda, waan ku talinayaa!"</p>
+                    </div>
+                `;
+            });
+        }
+
+        function renderPaymentMethods() {
+            const grid = document.getElementById('payment-methods-grid');
+            paymentMethods.forEach(m => {
+                grid.innerHTML += `
+                    <div id="meth-${m.id}" onclick="selectMethod('${m.id}')" class="payment-option p-3 rounded-xl border flex flex-col items-center justify-center bg-white hover:border-blue-300">
+                        <img src="${m.img}" class="h-8 w-auto object-contain mb-1">
+                        <span class="text-[10px] font-bold text-center leading-tight uppercase">${m.name}</span>
+                    </div>
+                `;
+            });
+        }
+
+        function openPurchase(price, img) {
+            state.selectedDesign = { price, img };
+            document.getElementById('modal-item-img').src = img;
+            document.getElementById('pay-amount').value = price;
+            document.getElementById('purchase-modal').classList.add('active');
+        }
+
+        function selectMethod(id) {
+            state.paymentMethodId = id;
+            document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+            document.getElementById('meth-' + id).classList.add('selected');
+        }
+
+        function goToStepTwo() {
+            const amount = document.getElementById('pay-amount').value;
+            if(!amount || !state.paymentMethodId) return;
+
+            closeModal();
+            
+            if(state.paymentMethodId === 'crypto') {
+                openCryptoChoice();
+            } else {
+                const method = paymentMethods.find(m => m.id === state.paymentMethodId);
+                document.getElementById('ussd-icon').innerHTML = `<img src="${method.img}" class="h-12 mx-auto">`;
+                document.getElementById('ussd-desc').innerText = `Ma hubtaa inaad lacag bixinta $${amount} ku bixiso ${method.name}? Waxaan kugu xiriirinaynaa USSD-gaaga.`;
+                document.getElementById('ussd-confirm-modal').classList.add('active');
+            }
+        }
+
+        function executeUssd() {
+            const amount = document.getElementById('pay-amount').value;
+            const method = paymentMethods.find(m => m.id === state.paymentMethodId);
+            const ussdCode = `${method.code}${amount}#`;
+            
+            window.location.href = "tel:" + encodeURIComponent(ussdCode);
+            
+            setTimeout(() => {
+                closeModal();
+                document.getElementById('final-confirm-modal').classList.add('active');
+            }, 2000);
+        }
+
+        function openCryptoChoice() {
+            const grid = document.getElementById('crypto-options-grid');
+            grid.innerHTML = "";
+            cryptoOptions.forEach(c => {
+                grid.innerHTML += `
+                    <div onclick="selectCryptoPay('${c.id}')" class="border-2 p-4 rounded-xl cursor-pointer hover:bg-blue-50 text-center transition">
+                        <img src="${c.img}" class="h-10 mx-auto mb-2">
+                        <span class="font-bold text-sm">${c.name}</span>
+                    </div>
+                `;
+            });
+            document.getElementById('crypto-choice-modal').classList.add('active');
+        }
+
+        function selectCryptoPay(id) {
+            state.cryptoTypeId = id;
+            const item = cryptoOptions.find(c => c.id === id);
+            closeModal();
+            document.getElementById('crypto-pay-title').innerText = `Bixi ${item.name}`;
+            document.getElementById('crypto-pay-qr').src = item.qr;
+            document.getElementById('crypto-pay-address').innerText = item.addr;
+            document.getElementById('crypto-pay-modal').classList.add('active');
+        }
+
+        function openWhatsAppFinal() {
+            const amount = document.getElementById('pay-amount').value;
+            const designPrice = state.selectedDesign ? state.selectedDesign.price : "Unknown";
+            let details = "";
+
+            if(state.paymentMethodId === 'crypto') {
+                const c = cryptoOptions.find(x => x.id === state.cryptoTypeId);
+                details = `CRYPTO: ${c.name}`;
+            } else {
+                const m = paymentMethods.find(x => x.id === state.paymentMethodId);
+                details = `BANK: ${m.name}`;
+            }
+
+            const waMsg = `Haye Doone Design! Waxaan iibsaday naqshada $${designPrice}.%0AQadarka: $${amount}%0A${details}.%0AFadlan xaqiiji shaqadana ii bilow.`;
+            window.open(`https://wa.me/252618877686?text=${waMsg}`, '_blank');
+        }
+
+        function copyAddress() {
+            const text = document.getElementById('crypto-pay-address').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Wallet address-ka waa la koobiyeeyay!");
+            }).catch(() => {
+                // Fallback for older browsers
+                const t = document.createElement('textarea');
+                t.value = text; document.body.appendChild(t); t.select();
+                document.execCommand('copy'); document.body.removeChild(t);
+                alert("Wallet address-ka waa la koobiyeeyay!");
+            });
+        }
+
+        function sendContact() {
+            const name = document.getElementById('contact-name').value;
+            const msg = document.getElementById('contact-msg').value;
+            if(!name || !msg) return;
+            const waLink = `https://wa.me/252618877686?text=MAGACA: ${name}%0AFARIIN: ${msg}`;
+            window.open(waLink, '_blank');
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+        }
+    </script>
+</body>
+</html>
